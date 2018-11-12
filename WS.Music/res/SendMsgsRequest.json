@@ -1,0 +1,15 @@
+{
+  "extension": {
+    "id": 1515,
+    "time": "",
+    "msg": "json rich text",
+    "fromUser": {
+      "id": 1,
+      "name": ""
+    },
+    "toUser": {
+      "id": 2,
+      "name": ""
+    }
+  }
+}
