@@ -66,10 +66,16 @@ namespace WS.Music.Managers
             if (fromUser == null) Define.Response.UserNotFound(response, request.Send.FromUserId);
             User toUser = await _UserStore.ReadAsync(a => a.Where(b => b.Id == request.Send.ToUserId), CancellationToken.None);
             if (toUser == null) Define.Response.UserNotFound(response, request.Send.ToUserId);
-            // 消息不可重复：在数据库中比较与上一条消息的发送时间是否一致
-
-            //var fromUser = _UserStore.ReadAsync(a=>a.Where(b=>b.Id==request.Send.FromUserId))
-            //var send = new Send(request.Send);
+            // TODO: 消息不可重复：在数据库中比较与上一条消息的发送时间是否一致，另外可以比较当前时间与上一条的内容一致但是时间间隔过短
+            var lastSend = await Store.ReadAsync(a => a.Where(b => b.FromUserId == fromUser.Id && b.ToUserId == toUser.Id && b.FromTime == a.Select(c => c.FromTime).OrderBy(c => c).LastOrDefault()), CancellationToken.None);
+            if (request.Send.FromTime == lastSend.FromTime)
+            {
+                response.Wrap(ResponseDefine.PostRepeat, "消息不可以重复发送");
+            }
+            else
+            {
+                //
+            }
         }
     }
 }

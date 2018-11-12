@@ -38,7 +38,7 @@ namespace WS.Music.Models
         public User FromUser { get; set; }
 
         /// <summary>
-        /// 发送时间
+        /// 发送时间，不应该为null
         /// </summary>
         public DateTime? FromTime { get; set; }
 
