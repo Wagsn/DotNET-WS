@@ -19,5 +19,10 @@ namespace WS.Music.Dto
         /// 用户密码
         /// </summary>
         public string UserPwd { get; set; }
+
+        /// <summary>
+        /// 登陆用户，将其从根数据中抽离出来
+        /// </summary>
+        public UserJson User { get; set; }
     }
 }

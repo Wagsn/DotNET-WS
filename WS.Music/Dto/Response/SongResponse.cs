@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Music.Dto
+namespace WS.Music.Dto
 {
     /// <summary>
     /// 一首歌曲的响应体

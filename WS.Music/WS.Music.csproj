@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\Common\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 

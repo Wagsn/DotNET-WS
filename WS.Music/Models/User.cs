@@ -19,9 +19,8 @@ namespace WS.Music.Models
         public long Id { get; set; }
 
         /// <summary>
-        /// 昵称，主键
+        /// 昵称
         /// </summary>
-        [Key]
         public string Name { get; set; }
 
         /// <summary>

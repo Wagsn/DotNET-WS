@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WS.Core.Dto;
 using WS.Music.Common;
 using WS.Music.Dto;
+using WS.Music.Models;
 using WS.Music.Stores;
 
 namespace WS.Music.Managers
@@ -75,6 +76,22 @@ namespace WS.Music.Managers
             {
                 response.Code = ResponseDefine.PostRepeat;
             }
+        }
+
+        /// <summary>
+        /// 登陆用户存在检查，不存在修改响应体状态码和追加信息
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="request"></param>
+        public async Task<User> UserGetAsync([Required]ResponseMessage response, [Required]UserJson userJson)
+        {
+            User user = await Store.ReadAsync(a => a.Where(b => b.Id == userJson.Id), CancellationToken.None);
+            // 判断用户是否存在
+            if (user == null)
+            {
+                Define.Response.UserNotFound(response, userJson);
+            }
+            return user;
         }
     }
 }

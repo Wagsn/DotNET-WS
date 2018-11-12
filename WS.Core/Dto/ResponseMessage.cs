@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WS.Core.Helpers;
 
 namespace WS.Core.Dto
 {
@@ -66,10 +67,12 @@ namespace WS.Core.Dto
                         Message = ResponseDefine.PostRepeatMsg;
                         break;
                     default:
+                        Message = "其他情况";
                         break;
                 }
             }
         }
+
         /// <summary>
         /// 响应消息
         /// </summary>
@@ -79,6 +82,26 @@ namespace WS.Core.Dto
         {
             Code = ResponseDefine.SuccessCode;
             Message = ResponseDefine.SuccessMsg;
+        }
+
+        /// <summary>
+        /// 响应体包装
+        /// </summary>
+        /// <param name="code"></param>
+        public void Wrap(string code)
+        {
+            Code = code;
+        }
+
+        /// <summary>
+        /// 响应体包装，如果code为自定义，Message则为"其它情况"
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="msgAppend"></param>
+        public void Wrap<TAppend>(string code, TAppend append)
+        {
+            Code = code;
+            Message += "\r\n"+JsonHelper.ToJson(append);
         }
 
         public bool IsSuccess()

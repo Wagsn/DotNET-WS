@@ -22,6 +22,18 @@ namespace WS.Music.Models
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Send>(b=> 
+            {
+                b.ToTable("ws_music_send");
+                b.Property<bool?>("_IsDeleted");
+            });
+
+            builder.Entity<Message>(b =>
+            {
+                b.ToTable("ws_music_message");
+                b.Property<bool?>("_IsDeleted");
+            });
+
             builder.Entity<Song>(b =>
             {
                 b.ToTable("ws_music_song");
@@ -52,15 +64,38 @@ namespace WS.Music.Models
         }
 
         /// <summary>
-        /// 通过泛型的方式查询目标类型的DbSet，可能会影响效率，未完成
+        /// 歌曲
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <returns></returns>
-        public virtual DbSet<TResult> Models<TResult>() where TResult : TraceUpdateBase
-        {
-            throw new NotSupportedException();
-        }
+        public DbSet<Song> Songs { get; set; }
 
+        /// <summary>
+        /// 用户
+        /// </summary>
+        public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// 发送
+        /// </summary>
+        public DbSet<Send> Sends { get; set; }
+
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public DbSet<Message> Messages { get; set; }
+
+        /// <summary>
+        /// 用户歌单关联
+        /// </summary>
+        public DbSet<RelUserPlayList> RelUserPlayLists { get; set; }
+
+        /// <summary>
+        /// 歌单歌曲关联
+        /// </summary>
+        public DbSet<RelPlayListSong> RelPlayListSongs { get; set; }
+
+        /// <summary>
+        /// 在保存改变之前
+        /// </summary>
         private void OnBeforeSaving()
         {
             foreach (var entry in ChangeTracker.Entries<User>())
@@ -80,23 +115,13 @@ namespace WS.Music.Models
         }
 
         /// <summary>
-        /// 歌曲
+        /// 通过泛型的方式查询目标类型的DbSet，可能会影响效率，未完成
         /// </summary>
-        public DbSet<Song> Songs { get; set; }
-
-        /// <summary>
-        /// 用户
-        /// </summary>
-        public DbSet<User> Users { get; set; }
-
-        /// <summary>
-        /// 用户歌单关联
-        /// </summary>
-        public DbSet<RelUserPlayList> RelUserPlayLists { get; set; }
-
-        /// <summary>
-        /// 歌单歌曲关联
-        /// </summary>
-        public DbSet<RelPlayListSong> RelPlayListSongs { get; set; }
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public virtual DbSet<TResult> Models<TResult>() where TResult : TraceUpdateBase
+        {
+            throw new NotSupportedException();
+        }
     }
 }

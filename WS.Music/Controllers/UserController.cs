@@ -30,9 +30,16 @@ namespace WS.Music.Controllers
 
         public SongStore _SongStore { get; } 
 
-        public UserManager _UserManager { get; }
+        public UserManager Manager { get; }
 
-
+        /// <summary>
+        /// 用户控制构造器
+        /// </summary>
+        /// <param name="applicationDbContext"></param>
+        /// <param name="relUserPlayListStore"></param>
+        /// <param name="relPlayListSongStore"></param>
+        /// <param name="songStore"></param>
+        /// <param name="userManager"></param>
         public UserController(
             ApplicationDbContext applicationDbContext, 
             RelUserPlayListStore relUserPlayListStore,
@@ -45,7 +52,7 @@ namespace WS.Music.Controllers
             _RelPlayListSongStore = relPlayListSongStore;
             _RelUserPlayListStore = relUserPlayListStore;
             _SongStore = songStore;
-            _UserManager = userManager;
+            Manager = userManager;
         }
 
         /// <summary>
@@ -68,7 +75,7 @@ namespace WS.Music.Controllers
             try
             {
                 /// 业务处理，TODO：<see cref="UserManager.CollectionSongAsync(ResponseMessage, SongCollectionRequest)"/>
-                await _UserManager.CollectionSongAsync(response, request);
+                await Manager.CollectionSongAsync(response, request);
             }
             catch (Exception e)
             {
@@ -135,15 +142,23 @@ namespace WS.Music.Controllers
             Console.WriteLine("WS------ Request: \r\n" + request);
             // 创建响应体
             ResponseMessage<List<Song>> response = new ResponseMessage<List<Song>>();
-            // 模型验证
-            if (!Util.ModelValidCheck(ModelState, response))
+            // 模型验证只会对存在的字段的格式进行验证和请求体的非空验证，所以我们需要进行字段的非空验证和有效性验证
+            // 因为很多验证所以封装成方法
+            if (UserIsNull(response, request.User)) return response;
+            // 有效性检查：不为0且在数据库中存在
+            if (request.User.Id == 0)
             {
+                response.Wrap(ResponseDefine.BadRequset, "你登陆用户的ID等于0？");
                 return response;
             }
+
+            User user = await Manager.UserGetAsync(response, request.User);
+            if (user == null) return response;
+
             try
             {
                 // 根据用户ID在RelUserPlayList中查询Type为Recommend的PlayListId
-                RelUserPlayList relUserPlayList = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.UserId && b.Type == "Recommend"), CancellationToken.None);  //await Context.RelUserPlayLists.Where(a => a.UserId == request.UserId && a._IsDeleted == false).AsNoTracking().SingleOrDefaultAsync();
+                RelUserPlayList relUserPlayList = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == user.Id && b.Type == "Recommend"), CancellationToken.None);  //await Context.RelUserPlayLists.Where(a => a.UserId == request.UserId && a._IsDeleted == false).AsNoTracking().SingleOrDefaultAsync();
                 var playListId = relUserPlayList.PlayListId;
                 // 再在RelPlayListSong中查询出List<long>
                 var songIds = await _RelPlayListSongStore.ListAsync(a => a.Where(b => b.PlayListId == playListId).Select(c => c.SongId), CancellationToken.None);
@@ -166,6 +181,24 @@ namespace WS.Music.Controllers
             // 日志输出：响应体
             Console.WriteLine("WS------ Response: \r\n" + response != null ? JsonHelper.ToJson(response) : "");
             return response;
+        }
+        
+        /// <summary>
+        /// 判断用户存在并修改响应体
+        /// </summary>
+        /// <typeparam name="TSrc"></typeparam>
+        /// <param name="response"></param>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        private bool UserIsNull<TSrc>(ResponseMessage response, TSrc src)
+        {
+            if (src == null)
+            {
+                response.Code = ResponseDefine.BadRequset;
+                response.Message += "\r\n" + "服务器未接收到你的用户信息，你需要登陆之后才能访问，如已登录，请检查你的请求体";
+                return true;
+            }
+            return false;
         }
     }
 }

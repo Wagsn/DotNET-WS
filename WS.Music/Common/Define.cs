@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WS.Core.Dto;
+using WS.Core.Helpers;
+using WS.Music.Dto;
 
 namespace WS.Music.Common
 {
@@ -65,9 +68,11 @@ namespace WS.Music.Define
     public static class User
     {
         /// <summary>
-        /// 找不到用户，可能是还未创建，请你检查一下你的请求是否正确
+        /// 找不到用户，可能是未注册或已注销，请你检查一下你的请求是否正确
         /// </summary>
-        public static readonly string NotFoundMsg = "找不到用户，可能是还未创建，请你检查一下你的请求是否正确";
+        public static readonly string NotFoundMsg = "找不到用户，可能是未注册或已注销，请你检查一下你的请求是否正确";
+
+
     }
 
     public static class Song
@@ -91,17 +96,20 @@ namespace WS.Music.Define
         public static class Type
         {
             /// <summary>
-            /// 推荐歌单
+            /// 推荐歌单 Define.PlayList.Type.Recommend
             /// </summary>
-            public static readonly string Recommend = "Recommend";  // Define.PlayList.Type.Recommend
-                                                                    /// <summary>
-                                                                    /// 收藏歌单
-                                                                    /// </summary>
+            public static readonly string Recommend = "Recommend";
+
+            /// <summary>
+            /// 收藏歌单
+            /// </summary>
             public static readonly string Collection = "Collection";
+
             /// <summary>
             /// 喜欢歌单
             /// </summary>
             public static readonly string Like = "Like";
+
             /// <summary>
             /// 创建歌单
             /// </summary>
@@ -112,5 +120,21 @@ namespace WS.Music.Define
         /// 找不到歌单，可能是注册时未创建默认歌单
         /// </summary>
         public static readonly string NotFoundMsg = "找不到歌单，可能是注册时未创建默认歌单";
+    }
+
+    public static class Response
+    {
+        /// <summary>
+        /// 用户未找到
+        /// </summary>
+        /// <typeparam name="TSrc"></typeparam>
+        /// <param name="response">响应体</param>
+        /// <param name="src">未找到的用户</param>
+        public static void UserNotFound<TSrc>(ResponseMessage response, TSrc src)
+        {
+            response.Code = ResponseDefine.NotFound;
+            response.Message += "\r\n" + User.NotFoundMsg;
+            Console.WriteLine("WS------ NotFound for User: \r\n" +JsonHelper.ToJson(src));
+        }
     }
 }

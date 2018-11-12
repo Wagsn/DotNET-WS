@@ -106,6 +106,9 @@ namespace WS.Core.Dto
         /// 服务器不支持完成请求所需的功能
         /// </summary>
         public static readonly string NotSupport = "501";
+        /// <summary>
+        /// 服务器不支持完成请求所需的功能
+        /// </summary>
         public static readonly string NotSupportMsg = "服务器不支持完成请求所需的功能";
 
         #endregion
