@@ -15,7 +15,8 @@ namespace WS.Music.Models
         /// 消息ID
         /// </summary>
         [Key]
-        public long Id { get; set; }
+        [MaxLength(63)]
+        public string Id { get; set; }
 
         /// <summary>
         /// 消息类型（text/image/location/link）动态News，博客Blog

@@ -128,7 +128,7 @@ namespace WS.Music.Controllers
         /// <param name="Id">音乐Id</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseMessage<Song>> Get([FromQuery]long Id)
+        public async Task<ResponseMessage<Song>> Get([FromQuery]string Id)
         {
             // 日志输出：请求体
             Console.WriteLine("WS------ Request: \r\n" + "Id: "+ Id);

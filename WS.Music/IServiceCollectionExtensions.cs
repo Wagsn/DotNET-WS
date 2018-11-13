@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Music.Managers;
+using WS.Music.Models;
 using WS.Music.Stores;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -25,11 +26,15 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             #region << 在这里添加依赖注入 >>
-            
+
+            services.AddScoped<ITransaction, Transaction<ApplicationDbContext>>();
+
             #region << Store >>
 
             services.AddTransient<SongStore>();
             services.AddTransient<UserStore>();
+            services.AddTransient<SendStore>();
+            services.AddTransient<MessageStore>();
             services.AddTransient<RelPlayListSongStore>();
             services.AddTransient<RelUserPlayListStore>();
 
@@ -39,6 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<UserManager>();
             services.AddTransient<SongManager>();
+            services.AddTransient<SendManager>();
 
             #endregion
 

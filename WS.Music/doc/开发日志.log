@@ -1,0 +1,30 @@
+﻿[2018-11-12]
+[09:41]
+[DONE] 今天将代码托管到GitHub，之前有部分代码在另一台设备上，今天完成的时候避免与之发生交集。
+[TODO] 今天做Chat私信模块。
+[11:21]
+[NOTE] 将发送实体与消息实体分离，可以更好的实现群发转发等操作。
+[DONE] 发送实体与消息的Dto层请求模板已完成。
+[14:07]
+[DONE] 用Navicat在数据库创建了send与message表
+[17:12]
+[DONE] 在ResponseMessage中添加方法Wrap，传入code和msgAppend来包装
+[17:58]
+[CRAP] 消息发送体的验证好麻烦
+[NOTE] 将发送消息简略的集中在一起？
+[19:00]
+[NOTE] 是否在StoreBase中添加Check(Func):bool方法来检查某条记录是否在表中以替代Read的作用，做法：在Check方法中调用Read(Func):Model方法，如果返回null则说明不存在
+[2018-11-13]
+[09:26]
+[TODO] 继续完善SendManager，将发送（SendMessageAsync）功能完成
+[09:30-10:18]
+[MEET] 会议室研发中心集体会议
+[10:59]
+[DONE] Managers.SendManager.SendMessageAsync([Required]ResponseMessage, [Required]SendMsgRequest, CancellationToken)已经初步完成
+[TODO] 完成MsgController的SendMsg方法
+[14:50]
+[LOCK] 存在一个DbReader连接未关闭问题，解决方案为改造Store
+[REDO] 改造Store接口，让其更方便与业务调用，让业务层只需要传递参数（非表达式），尝试采用LINQ代码
+[NOTE] 层次需要分明，Store做数据库访问，Manager做业务处理（按照请求通过判断查询包装等得到外部访问所需的数据），Controller做外部访问接口（需要对请求进行验证）
+[TODO] 代码重构，将所有Model的Id改为GUID
+[DONE] 基本重构完ID转Guid，以后每次创建实体时调用Guid.GetGuid().ToString()来获取Guid字符序列

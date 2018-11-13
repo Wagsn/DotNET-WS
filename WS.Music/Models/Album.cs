@@ -16,7 +16,8 @@ namespace WS.Music.Models
         /// 专辑ID
         /// </summary>
         [Key]
-        public long Id { get; set; }
+        [MaxLength(36)]
+        public string Id { get; set; }
 
         /// <summary>
         /// 专辑名称

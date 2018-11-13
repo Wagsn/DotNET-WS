@@ -13,7 +13,7 @@ namespace WS.Core.Models
         /// <summary>
         /// 创建人ID
         /// </summary>
-        long? _CreateUserId { get; set; }
+        string _CreateUserId { get; set; }
 
         /// <summary>
         /// 创建时间
@@ -23,7 +23,7 @@ namespace WS.Core.Models
         /// <summary>
         /// 更新人ID
         /// </summary>
-        long? _UpdateUserId { get; set; }
+        string _UpdateUserId { get; set; }
 
         /// <summary>
         /// 更新时间
@@ -33,7 +33,7 @@ namespace WS.Core.Models
         /// <summary>
         /// 删除人ID
         /// </summary>
-        long? _DeleteUserId { get; set; }
+        string _DeleteUserId { get; set; }
 
         /// <summary>
         /// 删除人时间

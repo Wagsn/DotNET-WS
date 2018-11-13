@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace WS.Music.Models
     /// </summary>
     public class TopList
     {
-        public long Id { get; set; }
+        [MaxLength(63)]
+        public string Id { get; set; }
     }
 }

@@ -17,13 +17,15 @@ namespace WS.Music.Models
         /// 歌单ID
         /// </summary>
         [Key]
-        public long PlayListId { get; set; }
+        [MaxLength(63)]
+        public string PlayListId { get; set; }
 
         /// <summary>
         /// 歌曲ID
         /// </summary>
         [Key]
-        public long SongId { get; set; }
+        [MaxLength(63)]
+        public string SongId { get; set; }
 
         /// <summary>
         /// 歌单

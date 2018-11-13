@@ -15,7 +15,8 @@ namespace WS.Music.Models
         /// ID
         /// </summary>
         [Key]
-        public long Id { get; set; }
+        [MaxLength(63)]
+        public string Id { get; set; }
 
         /// <summary>
         /// 名称

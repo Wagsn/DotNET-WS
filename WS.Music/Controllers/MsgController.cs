@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WS.Core.Dto;
 using WS.Core.Helpers;
@@ -22,12 +23,20 @@ namespace WS.Music.Controllers
 
         public SendManager _SendManager { get; }
 
+        public MsgController(UserManager UserManager, SendManager SendManager)
+        {
+            _UserManager = UserManager;
+            _SendManager = SendManager;
+        }
+
+
+
         /// <summary>
         /// 发送消息请求
         /// </summary>
         /// <param name="request"></param>
         [HttpPost("send")]
-        public ResponseMessage SendMsg([FromBody]SendMsgRequest request)
+        public async Task<ResponseMessage> SendMsgAsync([FromBody]SendMsgRequest request)
         {
             // 日志输出：请求体
             Console.WriteLine("WS------ Request: \r\n" + JsonHelper.ToJson(request));
@@ -37,9 +46,8 @@ namespace WS.Music.Controllers
 
             try
             {
-                /// 业务处理，TODO：<see cref="UserManager.CollectionSongAsync(ResponseMessage, SongCollectionRequest)"/>
-                ///await _UserManager.CollectionSongAsync(response, request);
-                response.Code = ResponseDefine.NotSupport;
+                /// 业务处理
+                await _SendManager.SendMessageAsync(response, request, default(CancellationToken));
             }
             catch (Exception e)
             {

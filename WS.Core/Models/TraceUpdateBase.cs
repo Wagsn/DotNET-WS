@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,8 @@ namespace WS.Core.Models
         /// <summary>
         /// 创建人ID
         /// </summary>
-        public long? _CreateUserId { get ; set; }
+        [MaxLength(36)]
+        public string _CreateUserId { get ; set; }
 
         /// <summary>
         /// 创建时间
@@ -23,7 +25,8 @@ namespace WS.Core.Models
         /// <summary>
         /// 更新人ID
         /// </summary>
-        public long? _UpdateUserId { get; set; }
+        [MaxLength(36)]
+        public string _UpdateUserId { get; set; }
 
         /// <summary>
         /// 更新时间
@@ -33,7 +36,8 @@ namespace WS.Core.Models
         /// <summary>
         /// 删除人ID
         /// </summary>
-        public long? _DeleteUserId { get; set; }
+        [MaxLength(36)]
+        public string _DeleteUserId { get; set; }
 
         /// <summary>
         /// 删除时间

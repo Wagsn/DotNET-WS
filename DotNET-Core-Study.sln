@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WS.WWW", "WS.WWW\WS.WWW.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WS.FileDemo", "WS.FileDemo\WS.FileDemo.csproj", "{1B916A0D-BA01-4314-86D0-A039BA7A5977}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS.ConsoleApp", "WS.Console\WS.ConsoleApp.csproj", "{1454F98A-D2BA-41E8-A9C9-6E551FF4E0DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wagsn-Shell", "WS.Console\Wagsn-Shell.csproj", "{1454F98A-D2BA-41E8-A9C9-6E551FF4E0DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

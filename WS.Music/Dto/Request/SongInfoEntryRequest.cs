@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Music.Models;
@@ -23,7 +24,8 @@ namespace WS.Music.Dto
         /// <summary>
         /// 歌曲ID，没有就是新增，有就是创建
         /// </summary>
-        public long? Id { get; set; }
+        [MaxLength(36)]
+        public string Id { get; set; }
 
         /// <summary>
         /// 歌曲名

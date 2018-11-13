@@ -95,7 +95,7 @@ namespace WS.Music.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseMessage<User>> Get([FromQuery]long Id)
+        public async Task<ResponseMessage<User>> Get([FromQuery]string Id)
         {
             // 日志输出：请求体
             Console.WriteLine("WS------ Request: \r\n" + "Id: " + Id);
@@ -108,7 +108,7 @@ namespace WS.Music.Controllers
             }
             try
             {
-                /// 业务处理，TODO：<see cref="WSControllerBase.Get{Ext}(long)"/>
+                /// 业务处理，TODO：<see cref="WSControllerBase.Get{Ext}(string)"/>
                 response.Extension = await Context.Users.Where(a => a.Id == Id && a._IsDeleted==false).AsNoTracking().SingleOrDefaultAsync(); //await _SongStore.ReadAsync(new Song { Id = Id }, CancellationToken.None);  // await Context.Songs.Where(a => a.Id == Id).AsNoTracking().SingleOrDefaultAsync();
             }
             catch (Exception e)
@@ -146,7 +146,7 @@ namespace WS.Music.Controllers
             // 因为很多验证所以封装成方法
             if (UserIsNull(response, request.User)) return response;
             // 有效性检查：不为0且在数据库中存在
-            if (request.User.Id == 0)
+            if (request.User.Id == null)
             {
                 response.Wrap(ResponseDefine.BadRequset, "你登陆用户的ID等于0？");
                 return response;

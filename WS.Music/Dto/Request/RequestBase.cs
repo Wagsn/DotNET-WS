@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,8 @@ namespace WS.Music.Dto
         /// <summary>
         /// 用户Id，如果为0则表示为游客（或者通过IP设备用户等生成临时Id）
         /// </summary>
-        public long UserId { get; set; }
+        [MaxLength(36)]
+        public string UserId { get; set; }
 
         /// <summary>
         /// 用户密码

@@ -10,6 +10,6 @@ namespace WS.Music.Dto
     /// </summary>
     public class SongCollectionRequest : RequestBase
     {
-        public long SongId { get; set; }
+        public string SongId { get; set; }
     }
 }

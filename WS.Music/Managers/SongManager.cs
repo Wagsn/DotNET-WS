@@ -34,7 +34,7 @@ namespace WS.Music.Managers
             // 参数检查，空检查和存在检查（操作数据是否存在于数据库）
             var songId = await Store.ReadAsync(a => a.Where(b => b.Id == request.SongInfo.Id).Select(c=>c.Id), CancellationToken.None);
             // 如果没有被创建
-            if (songId == 0)
+            if (songId == null)
             {
                 // 数据创建
                 await Store.CreateAsync(new Models.Song

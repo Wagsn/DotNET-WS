@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace WS.Music.Models
         /// <summary>
         /// 歌曲ID
         /// </summary>
-        public long SongId { get; set; }
+        [MaxLength(63)]
+        public string SongId { get; set; }
 
         /// <summary>
         /// 专辑ID

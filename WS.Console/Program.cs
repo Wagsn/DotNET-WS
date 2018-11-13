@@ -6,9 +6,10 @@ namespace WS.ConsoleApp
     {
         static void Main(string[] args)
         {
+            ShellContext AppContext = new ShellContext();
             Console.Write($"Wagsn Shell\r\n版权所有 (C) Wagsn。保留所有权利。\r\n\r\nWS {System.IO.Directory.GetCurrentDirectory()}> ");
             // 一个简单的控制台循环
-            string nextLine ="";
+            string nextLine = "";
             //bool hasOutput = true;
             while (true)
             {
@@ -28,7 +29,7 @@ namespace WS.ConsoleApp
                         Console.SetCursorPosition(0, Console.CursorSize - 1);
                         break;
                     case "now":
-                        Console.WriteLine(DateTime.Now);
+                        Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFK"));
                         break;
                     case "help":
                         Console.WriteLine("[command]\t[decription]\r\nhelp\t\t帮助\r\nnow\t\t当前时间\r\nclear\t\t清除屏幕\r\nexit\t\t退出 Wagsn Shell\r\n");
@@ -42,9 +43,14 @@ namespace WS.ConsoleApp
                 //hasOutput = true;
                 Console.Write($"WS {System.IO.Directory.GetCurrentDirectory()}> ");
             }
-            //Console.WriteLine("Hello World!");
-            //Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.vvv"));
-            //Console.ReadKey();
+        }
+
+        /// <summary>
+        /// 程序启动时使用
+        /// </summary>
+        static void Startup()
+        {
+
         }
 
         static void MainHadle(string line)
@@ -59,5 +65,13 @@ namespace WS.ConsoleApp
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// Wagsn Shell Context
+    /// </summary>
+    class ShellContext
+    {
+        public string CurrentDirectory { get; set; }
     }
 }

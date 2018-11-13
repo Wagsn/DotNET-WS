@@ -16,17 +16,31 @@ namespace WS.Music.Models
         /// ID，主键
         /// </summary>
         [Key]
-        public long Id { get; set; }
+        [MaxLength(36, ErrorMessage = "GUID最长不超过36")]
+        public string Id { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
+        [MaxLength(31)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [MaxLength(63)]
+        public string Pwd { get; set; }
+
+        /// <summary>
+        /// 电子邮箱
+        /// </summary>
+        [MaxLength(255)]
+        public string Mail { get; set; }
 
         /// <summary>
         /// 介绍，可空（Empty=Blank>Null）
         /// </summary>
-        [MaxLength(255)]
+        [MaxLength(511)]
         public string Description { get; set; }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WS.Core.Models;
 
@@ -92,6 +93,18 @@ namespace WS.Music.Models
         /// 歌单歌曲关联
         /// </summary>
         public DbSet<RelPlayListSong> RelPlayListSongs { get; set; }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            //OnBeforeSaving();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            //OnBeforeSaving();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
 
         /// <summary>
         /// 在保存改变之前

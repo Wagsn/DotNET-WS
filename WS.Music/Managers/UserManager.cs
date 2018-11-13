@@ -45,7 +45,7 @@ namespace WS.Music.Managers
         {
             // 判断用户是否存在
             var userId = await Store.ReadAsync(a => a.Where(b => b.Id == request.UserId).Select(c=>c.Id), CancellationToken.None);
-            if (userId == 0)
+            if (userId == null)
             {
                 response.Code = ResponseDefine.NotFound;
                 response.Message += "\r\n"+ Define.User.NotFoundMsg;
@@ -53,7 +53,7 @@ namespace WS.Music.Managers
             // 找到PlayListId
             var RecommendPlayListId = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.UserId && b.Type == PlayListType.Recommend).Select(c=>c.PlayListId), CancellationToken.None);
             // 找不到歌单
-            if(RecommendPlayListId==0)
+            if(RecommendPlayListId==null)
             {
                 response.Code = ResponseDefine.NotFound;
                 response.Message += "\r\n" + Define.PlayList.NotFoundMsg;

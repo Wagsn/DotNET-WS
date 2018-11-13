@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Music.Models;
@@ -11,16 +12,31 @@ namespace WS.Music.Dto
         /// <summary>
         /// ID，主键
         /// </summary>
-        public long Id { get; set; }
+        [MaxLength(36, ErrorMessage ="GUID最大不能超过36个字符")]
+        public string Id { get; set; }
 
         /// <summary>
         /// 昵称，主键
         /// </summary>
+        [MaxLength(31)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [MaxLength(63)]
+        public string Pwd { get; set; }
+
+        /// <summary>
+        /// 电子邮箱
+        /// </summary>
+        [MaxLength(255)]
+        public string Mail { get; set; }
 
         /// <summary>
         /// 介绍，可空（Empty=Blank>Null）
         /// </summary>
+        [MaxLength(511)]
         public string Description { get; set; }
 
         /// <summary>
@@ -41,6 +57,8 @@ namespace WS.Music.Dto
         {
             Id = user.Id;
             Name = user.Name ?? Name;
+            Pwd = user.Pwd ?? Pwd;
+            Mail = user.Mail ?? Mail;
             Description = user.Description ?? Description;
             Sex = user.Sex ?? Sex;
             BirthTime = user.BirthTime ?? BirthTime;
@@ -54,6 +72,8 @@ namespace WS.Music.Dto
         {
             Id = user.Id;
             Name = user.Name ?? Name;
+            Pwd = user.Pwd ?? Pwd;
+            Mail = user.Mail ?? Mail;
             Description = user.Description ?? Description;
             Sex = user.Sex ?? Sex;
             BirthTime = user.BirthTime ?? BirthTime;

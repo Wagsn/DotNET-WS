@@ -16,7 +16,8 @@ namespace WS.Music.Models
         /// 歌曲ID
         /// </summary>
         [Key]
-        public long Id { get; set; }
+        [MaxLength(63)]
+        public string Id { get; set; }
 
         /// <summary>
         /// 歌曲名
@@ -50,7 +51,7 @@ namespace WS.Music.Models
         
         public Song() { }
 
-        public Song(long id, string name, string url)
+        public Song(string id, string name, string url)
         {
             Init(id, name, url);
         }
@@ -61,7 +62,7 @@ namespace WS.Music.Models
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="url"></param>
-        public void Init(long id, string name, string url)
+        public void Init(string id, string name, string url)
         {
             Id = id;
             Name = name;

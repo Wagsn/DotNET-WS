@@ -17,13 +17,15 @@ namespace WS.Music.Models
         /// 用户ID
         /// </summary>
         [Key]
-        public long UserId { get; set; }
+        [MaxLength(36)]
+        public string UserId { get; set; }
 
         /// <summary>
         /// 歌单ID
         /// </summary>
         [Key]
-        public long PlayListId { get; set; }
+        [MaxLength(36)]
+        public string PlayListId { get; set; }
 
         /// <summary>
         /// 关联类型，创建：Create（喜欢：Like），收藏：Collection，推荐：Recommend（用户被推荐）

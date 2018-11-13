@@ -38,7 +38,7 @@ namespace WS.Core.Stores
         /// <param name="model"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken)
+        public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default(CancellationToken))
         {
             CheckNull(model);
 
@@ -46,15 +46,15 @@ namespace WS.Core.Stores
             model._CreateTime = DateTime.Now;
             model._IsDeleted = false;
 
-            Context.Add(model);
+            model = Context.Add(model).Entity;
 
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
             }
-            catch(DbUpdateConcurrencyException)
+            catch(DbUpdateConcurrencyException e)
             {
-                throw;
+                throw new Exception("WS------ StoreBase中保存改变时: \r\n", e);
             }
             
             return model;
