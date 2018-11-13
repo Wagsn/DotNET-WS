@@ -60,7 +60,7 @@ namespace WS.Music.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet("songcollection")]
+        [HttpPost("songcollection")]
         public async Task<ResponseMessage> SongCollection([FromBody]SongCollectionRequest request)
         {
             // 日志输出：请求体
@@ -74,7 +74,7 @@ namespace WS.Music.Controllers
             }
             try
             {
-                /// 业务处理，TODO：<see cref="UserManager.CollectionSongAsync(ResponseMessage, SongCollectionRequest)"/>
+                /// 业务处理
                 await Manager.CollectionSongAsync(response, request);
             }
             catch (Exception e)

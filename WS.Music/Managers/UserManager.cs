@@ -34,9 +34,7 @@ namespace WS.Music.Managers
             TheUsers = theUsers;
             _Mapper = Mapper;
         }
-
-
-
+        
         /// <summary>
         /// 用户收藏歌曲，通过UserId在UserPlayList中找到RecommendPlayList，在PlayListSong中添加记录，需要对SongId进行有效性验证
         /// </summary>
@@ -44,15 +42,24 @@ namespace WS.Music.Managers
         /// <param name="songId">歌曲ID</param>
         public async Task CollectionSongAsync([Required]ResponseMessage response, [Required]SongCollectionRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (request.User == null|| request.User.Id == null)
+            {
+                response.Code = ResponseDefine.BadRequset;
+                response.Message += "\r\n" + "请求体未包含系统用户信息，用户未登陆不能进行收藏歌曲操作";
+                return;
+            }
             // 判断用户是否存在
-            var userId = await TheUsers.ReadAsync(a => a.Where(b => b.Id == request.UserId).Select(c=>c.Id), cancellationToken);
-            if (userId == null)
+            //var user = await TheUsers.ReadAsync(a => a.Where(b => b.Id == request.User.Id), cancellationToken);
+            var user = TheUsers.ForId(request.User.Id).SingleOrDefault();
+            
+            if (user==null)
             {
                 response.Code = ResponseDefine.NotFound;
                 response.Message += "\r\n"+ Define.User.NotFoundMsg;
+                return;
             }
             // 找到PlayListId
-            var RecommendPlayListId = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.UserId && b.Type == PlayListType.Recommend).Select(c=>c.PlayListId), cancellationToken);
+            var RecommendPlayListId = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.User.Id && b.Type == PlayListType.Recommend).Select(c=>c.PlayListId), cancellationToken);
             // 找不到歌单
             if(RecommendPlayListId==null)
             {

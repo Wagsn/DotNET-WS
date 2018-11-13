@@ -44,7 +44,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="userId">用户GUID</param>
         /// <returns></returns>
-        public IQueryable<User> ById([Required][MaxLength(36)]string userId)
+        public IQueryable<User> ForId([Required][MaxLength(36)]string userId)
         {
             var query = from u in Context.Users
                         where u.Id == userId && !u._IsDeleted
