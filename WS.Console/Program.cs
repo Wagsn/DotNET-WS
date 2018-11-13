@@ -6,6 +6,7 @@ namespace WS.ConsoleApp
     {
         static void Main(string[] args)
         {
+            // Wagsn Shell 的应用上下文
             ShellContext AppContext = new ShellContext();
             Console.Write($"Wagsn Shell\r\n版权所有 (C) Wagsn。保留所有权利。\r\n\r\nWS {System.IO.Directory.GetCurrentDirectory()}> ");
             // 一个简单的控制台循环

@@ -26,25 +26,25 @@ namespace WS.Music.Models
             builder.Entity<Send>(b=> 
             {
                 b.ToTable("ws_music_send");
-                b.Property<bool?>("_IsDeleted");
+                b.Property<bool>("_IsDeleted");
             });
 
             builder.Entity<Message>(b =>
             {
                 b.ToTable("ws_music_message");
-                b.Property<bool?>("_IsDeleted");
+                b.Property<bool>("_IsDeleted");
             });
 
             builder.Entity<Song>(b =>
             {
                 b.ToTable("ws_music_song");
-                b.Property<bool?>("_IsDeleted");
+                b.Property<bool>("_IsDeleted");
             });
 
             builder.Entity<User>(b=> 
             {
                 b.ToTable("ws_music_user");  // 映射到ws_music_user表中
-                b.Property<bool?>("_IsDeleted");  // 指明有额外列_IsDeleted
+                b.Property<bool>("_IsDeleted");  // 指明有额外列_IsDeleted
                 b.HasKey(new string[] { "Id", "Name" });  // 双主键
                 //b.HasQueryFilter(a => EF.Property<bool>(User, "_IsDeleted") == false);  // 字段过滤器，过滤之后恢复删除有点麻烦，现在的情况是写在Store
             });
@@ -52,14 +52,14 @@ namespace WS.Music.Models
             builder.Entity<RelUserPlayList>(b =>
             {
                 b.ToTable("ws_music_rel_userplaylist");
-                b.Property<bool?>("_IsDeleted");
+                b.Property<bool>("_IsDeleted");
                 b.HasKey(new string[] { "UserId", "PlayListId" });
             });
 
             builder.Entity<RelPlayListSong>(b =>
             {
                 b.ToTable("ws_music_rel_playlistsong");
-                b.Property<bool?>("_IsDeleted");
+                b.Property<bool>("_IsDeleted");
                 b.HasKey(new string[] { "PlayListId", "SongId" });
             });
         }

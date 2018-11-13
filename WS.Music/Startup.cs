@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WS.Music.Models;
 
+using AutoMapper;
+
 namespace WS.Music
 {
     public class Startup
@@ -38,10 +40,19 @@ namespace WS.Music
                 options.UseMySql(configuration["Data:DefaultConnection:ConnectionString"]);
                 //options.UseOpenIddict();
             });
+            
+            services.AddAutoMapper();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // 这个方法是自定义的
+            // 这个方法是自定义的 IServiceCollectionExtensions.cs
             services.AddUserDefined();
+
+            //AutoMapper.Mapper.
+
+            //Mapper.Initialize(x => x.AddProfile<MappingProfile>());
+
+            //services.AddScoped<IMapper, Mapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

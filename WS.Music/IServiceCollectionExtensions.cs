@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             #region << 在这里添加依赖注入 >>
 
             services.AddScoped<ITransaction, Transaction<ApplicationDbContext>>();
+            //services.AddTransient<IMapper>();
 
             #region << Store >>
 

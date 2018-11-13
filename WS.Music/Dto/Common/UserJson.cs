@@ -30,8 +30,8 @@ namespace WS.Music.Dto
         /// <summary>
         /// 电子邮箱
         /// </summary>
-        [MaxLength(255)]
-        public string Mail { get; set; }
+        [MaxLength(320)]
+        public string Email { get; set; }
 
         /// <summary>
         /// 介绍，可空（Empty=Blank>Null）
@@ -58,7 +58,7 @@ namespace WS.Music.Dto
             Id = user.Id;
             Name = user.Name ?? Name;
             Pwd = user.Pwd ?? Pwd;
-            Mail = user.Mail ?? Mail;
+            Email = user.Email ?? Email;
             Description = user.Description ?? Description;
             Sex = user.Sex ?? Sex;
             BirthTime = user.BirthTime ?? BirthTime;
@@ -73,7 +73,7 @@ namespace WS.Music.Dto
             Id = user.Id;
             Name = user.Name ?? Name;
             Pwd = user.Pwd ?? Pwd;
-            Mail = user.Mail ?? Mail;
+            Email = user.Email ?? Email;
             Description = user.Description ?? Description;
             Sex = user.Sex ?? Sex;
             BirthTime = user.BirthTime ?? BirthTime;

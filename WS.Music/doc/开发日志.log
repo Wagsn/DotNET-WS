@@ -28,3 +28,7 @@
 [NOTE] 层次需要分明，Store做数据库访问，Manager做业务处理（按照请求通过判断查询包装等得到外部访问所需的数据），Controller做外部访问接口（需要对请求进行验证）
 [TODO] 代码重构，将所有Model的Id改为GUID
 [DONE] 基本重构完ID转Guid，以后每次创建实体时调用Guid.GetGuid().ToString()来获取Guid字符序列
+[19:53]
+[DONE] 为UserStore添加了一些查询方法，采用Linq式查询
+[22:04]
+[DONE] 为项目添加AutoMapper，主要时要添加两个NuGet包，AutoMapper和AutoMapper.Extensions.Microsoft.DependencyInjection

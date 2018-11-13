@@ -95,12 +95,12 @@ namespace WS.Music.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseMessage<User>> Get([FromQuery]string Id)
+        public async Task<ResponseMessage<UserJson>> Get([FromBody]UserJson user)
         {
             // 日志输出：请求体
-            Console.WriteLine("WS------ Request: \r\n" + "Id: " + Id);
+            Console.WriteLine("WS------ Request: \r\n" + user);
             // 创建响应体
-            ResponseMessage<User> response = new ResponseMessage<User>();
+            ResponseMessage<UserJson> response = new ResponseMessage<UserJson>();
             // 模型验证
             if (!Util.ModelValidCheck(ModelState, response))
             {
@@ -109,7 +109,7 @@ namespace WS.Music.Controllers
             try
             {
                 /// 业务处理，TODO：<see cref="WSControllerBase.Get{Ext}(string)"/>
-                response.Extension = await Context.Users.Where(a => a.Id == Id && a._IsDeleted==false).AsNoTracking().SingleOrDefaultAsync(); //await _SongStore.ReadAsync(new Song { Id = Id }, CancellationToken.None);  // await Context.Songs.Where(a => a.Id == Id).AsNoTracking().SingleOrDefaultAsync();
+                response.Extension = await Manager.GetUserJson(response, user);
             }
             catch (Exception e)
             {
@@ -152,7 +152,7 @@ namespace WS.Music.Controllers
                 return response;
             }
 
-            User user = await Manager.UserGetAsync(response, request.User);
+            User user = await Manager.GetUser(response, request.User);
             if (user == null) return response;
 
             try

@@ -47,7 +47,7 @@ namespace WS.Core.Models
         /// <summary>
         /// 是否已删除
         /// </summary>
-        public bool? _IsDeleted { get; set; }
+        public bool _IsDeleted { get; set; }
 
         /// <summary>
         /// 刷新数据
@@ -61,7 +61,7 @@ namespace WS.Core.Models
             _UpdateTime = update._UpdateTime?? _UpdateTime;
             _DeleteUserId = update._DeleteUserId?? _DeleteUserId;
             _DeleteTime = update._DeleteTime?? _DeleteTime;
-            _IsDeleted = update._IsDeleted?? _IsDeleted;
+            _IsDeleted = update._IsDeleted;
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace WS.Core.Stores
         /// <summary>
         /// 数据库上下文
         /// </summary>
-        protected virtual TContext Context { get; }
+        public virtual TContext Context { get; }
 
         /// <summary>
         /// 存储基类构造器
@@ -219,6 +219,7 @@ namespace WS.Core.Stores
         {
             CheckNull(query);
             
+            // List是否返回为空？
             return (await ListAsync(query, cancellationToken)).SingleOrDefault();
         }
 

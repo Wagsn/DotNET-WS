@@ -43,7 +43,7 @@ namespace WS.Core.Models
         /// <summary>
         /// 删除状态，软删除（在数据库存在，在客户端不存在）
         /// </summary>
-        bool? _IsDeleted { get; set; }
+        bool _IsDeleted { get; set; }
 
         /// <summary>
         /// 刷新数据
