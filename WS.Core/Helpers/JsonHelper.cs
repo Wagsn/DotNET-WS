@@ -12,7 +12,7 @@ namespace WS.Core.Helpers
         private static JsonSerializerSettings setting = new JsonSerializerSettings()
         {
             DateFormatHandling = DateFormatHandling.IsoDateFormat,
-            DateFormatString = "yyyy-MM-dd HH:mm:ss",
+            DateFormatString = "yyyy-MM-dd HH:mm:ss.FFFFFFK",
             DateTimeZoneHandling = DateTimeZoneHandling.Local,
             NullValueHandling = NullValueHandling.Ignore,
             Formatting = Formatting.Indented,

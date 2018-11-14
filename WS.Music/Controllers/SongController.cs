@@ -65,7 +65,7 @@ namespace WS.Music.Controllers
             try
             {
                 /// 业务处理，TODO：<see cref=""/>
-                await _SongManager.SongInfoEntryAsync(response, request);
+                await _SongManager.SongEntryAsync(response, request);
             }
             catch (Exception e)
             {
@@ -86,20 +86,15 @@ namespace WS.Music.Controllers
         /// <param name="request">歌曲搜索请求</param>
         /// <returns></returns>
         [HttpGet("search")]
-        public async Task<ResponseMessage<List<Song>>> Search([FromBody] SongSearchRequest request)
+        public async Task<ResponseMessage<List<Song>>> Search([FromBody]SongSearchRequest request)
         {
             // 日志输出：请求体
             Console.WriteLine("WS------ Request: \r\n" + request);
             // 创建响应体
             ResponseMessage<List<Song>> response = new ResponseMessage<List<Song>>();
-            // 模型验证
-            if (!Util.ModelValidCheck(ModelState, response))
-            {
-                return response;
-            }
             try
             {
-                /// 业务处理，TODO：<see cref="WSControllerBase.Get{Ext}(long)"/>
+                // 业务处理
                 // 获取交集数量，当交集数量大于某个阈值就判定为相似
                 // int q = ss.Intersect(st).Count();
                 response.Extension = await _SongStore.ListAsync(a=>a.Where(b =>b.Name.Contains(request.SongName)), CancellationToken.None);  // await Context.Songs.Where(a => a.Id == Id).AsNoTracking().SingleOrDefaultAsync();

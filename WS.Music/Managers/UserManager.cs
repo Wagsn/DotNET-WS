@@ -102,6 +102,13 @@ namespace WS.Music.Managers
             return user;
         }
 
+        /// <summary>
+        /// 获得用户通过用户Id
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="userJson"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<User> GetUser([Required]ResponseMessage response, [Required]UserJson userJson, CancellationToken cancellationToken = default(CancellationToken))
         {
             User user = await TheUsers.ReadAsync(a => a.Where(b => b.Id == userJson.Id), cancellationToken);
@@ -122,10 +129,91 @@ namespace WS.Music.Managers
         /// <returns></returns>
         public IQueryable<User> GetUsersOr([Required]ResponseMessage response, [Required]UserJson userJson, CancellationToken cancellationToken = default(CancellationToken))
         {
+            // 放到Store中去
             var query = from u in TheUsers.Context.Users
                         where u.Id == userJson.Id || u.Name == userJson.Name || u.Email == userJson.Email  // those value is only one in db
                         select new User(u);
             return query;
+        }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task Create([Required]ResponseMessage<UserJson> response, [Required]UserSignUpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // 检查参数是否异常
+            var signupUserJson = request.SignupUser;  // 不采用request.User的原因是为了后台手动注册时也有账户登陆
+            if (signupUserJson == null || signupUserJson.Name == null || signupUserJson.Pwd == null)
+            {
+                Define.Response.Wrap(response, ResponseDefine.BadRequset, "用户注册信息不全");
+                return;
+            }
+            // 检查用户是否已经存在
+            var dbuser = TheUsers.ByName(signupUserJson.Name).SingleOrDefault();
+            if (dbuser != null)
+            {
+                Define.Response.Wrap(response, ResponseDefine.BadRequset, "该用户名已经存在，不能重复注册，若是你注册的请登陆或到密码找回处找回密码");
+                return;
+            }
+            // 创建用户
+            dbuser = _Mapper.Map<User>(signupUserJson);
+            dbuser.Id = Guid.NewGuid().ToString();
+            dbuser._CreateUserId = dbuser.Id;
+            var user = await TheUsers.CreateAsync(dbuser, cancellationToken);
+            if (user == null)
+            {
+                Define.Response.Wrap(response, ResponseDefine.ServiceError, "在数据库插入数据失败");
+                return;
+            }
+            response.Extension = _Mapper.Map<UserJson>(user);
+        }
+
+        /// <summary>
+        /// 用户信息更新
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        public async Task Update([Required]ResponseMessage<UserJson> response, [Required]UserUpdateRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // 检查参数格式
+            if(request.User==null || request.User.Id == null || request.User.Name == null || request.User.Pwd == null)
+            {
+                Define.Response.Wrap(response, Define.Response.NotAllowCode, "你还没有登陆，不能够修改用户信息");
+                return;
+            }
+            if(request.UpdateUser == null||request.UpdateUser.Id==null)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "修改用户信息的请求有误");
+                return;
+            }
+            // 判断用户是否存在及其密码是否正确
+            if (request.User.Id != request.UpdateUser.Id)
+            {
+                Define.Response.Wrap(response, Define.Response.NotSupportCode, "抱歉，暂时不支持修改其他账号的用户信息");  // 用户是不应该知道自己的ID的
+            }
+            // 检查参数有效
+            var dbuser = TheUsers.ForId(request.UpdateUser.Id).SingleOrDefault();
+            if (dbuser == null)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, Define.User.NotFoundMsg);
+                return;
+            }
+            // 判断密码是否错误
+            else if (dbuser.Pwd!=request.User.Pwd)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "用户密码错误");
+                return;
+            }
+            // 用户数据更新: 将数据库中拿出的user更新几个变化的值
+            dbuser._Update(_Mapper.Map<User>(request.UpdateUser));
+            dbuser._UpdateUserId = request.User.Id;
+            await TheUsers.UpdateAsync(dbuser, cancellationToken);
+            response.Extension = _Mapper.Map<UserJson>(dbuser);  // 返回的User包含完整的用户信息
         }
     }
 }

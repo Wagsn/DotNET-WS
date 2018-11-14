@@ -63,6 +63,7 @@ namespace WS.Music.Models
 
         public User([Required]UserJson user)
         {
+            // 外部可以采用AutoMapper映射
             Id = user.Id;
             Name = user.Name;
             Pwd = user.Pwd;
@@ -88,13 +89,13 @@ namespace WS.Music.Models
         /// <param name="user"></param>
         public void _Update(User user)
         {
-            Id = user.Id;
-            Name = user.Name;
-            Pwd = user.Pwd;
-            Email = user.Email;
-            Description = user.Description;
-            Sex = user.Sex;
-            BirthTime = user.BirthTime;
+            Id = user.Id??Id;
+            Name = user.Name??Id;
+            Pwd = user.Pwd??Pwd;
+            Email = user.Email??Email;
+            Description = user.Description??Description;
+            Sex = user.Sex??Sex;
+            BirthTime = user.BirthTime??BirthTime;
         }
 
 

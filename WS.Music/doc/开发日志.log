@@ -32,3 +32,8 @@
 [DONE] 为UserStore添加了一些查询方法，采用Linq式查询
 [22:04]
 [DONE] 为项目添加AutoMapper，主要时要添加两个NuGet包，AutoMapper和AutoMapper.Extensions.Microsoft.DependencyInjection
+[2018-11-14]
+[09:03]
+[TODO] 添加用户注册，采用Guid生成Id
+[14:55]
+[DONE] 用户注册、用户信息更新

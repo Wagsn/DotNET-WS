@@ -8,21 +8,11 @@ namespace WS.Music.Dto
     /// <summary>
     /// 用户注册请求体
     /// </summary>
-    public class UserSignUpRequest
+    public class UserSignUpRequest : RequestBase
     {
         /// <summary>
-        /// 用户名
+        /// 注册用户  不采用request.User的原因是为了后台手动注册时也有账户登陆
         /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public string Pwd { get; set; }
-
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        public string Mail { get; set; }
+        public UserJson SignupUser { get; set; }
     }
 }

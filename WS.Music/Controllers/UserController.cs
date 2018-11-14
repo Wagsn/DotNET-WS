@@ -56,6 +56,72 @@ namespace WS.Music.Controllers
         }
 
         /// <summary>
+        /// 用户信息更新
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ResponseMessage<UserJson>> Update([FromBody]UserUpdateRequest request)
+        {
+            // 日志输出：请求体
+            Console.WriteLine("WS------ Request: \r\n" + JsonHelper.ToJson(request));
+            // 创建响应体
+            ResponseMessage<UserJson> response = new ResponseMessage<UserJson>();
+            // 模型验证
+            if (!Util.ModelValidCheck(ModelState, response))
+            {
+                return response;
+            }
+            try
+            {
+                // 业务处理
+                await Manager.Update(response, request, default(CancellationToken));
+            }
+            catch (Exception e)
+            {
+                Define.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
+                // 日志输出：服务器错误
+                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+            }
+            // 日志输出：响应体
+            Console.WriteLine("WS------ Response: \r\n" + response != null ? JsonHelper.ToJson(response) : "");
+            return response;
+        }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ResponseMessage<UserJson>> SignUp([FromBody]UserSignUpRequest request)
+        {
+            // 日志输出：请求体
+            Console.WriteLine("WS------ Request: \r\n" + JsonHelper.ToJson(request));
+            // 创建响应体
+            ResponseMessage<UserJson> response = new ResponseMessage<UserJson>();
+            // 模型验证
+            if (!Util.ModelValidCheck(ModelState, response))
+            {
+                return response;
+            }
+            try
+            {
+                // 业务处理
+                await Manager.Create(response, request, default(CancellationToken));
+            }
+            catch (Exception e)
+            {
+                Define.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
+                // 日志输出：服务器错误
+                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+            }
+            // 日志输出：响应体
+            Console.WriteLine("WS------ Response: \r\n" + response != null ? JsonHelper.ToJson(response) : "");
+            return response;
+        }
+
+        /// <summary>
         /// 用户收藏歌曲
         /// </summary>
         /// <param name="request"></param>
@@ -200,5 +266,7 @@ namespace WS.Music.Controllers
             }
             return false;
         }
+
+
     }
 }

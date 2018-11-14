@@ -6,25 +6,15 @@ using System.Threading.Tasks;
 namespace WS.Music.Dto
 {
     /// <summary>
-    /// 歌曲搜索请求体
+    /// 搜索请求
     /// </summary>
-    public class SongSearchRequest : RequestBase
+    public class SearchRequest : RequestBase
     {
-        /// <summary>
-        /// 歌曲名
-        /// </summary>
-        public string SongName { get; set; }
-
-        /// <summary>
-        /// 歌手名
-        /// </summary>
-        public string ArtistName { get; set; }
-
         /// <summary>
         /// 关键字
         /// </summary>
         public string Word { get; set; }
-        
+
         /// <summary>
         /// 类型
         /// </summary>

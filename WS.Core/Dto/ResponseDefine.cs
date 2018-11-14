@@ -40,7 +40,7 @@ namespace WS.Core.Dto
         /// 成功但是重复
         /// </summary>
         public static readonly string PostRepeat = "601";
-        public static readonly string PostRepeatMsg = "创建资源操作重复，服务器的资源已经被创建";
+        public static readonly string PostRepeatMsg = "创建资源重复，服务器的资源已经被创建";
 
         #endregion
 

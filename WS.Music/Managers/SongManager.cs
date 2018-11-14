@@ -28,7 +28,7 @@ namespace WS.Music.Managers
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
-        public async Task SongInfoEntryAsync([Required]ResponseMessage response, [Required]SongInfoEntryRequest request)
+        public async Task SongEntryAsync([Required]ResponseMessage response, [Required]SongInfoEntryRequest request)
         {
             // 权限检查在Controller中验证
             // 参数检查，空检查和存在检查（操作数据是否存在于数据库）
