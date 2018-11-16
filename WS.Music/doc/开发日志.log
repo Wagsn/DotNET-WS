@@ -37,3 +37,14 @@
 [TODO] 添加用户注册，采用Guid生成Id
 [14:55]
 [DONE] 用户注册、用户信息更新
+[2018-11-14]
+[TODO] 开发Android端
+[DONE] 开发文件工具，目的是将以后从服务器获取的音乐或唱片等信息本地化保存
+[NOTE] Android studio 进行JUnit单元测试时报错找不到org.junit包，解决方案为：将C:\Users\wagsn\.gradle\caches\modules-2\files-2.1\junit\junit\4.12下的junit包拷贝到项目的libs文件夹下
+[2018-11-16]
+[09:01]
+[TODO] 开发文件存储工具，并用Song类来测试。
+[12:57]
+[DONE] 文件工具测试通过
+[17:39]
+[MEET] 讲解计算机以及网络，还有.NET Core的历史
