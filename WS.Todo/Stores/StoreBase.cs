@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using TodoApi.Models;
+using WS.Todo.Models;
 using WS.Core.Helpers;
 
-namespace TodoApi.Stores
+namespace WS.Todo.Stores
 {
     /// <summary>
     /// Store基类，软删除在这里写，实现了一些通用方法，和工具方法

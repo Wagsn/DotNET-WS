@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace TodoApi.Dto
+namespace WS.Todo.Dto
 {
     public class TodoItemCreateRequest
     {

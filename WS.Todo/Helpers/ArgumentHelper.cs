@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Helpers
+namespace WS.Todo.Helpers
 {
     /// <summary>
     /// 参数验证助手

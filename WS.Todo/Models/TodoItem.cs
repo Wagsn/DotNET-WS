@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Models
+namespace WS.Todo.Models
 {
     public class TodoItem : TraceUpdateBase
     {
@@ -17,13 +17,13 @@ namespace TodoApi.Models
         /// <summary>
         /// 待办名
         /// </summary>
-        [MaxLength(50)]
+        [MaxLength(31)]
         public string Name { get; set; }
 
         /// <summary>
         /// 待办内容
         /// </summary>
-        [MaxLength(200)]
+        [MaxLength(255)]
         public string Content { get; set; }
 
         /// <summary>

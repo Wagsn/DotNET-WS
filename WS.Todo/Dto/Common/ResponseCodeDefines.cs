@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Dto
+namespace WS.Todo.Dto
 {
     /// <summary>
     /// 响应体返回码

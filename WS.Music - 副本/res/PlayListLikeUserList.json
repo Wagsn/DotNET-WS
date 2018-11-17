@@ -1,0 +1,12 @@
+{
+  "extendion": [ /*喜欢这个歌单的人*/
+    {
+      "id": 1,
+      "name": "wagsn"
+    },
+    {
+      "id": 2,
+      "name": "admin"
+    }
+  ]
+}

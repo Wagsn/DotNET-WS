@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TodoApi
+namespace WS.Todo
 {
     public class HttpHeaderOperation : IOperationFilter
     {

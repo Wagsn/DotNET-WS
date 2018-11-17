@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Dto
+namespace WS.Todo.Dto
 {
     /// <summary>
     /// 携带消息响应体（用于返回错误信息）

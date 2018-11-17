@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+//using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,11 +13,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.Swagger;
-using TodoApi.Models;
-using TodoApi.Stores;
 
-namespace TodoApi
+using Swashbuckle.AspNetCore.Swagger;
+
+using WS.Todo.Models;
+using WS.Todo.Stores;
+
+namespace WS.Todo
 {
     /// <summary>
     /// 启动器
@@ -107,12 +109,14 @@ namespace TodoApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
+            //else
+            //{
+            //    // HTTPS   HSTS 中间件 (UseHsts) 发送给客户端的 HTTP 严格传输安全性协议 (HSTS) 标头。
+            //    app.UseHsts();
+            //}
 
-            app.UseHttpsRedirection();
+            // 启用https协议
+            //app.UseHttpsRedirection();
             app.UseMvc();
 
             // Call the Web API with jQuery

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Models
+namespace WS.Todo.Models
 {
     /// <summary>
     /// 数据库更新追踪，实现软删除，以及存储数据库更新信息

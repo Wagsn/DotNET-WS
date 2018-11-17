@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace TodoApi.Models
+namespace WS.Todo.Models
 {
     /// <summary>
     /// 数据库上下文

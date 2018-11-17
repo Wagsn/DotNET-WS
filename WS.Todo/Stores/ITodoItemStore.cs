@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using TodoApi.Models;
+using WS.Todo.Models;
 
-namespace TodoApi.Stores
+namespace WS.Todo.Stores
 {
     /// <summary>
     /// 未使用

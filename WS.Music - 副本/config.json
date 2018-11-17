@@ -1,0 +1,7 @@
+﻿{
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=localhost;database=ws_music;uid=root;pwd=123456;Pooling=true;ConnectionReset=false;maxpoolsize=20"
+    }
+  }
+}

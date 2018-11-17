@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Dto
+namespace WS.Todo.Dto
 {
     /// <summary>
     /// 工具类，可能会被拆分至各个Helper中

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TodoApi.Dto.Request
+namespace WS.Todo.Dto.Request
 {
     /// <summary>
     /// 分页查询请求

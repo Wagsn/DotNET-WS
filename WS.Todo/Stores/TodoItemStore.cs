@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-using TodoApi.Dto;
-using TodoApi.Models;
+using WS.Todo.Dto;
+using WS.Todo.Models;
 
-namespace TodoApi.Stores
+namespace WS.Todo.Stores
 {
     /// <summary>
     /// 

@@ -5,12 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Dto;
-using TodoApi.Models;
-using TodoApi.Stores;
+
+using WS.Todo.Dto;
+using WS.Todo.Models;
+using WS.Todo.Stores;
 using WS.Core.Helpers;
 
-namespace TodoApi.Controllers
+namespace WS.Todo.Controllers
 {
     /// <summary>
     /// 待办控制器
