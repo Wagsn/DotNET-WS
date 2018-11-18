@@ -12,19 +12,19 @@ namespace WS.Shell
         {
             // Wagsn Shell 的应用上下文
             ShellContext AppContext = new ShellContext();
-            Console.Write($"{ShellContext.CopyrightInfo}\r\n\r\nWS {AppContext.CurrentDirectory}> ");
+            Console.Write($"{AppContext.CopyrightInfo}\r\n\r\nWS {AppContext.CurrentDirectory}> ");
             // 一个简单的控制台循环
             string nextLine = "";
             //bool hasOutput = true;
             while (true)
             {
-                nextLine = Console.ReadLine();
+                nextLine = Console.ReadLine().Trim();
                 switch (nextLine)
                 {
                     case "":
                         break;
                     case "id":
-                        Console.WriteLine("id: "+ShellContext.StartId);
+                        Console.WriteLine("id: "+AppContext.StartId);
                         break;
                     case "exit":
                         return;
@@ -103,12 +103,12 @@ namespace WS.Shell
         /// <summary>
         /// 版权信息
         /// </summary>
-        public static string CopyrightInfo = "Wagsn Shell\r\n版权所有 (C) Wagsn。保留所有权利。";
+        public string CopyrightInfo = "Wagsn Shell\r\n版权所有 (C) Wagsn。保留所有权利。";
 
         /// <summary>
         /// 程序启动ID
         /// </summary>
-        public static readonly string StartId = Guid.NewGuid().ToString();
+        public readonly string StartId = Guid.NewGuid().ToString();
 
         public ShellContext()
         {
