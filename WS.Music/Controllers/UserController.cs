@@ -174,7 +174,7 @@ namespace WS.Music.Controllers
             }
             try
             {
-                /// 业务处理，TODO：<see cref="WSControllerBase.Get{Ext}(string)"/>
+                /// 业务处理
                 response.Extension = await Manager.GetUserJson(response, user);
             }
             catch (Exception e)
