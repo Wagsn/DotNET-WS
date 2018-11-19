@@ -82,23 +82,21 @@ namespace WS.Music.Controllers
 
         /// <summary>
         /// 歌曲相似度搜索
-        /// 歌曲名称搜索OK，TODO：根据专辑名称和歌手名称搜索
+        /// 歌曲名称搜索OK，TODO：根据专辑、歌手、歌词名称搜索
         /// </summary>
         /// <param name="request">歌曲搜索请求</param>
         /// <returns></returns>
         [HttpGet("search")]
-        public async Task<ResponseMessage<List<Song>>> Search([FromBody]SongSearchRequest request)
+        public ResponseMessage<List<SongJson>> Search([FromBody]SongSearchRequest request)
         {
             // 日志输出：请求体
             Console.WriteLine("WS------ Request: \r\n" + request);
             // 创建响应体
-            ResponseMessage<List<Song>> response = new ResponseMessage<List<Song>>();
+            ResponseMessage<List<SongJson>> response = new ResponseMessage<List<SongJson>>();
             try
             {
                 // 业务处理
-                // 获取交集数量，当交集数量大于某个阈值就判定为相似
-                // int q = ss.Intersect(st).Count();
-                response.Extension = await _SongStore.ListAsync(a=>a.Where(b =>b.Name.Contains(request.SongName)), CancellationToken.None);  // await Context.Songs.Where(a => a.Id == Id).AsNoTracking().SingleOrDefaultAsync();
+                _SongManager.Serch(response, request);
             }
             catch (Exception e)
             {

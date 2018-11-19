@@ -18,6 +18,7 @@ namespace WS.Music
             // 从User映射到UserJson
             CreateMap<User, UserJson>();
             CreateMap<UserJson, User>();
+            CreateMap<Song, SongJson>();
         }
     }
 }

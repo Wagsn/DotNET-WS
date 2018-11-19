@@ -11,22 +11,12 @@ namespace WS.Music.Dto
     public class SongSearchRequest : RequestBase
     {
         /// <summary>
-        /// 歌曲名
-        /// </summary>
-        public string SongName { get; set; }
-
-        /// <summary>
-        /// 歌手名
-        /// </summary>
-        public string ArtistName { get; set; }
-
-        /// <summary>
         /// 关键字
         /// </summary>
         public string Word { get; set; }
-        
+
         /// <summary>
-        /// 类型
+        /// 类型,(Song: default, Artist, Ablum, Lyric歌词: ╳, All)
         /// </summary>
         public string Type { get; set; }
     }

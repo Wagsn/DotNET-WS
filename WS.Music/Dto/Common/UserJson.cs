@@ -10,7 +10,7 @@ namespace WS.Music.Dto
     public class UserJson
     {
         /// <summary>
-        /// ID，主键
+        /// 用户Id，如果为0则表示为游客（TODO：通过IP设备用户等生成临时Id）
         /// </summary>
         [MaxLength(36, ErrorMessage ="GUID最大不能超过36个字符")]
         public string Id { get; set; }

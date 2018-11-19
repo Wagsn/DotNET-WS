@@ -1,35 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WS.Music.Models
+namespace WS.Music.Dto
 {
     /// <summary>
-    /// 音乐专辑实体
+    /// 歌曲信息
     /// </summary>
-    public class Album : Core.Models.TraceUpdateBase
+    public class SongJson
     {
         /// <summary>
-        /// 标签 Album
-        /// </summary>
-        [NotMapped]
-        public static readonly string TAG = "Album";
-
-        /// <summary>
-        /// 专辑ID
+        /// 歌曲ID
         /// </summary>
         [Key]
-        [MaxLength(36)]
+        [MaxLength(63)]
         public string Id { get; set; }
 
         /// <summary>
-        /// 专辑名称
+        /// 歌曲名
         /// </summary>
         [Required]
-        [MaxLength(63)]
         public string Name { get; set; }
 
         /// <summary>
@@ -39,20 +31,21 @@ namespace WS.Music.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// 歌曲的持续时长，可能不需要，因为通过歌曲文件可以得到
+        /// </summary>
+        public long? Duration { get; set; }
+
+        /// <summary>
         /// 发行时间
         /// </summary>
         public DateTime? ReleaseTime { get; set; }
 
         /// <summary>
-        /// 包含的歌曲
+        /// 歌曲文件的URL，标准输出，如果想听其他规格的歌曲文件，请在SongFile中查找
         /// </summary>
-        [NotMapped]
-        public List<Song> Songs { get; set; }
+        [MaxLength(255)]
+        public string Url { get; set; }
 
-        /// <summary>
-        /// 演唱歌手列表（一般只有一个，用于合辑）
-        /// </summary>
-        [NotMapped]
-        public List<Artist> Artists { get; set; }
+        // User Album TagList（标签集）
     }
 }

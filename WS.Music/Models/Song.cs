@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Core.Models;
@@ -47,9 +48,33 @@ namespace WS.Music.Models
         [MaxLength(255)]
         public string Url { get; set; }
 
-        // User Album TagList（标签集）
-        
+        // 还有个来源Link，比如来源（ID+Type）于专辑，歌单、排行榜、分享
+
+        /// <summary>
+        /// 艺人
+        /// </summary>
+        [NotMapped]
+        public List<Artist> Artists { get; set; }
+
+        /// <summary>
+        /// 专辑（歌曲可能属于几个专辑，不过当前歌曲只会提示属于哪个专辑）
+        /// </summary>
+        [NotMapped]
+        public Album Album { get; set; }
+
+        // User（哪个用户上传的） TagList（标签集）
+
         public Song() { }
+
+        public Song (Song s)
+        {
+            Id = s.Id;
+            Name = s.Name;
+            Description = s.Description;
+            Duration = s.Duration;
+            ReleaseTime = s.ReleaseTime;
+            Url = s.Url;
+        }
 
         public Song(string id, string name, string url)
         {

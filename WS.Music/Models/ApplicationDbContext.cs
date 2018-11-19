@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Music.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,18 @@ namespace WS.Music.Models
             {
                 b.ToTable("ws_music_send");
                 b.Property<bool>("_IsDeleted");
+            });
+
+            builder.Entity<Artist>(b =>
+            {
+                b.ToTable("ws_music_artist");
+                b.Property<bool>("_IstDeleted");
+            });
+
+            builder.Entity<Album>(b =>
+            {
+                b.ToTable("ws_music_album");
+                b.Property<bool>("_IstDeleted");
             });
 
             builder.Entity<Message>(b =>
@@ -62,12 +75,36 @@ namespace WS.Music.Models
                 b.Property<bool>("_IsDeleted");
                 b.HasKey(new string[] { "PlayListId", "SongId" });
             });
+
+            builder.Entity<RelSongArtist>(b =>
+            {
+                b.ToTable("ws_music_rel_songartist");
+                b.Property<bool>("_IsDeleted");
+                b.HasKey(new string[] { "SongId", "ArtistId" });
+            });
+
+            builder.Entity<RelSongAlbum>(b =>
+            {
+                b.ToTable("ws_music_rel_songalbum");
+                b.Property<bool>("_IsDeleted");
+                b.HasKey(new string[] { "SongId", "AlbumId" });
+            });
         }
 
         /// <summary>
         /// 歌曲
         /// </summary>
         public DbSet<Song> Songs { get; set; }
+
+        /// <summary>
+        /// 艺人
+        /// </summary>
+        public DbSet<Artist> Artists { get; set; }
+
+        /// <summary>
+        /// 专辑
+        /// </summary>
+        public DbSet<Album> Albums { get; set; }
 
         /// <summary>
         /// 用户
@@ -83,6 +120,16 @@ namespace WS.Music.Models
         /// 消息
         /// </summary>
         public DbSet<Message> Messages { get; set; }
+
+        /// <summary>
+        /// 歌曲专辑关联
+        /// </summary>
+        public DbSet<RelSongAlbum> RelSongAlbums { get; set; }
+
+        /// <summary>
+        /// 歌曲艺人关联
+        /// </summary>
+        public DbSet<RelSongArtist> RelSongArtists { get; set; }
 
         /// <summary>
         /// 用户歌单关联

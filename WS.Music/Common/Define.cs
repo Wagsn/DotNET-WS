@@ -70,6 +70,7 @@ namespace WS.Music.Define
     /// </summary>
     public static class User
     {
+        public static readonly string TAG = "User";
         /// <summary>
         /// 找不到用户，可能是未注册或已注销，请你检查一下你的请求是否正确
         /// </summary>
@@ -83,6 +84,7 @@ namespace WS.Music.Define
     /// </summary>
     public static class Song
     {
+        public static readonly string TAG = "Song";
         /// <summary>
         /// 歌曲信息录入成功
         /// </summary>
@@ -91,11 +93,26 @@ namespace WS.Music.Define
         public static readonly string DeletedMsg = "歌曲信息删除成功";
     }
 
+    public static class Album
+    {
+        public static readonly string TAG = "Album";
+
+    }
+
+    /// <summary>
+    /// 歌手常量
+    /// </summary>
+    public static class Artist
+    {
+        public static readonly string TAG = "Artist";
+    }
+
     /// <summary>
     /// 歌单相关的常量
     /// </summary>
     public static class PlayList
     {
+        public static readonly string TAG = "PlayList";
         /// <summary>
         /// 歌单类型相关的常量
         /// </summary>
@@ -130,7 +147,7 @@ namespace WS.Music.Define
 
     public static class Format
     {
-        public static readonly string Time = "yyyy-MM-ddTmm:ss.FFFFFFK";
+        public static readonly string FullTime = "yyyy-MM-dd mm:ss.FFFFFFK";
     }
 
     /// <summary>

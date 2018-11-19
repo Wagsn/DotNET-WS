@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using AutoMapper;
+
 using WS.Core.Dto;
 using WS.Music.Dto;
 using WS.Music.Stores;
@@ -17,9 +20,12 @@ namespace WS.Music.Managers
     {
         public SongStore Store { get; set; }
 
-        public SongManager(SongStore songStore)
+        public IMapper _Mapper { get; set; }
+
+        public SongManager(SongStore songStore, IMapper Mapper)
         {
             Store = songStore;
+            _Mapper = Mapper;
         }
 
         /// <summary>
@@ -43,7 +49,7 @@ namespace WS.Music.Managers
                     Description = request.SongInfo.Description,
                     ReleaseTime = request.SongInfo.ReleaseTime,
                     Duration = request.SongInfo.Duration ?? 0,
-                    _CreateUserId = request.UserId
+                    _CreateUserId = request.User.Id
                 }, CancellationToken.None);
                 response.Message += "\r\n" + ResponseDefine.CreatedMsg + "\r\n" + Define.Song.CreatedMsg;
             }
@@ -57,9 +63,48 @@ namespace WS.Music.Managers
                     Description = request.SongInfo.Description,
                     ReleaseTime = request.SongInfo.ReleaseTime,
                     Duration = request.SongInfo.Duration ?? 0,
-                    _UpdateUserId = request.UserId
+                    _UpdateUserId = request.User.Id
                 }, CancellationToken.None);
                 response.Message += "\r\n" + Define.Song.UpdatedMsg;
+            }
+        }
+        /// <summary>
+        /// Fuzzy search Songs by Song Name, Artist Name, Album Name, Lyric, Tag or All the Names.
+        /// </summary>
+        /// <param name="response">Response Message</param>
+        /// <param name="request">Song Search Request</param>
+        public void Serch([Required]ResponseMessage<List<SongJson>> response, [Required]SongSearchRequest request)
+        {
+            // Check arguments.
+            if (request.Word == null)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "Keywords can not be empty!");
+            }
+
+            // Search Song by Song Name.
+            if (request.Type == null || request.Type.ToLower() == "song")
+            {
+                response.Extension = Store.ByName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+            }
+            // Search Song by Other ways.
+            switch (request.Type.ToLower())
+            {
+                case "artist":
+                    response.Extension = Store.ByArtistName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    break;
+                case "album":
+                    response.Extension = Store.ByAlbumName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    break;
+                case "all":
+                    response.Extension = Store.ByAllName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    break;
+                case "lyric":
+                default:
+                    if (response.Extension == null)
+                    {
+                        Define.Response.Wrap(response, Define.Response.NotSupportCode, "Does not support query songs by other ways!");
+                    }
+                    break;
             }
         }
     }

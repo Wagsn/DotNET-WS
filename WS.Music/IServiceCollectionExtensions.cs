@@ -34,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             #region << Store >>
 
             services.AddTransient<SongStore>();
+            services.AddTransient<ArtistStore>();
             services.AddTransient<UserStore>();
             services.AddTransient<SendStore>();
             services.AddTransient<MessageStore>();
