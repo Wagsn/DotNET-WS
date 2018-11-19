@@ -50,6 +50,22 @@ namespace WS.Core.Models
         public bool _IsDeleted { get; set; }
 
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        protected TraceUpdateBase()
+        {
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="update"></param>
+        public TraceUpdateBase(TraceUpdateBase update)
+        {
+            _Update(update);
+        }
+
+        /// <summary>
         /// 刷新数据
         /// </summary>
         /// <param name="update"></param>
@@ -65,13 +81,27 @@ namespace WS.Core.Models
         }
 
         /// <summary>
-        /// 匹配相似度
+        /// 比较
         /// </summary>
         /// <param name="update"></param>
         /// <returns></returns>
         public virtual bool _Equals(ITraceUpdate update)
         {
             return _CreateTime == update._CreateTime;
+        }
+
+        /// <summary>
+        /// 数据重置，一般用户创建时，所以创建时间重置为当前时间
+        /// </summary>
+        public virtual void _Reset()
+        {
+            _CreateUserId = null;
+            _CreateTime = null;
+            _UpdateUserId = null;
+            _UpdateTime = null;
+            _DeleteUserId = null;
+            _DeleteTime = null;
+            _IsDeleted = false;
         }
     }
 }

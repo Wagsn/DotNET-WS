@@ -84,19 +84,19 @@ namespace WS.Music.Managers
             // Search Song by Song Name.
             if (request.Type == null || request.Type.ToLower() == "song")
             {
-                response.Extension = Store.ByName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                response.Extension = Store.LikeName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
             }
             // Search Song by Other ways.
             switch (request.Type.ToLower())
             {
                 case "artist":
-                    response.Extension = Store.ByArtistName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    response.Extension = Store.LikeArtistName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
                     break;
                 case "album":
-                    response.Extension = Store.ByAlbumName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    response.Extension = Store.LikeAlbumName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
                     break;
                 case "all":
-                    response.Extension = Store.ByAllName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
+                    response.Extension = Store.LikeAllName(request.Word).Select(a => _Mapper.Map<SongJson>(a)).ToList();
                     break;
                 case "lyric":
                 default:

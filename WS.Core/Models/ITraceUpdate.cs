@@ -57,5 +57,7 @@ namespace WS.Core.Models
         /// <param name="update"></param>
         /// <returns></returns>
         bool _Equals(ITraceUpdate update);
+
+        void _Reset();
     }
 }

@@ -41,11 +41,40 @@ namespace WS.Music.Stores
         }
 
         /// <summary>
+        /// 通过歌单ID查询歌曲
+        /// </summary>
+        /// <param name="playListId"></param>
+        /// <returns></returns>
+        public IQueryable<Song> ByPlayListId (string playListId)
+        {
+            var query = from s in Context.Songs
+                        where (from rps in Context.RelPlayListSongs
+                               where rps.PlayListId == playListId
+                               select rps.SongId).Contains(s.Id)
+                        select new Song(s);
+            return query;
+            // C:\Users\wagsn\Documents\Tencent Files\850984728\FileRecv\
+        }
+
+        /// <summary>
+        /// 查询ID通过歌单ID
+        /// </summary>
+        /// <param name="playListId"></param>
+        /// <returns></returns>
+        public IQueryable<string> FindIdByPlayListId(string playListId)
+        {
+            var query = from rps in Context.RelPlayListSongs
+                        where rps.PlayListId == playListId
+                        select rps.SongId;
+            return query;
+        }
+
+        /// <summary>
         /// 通过所有有关联的名称查询Song，模糊查询，效率较低
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> ByAllName(string name)
+        public IQueryable<Song> LikeAllName(string name)
         {
             // TODO 优化查询速度
             var query = from s in Context.Songs
@@ -67,12 +96,12 @@ namespace WS.Music.Stores
         /// <summary>
         /// 找到Song通过歌名，模糊查询
         /// </summary>
-        /// <param name="Name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> ByName(string Name)
+        public IQueryable<Song> LikeName(string name)
         {
             var query = from s in Context.Songs
-                        where s.Name.Contains(Name)
+                        where s.Name.Contains(name)
                         select new Song(s);
             return query;
         }
@@ -80,14 +109,14 @@ namespace WS.Music.Stores
         /// <summary>
         /// 找到Song通过艺人名，模糊查询
         /// </summary>
-        /// <param name="Name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> ByArtistName(string Name)
+        public IQueryable<Song> LikeArtistName(string name)
         {
             var query = from s in Context.Songs
                         where (from rsoar in Context.RelSongArtists
                                where (from a in Context.Artists
-                                      where a.Name.Contains(Name)  
+                                      where a.Name.Contains(name)  
                                       select a.Id).Contains(rsoar.ArtistId)
                                select rsoar.SongId).Contains(s.Id)
                         select new Song(s);
@@ -99,7 +128,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public IQueryable<Song> ByAlbumName(string Name)
+        public IQueryable<Song> LikeAlbumName(string Name)
         {
             var query = from s in Context.Songs
                         where (from rsoal in Context.RelSongAlbums

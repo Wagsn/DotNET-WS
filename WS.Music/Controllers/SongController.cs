@@ -81,8 +81,8 @@ namespace WS.Music.Controllers
         }
 
         /// <summary>
-        /// 歌曲相似度搜索
-        /// 歌曲名称搜索OK，TODO：根据专辑、歌手、歌词名称搜索
+        /// 歌曲模糊搜索
+        /// 歌曲名称、专辑名称、歌手名称搜索OK，TODO 歌词、标签搜索
         /// </summary>
         /// <param name="request">歌曲搜索请求</param>
         /// <returns></returns>

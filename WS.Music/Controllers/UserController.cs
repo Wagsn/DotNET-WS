@@ -156,6 +156,40 @@ namespace WS.Music.Controllers
         }
 
         /// <summary>
+        /// 用户取消收藏歌曲
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ResponseMessage> SongClollectionDeleted([FromBody]SongCollectionRequest request)
+        {
+            // 日志输出：请求体
+            Console.WriteLine("WS------ Request: \r\n" + JsonHelper.ToJson(request));
+            // 创建响应体
+            ResponseMessage response = new ResponseMessage();
+            // 模型验证
+            if (!Util.ModelValidCheck(ModelState, response))
+            {
+                return response;
+            }
+            try
+            {
+                /// 业务处理
+                await Manager.CollectionSongAsync(response, request);
+            }
+            catch (Exception e)
+            {
+                response.Code = ResponseDefine.ServiceError;
+                response.Message += "\r\n" + e.Message;
+                // 日志输出：服务器错误
+                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+            }
+            // 日志输出：响应体
+            Console.WriteLine("WS------ Response: \r\n" + response != null ? JsonHelper.ToJson(response) : "");
+            return response;
+        }
+
+        /// <summary>
         /// 通过ID查询用户信息，TODO：建立请求分发中心，request携带请求码code来判断是哪个Manager来处理事务然后返回结果
         /// </summary>
         /// <param name="Id"></param>

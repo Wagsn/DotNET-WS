@@ -58,8 +58,14 @@ namespace WS.Music.Models
             {
                 b.ToTable("ws_music_user");  // 映射到ws_music_user表中
                 b.Property<bool>("_IsDeleted");  // 指明有额外列_IsDeleted
-                b.HasKey(new string[] { "Id", "Name" });  // 双主键
+                //b.HasKey(new string[] { "Id", "Name" });  // 双主键
                 //b.HasQueryFilter(a => EF.Property<bool>(User, "_IsDeleted") == false);  // 字段过滤器，过滤之后恢复删除有点麻烦，现在的情况是写在Store
+            });
+
+            builder.Entity<PlayList>(b =>
+            {
+                b.ToTable("ws_music_palylist");
+                b.Property<bool>("_IsDeleted");
             });
 
             builder.Entity<RelUserPlayList>(b =>
@@ -110,6 +116,11 @@ namespace WS.Music.Models
         /// 用户
         /// </summary>
         public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// 歌单
+        /// </summary>
+        public DbSet<PlayList> PlayLists { get; set; }
 
         /// <summary>
         /// 发送

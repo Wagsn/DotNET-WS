@@ -23,18 +23,21 @@ namespace WS.Music.Managers
 
         public RelPlayListSongStore _RelPlayListSongStore { get; set; }
 
+        public SongStore _SongStore { get; set; }
+
         public UserStore TheUsers { get; set; }
 
         public IMapper _Mapper { get; set; }
 
-        public UserManager(RelUserPlayListStore RelUserPlayListStore, RelPlayListSongStore RelPlayListSongStore, UserStore theUsers, IMapper Mapper)
+        public UserManager(RelUserPlayListStore RelUserPlayListStore, RelPlayListSongStore RelPlayListSongStore, SongStore SongStore, UserStore theUsers, IMapper Mapper)
         {
             _RelUserPlayListStore = RelUserPlayListStore;
             _RelPlayListSongStore = RelPlayListSongStore;
+            _SongStore = SongStore;
             TheUsers = theUsers;
             _Mapper = Mapper;
         }
-        
+
         /// <summary>
         /// 用户收藏歌曲，通过UserId在UserPlayList中找到RecommendPlayList，在PlayListSong中添加记录，需要对SongId进行有效性验证
         /// </summary>
@@ -50,7 +53,7 @@ namespace WS.Music.Managers
             }
             // 判断用户是否存在
             //var user = await TheUsers.ReadAsync(a => a.Where(b => b.Id == request.User.Id), cancellationToken);
-            var user = TheUsers.ForId(request.User.Id).SingleOrDefault();
+            var user = TheUsers.ById(request.User.Id).SingleOrDefault();
             
             if (user==null)
             {
@@ -83,6 +86,55 @@ namespace WS.Music.Managers
             else
             {
                 response.Code = ResponseDefine.PostRepeat;
+            }
+        }
+
+        /// <summary>
+        /// 收藏歌曲取消
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        public async Task CollectionSongCancel([Required]ResponseMessage response, [Required]SongCollectionRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Check arguments
+            if (request.User == null || request.User.Id == null)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "请求体未包含系统用户信息，用户未登陆不能进行收藏歌曲操作");
+                return;
+            }
+            if (request.SongId == null)
+            {
+                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "取消歌曲收藏，其ID不能为null");
+                return;
+            }
+            // Check whether user exist
+            var user = TheUsers.ById(request.User.Id).SingleOrDefault();
+            if (user == null)
+            {
+                Define.Response.Wrap(response, Define.Response.NotFoundCode, Define.User.NotFoundMsg);
+                return;
+            }
+            // 歌曲是否存在
+
+            // 通过用户查询收藏歌单
+            var playListId = TheUsers.FindPlayListIdByType(request.User.Id, Define.PlayList.Type.Collection).SingleOrDefault();
+            if (playListId == null)
+            {
+                // 如果之前没有创建可以在这里创建
+                Define.Response.Wrap(response, Define.Response.NotFoundCode, "收藏歌单未找到，可能的原因是创建账号时没有默认创建收藏歌单！");
+            }
+            // 通过收藏歌单查询歌曲 PlayListStore.FindSongByPlayListId
+            var songId =_SongStore.FindIdByPlayListId(playListId).SingleOrDefault();
+            // 比对歌曲
+            if (songId == null)
+            {
+                response.Message += "\r\n" + "你所取消收藏的歌曲不在你的收藏歌单中！";
+            }
+            else  // 歌曲在歌单中则断开链接，软删除 RelPlayListSong
+            {
+                await _RelPlayListSongStore.Delete(request.User.Id, playListId, songId);
+                response.Message += "\r\n"+"歌曲取消成功！";
             }
         }
 
@@ -197,7 +249,7 @@ namespace WS.Music.Managers
                 Define.Response.Wrap(response, Define.Response.NotSupportCode, "抱歉，暂时不支持修改其他账号的用户信息");  // 用户是不应该知道自己的ID的
             }
             // 检查参数有效
-            var dbuser = TheUsers.ForId(request.UpdateUser.Id).SingleOrDefault();
+            var dbuser = TheUsers.ById(request.UpdateUser.Id).SingleOrDefault();
             if (dbuser == null)
             {
                 Define.Response.Wrap(response, Define.Response.BadRequsetCode, Define.User.NotFoundMsg);

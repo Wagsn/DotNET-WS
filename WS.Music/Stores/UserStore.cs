@@ -44,7 +44,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="userId">用户GUID</param>
         /// <returns></returns>
-        public IQueryable<User> ForId([Required][MaxLength(36)]string userId)
+        public IQueryable<User> ById([Required][MaxLength(36)]string userId)
         {
             var query = from u in Context.Users
                         where u.Id == userId && !u._IsDeleted
@@ -76,6 +76,39 @@ namespace WS.Music.Stores
                         where u.Name.Contains(name)
                         select new User(u);
             return query;
+        }
+
+        /// <summary>
+        /// 通过用户歌单类型查询歌单ID
+        /// </summary>
+        /// <param name="userId">用户ID</param>
+        /// <param name="type">类型</param>
+        /// <returns></returns>
+        public IQueryable<string> FindPlayListIdByType(string userId, string type)
+        {
+            var query = from rup in Context.RelUserPlayLists
+                        where rup.UserId == userId && rup.Type == type
+                        select rup.PlayListId;
+            return query;
+        }
+
+        /// <summary>
+        /// 通过歌单类型查询歌曲
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IQueryable<Song> FindSongByPlayListType(string userId, string type)
+        {
+            var query = from so in Context.Songs
+                        where (from rplso in Context.RelPlayListSongs
+                               where (from rup in Context.RelUserPlayLists
+                                      where rup.UserId == userId && rup.Type == type
+                                      select rup.PlayListId).Contains(rplso.PlayListId)
+                               select rplso.SongId).Contains(so.Id)
+                        select new Song(so);
+            return query;
+                
         }
 
         /// <summary>
