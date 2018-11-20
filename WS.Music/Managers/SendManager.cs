@@ -66,9 +66,9 @@ namespace WS.Music.Managers
             }
             // 判断发信人与收信人存在
             User fromUser =  _UserStore.ReadAsync(a => a.Where(b => b.Id == request.Send.FromUserId), CancellationToken.None).Result;
-            if (fromUser == null) Define.Response.UserNotFound(response, request.Send.FromUserId);
+            if (fromUser == null) Def.Response.UserNotFound(response, request.Send.FromUserId);
             User toUser = _UserStore.ReadAsync(a => a.Where(b => b.Id == request.Send.ToUserId), CancellationToken.None).Result;
-            if (toUser == null) Define.Response.UserNotFound(response, request.Send.ToUserId);
+            if (toUser == null) Def.Response.UserNotFound(response, request.Send.ToUserId);
             // 消息不可重复：在数据库中比较与上一条消息的发送时间是否一致，TODO: 另外可以比较当前时间与上一条的内容一致但是时间间隔过短
 
             // 改造，生成LastMessage(long )方法

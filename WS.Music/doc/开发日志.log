@@ -64,3 +64,5 @@
 [TODO] 完善音乐收藏，添加删除收藏功能
 [20:33]
 [NOTE] 通过字段来表示删除可能会导致数据表的庞大，建议通过历史变更表来表示删除，历史变更表中保存旧的数据（全部或部分保存）、（用户数据库索引，个人数据）
+[11:38]
+[DONE] Wagsn-Shell 命令参数切割(Command parameter cutting)，ShellContext添加变量表(VariableTable)

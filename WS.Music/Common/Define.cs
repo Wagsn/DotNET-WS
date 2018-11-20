@@ -1,72 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
 using WS.Core.Dto;
 using WS.Core.Helpers;
-using WS.Music.Dto;
-
-namespace WS.Music.Common
-{
-    /// <summary>
-    /// 用户歌单常量池
-    /// </summary>
-    public static class PlayListType
-    {
-        public static readonly string Recommend = "Recommend";
-        public static readonly string Collection = "Collection";
-        public static readonly string Like = "Like";
-        public static readonly string Create = "Create";
-
-    }
-
-    /// <summary>
-    /// 歌单相关的常量
-    /// </summary>
-    public static class PlayListDefine
-    {
-        /// <summary>
-        /// 歌单类型相关的常量
-        /// </summary>
-        public static class Type
-        {
-            /// <summary>
-            /// 推荐歌单
-            /// </summary>
-            public static readonly string Recommend = "Recommend";
-
-            /// <summary>
-            /// 收藏歌单
-            /// </summary>
-            public static readonly string Collection = "Collection";
-
-            /// <summary>
-            /// 喜欢歌单
-            /// </summary>
-            public static readonly string Like = "Like";
-
-            /// <summary>
-            /// 创建歌单
-            /// </summary>
-            public static readonly string Create = "Create";
-        }
-
-        /// <summary>
-        /// 找不到歌单，可能是注册时未创建默认歌单
-        /// </summary>
-        public static readonly string NotFoundMsg = "找不到歌单，可能是注册时未创建默认歌单";
-    }
-
-    
-}
 
 /// <summary>
 /// 项目专用的总常量池，TODO：将所有常量迁移到这里来，不过这样会导致其它地方不好创建常量，建议一个模块一个常量池类，其他地方的常量也可以采用这种命名空间
 /// </summary>
-namespace WS.Music.Define
+namespace WS.Music.Def
 {
     /// <summary>
-    /// User 相关常量
+    /// 用户常量
     /// </summary>
     public static class User
     {
@@ -80,7 +27,7 @@ namespace WS.Music.Define
     }
 
     /// <summary>
-    /// Song 相关常量
+    /// 歌曲常量
     /// </summary>
     public static class Song
     {
@@ -93,6 +40,9 @@ namespace WS.Music.Define
         public static readonly string DeletedMsg = "歌曲信息删除成功";
     }
 
+    /// <summary>
+    /// 专辑常量
+    /// </summary>
     public static class Album
     {
         public static readonly string TAG = "Album";
@@ -108,7 +58,7 @@ namespace WS.Music.Define
     }
 
     /// <summary>
-    /// 歌单相关的常量
+    /// 歌单常量
     /// </summary>
     public static class PlayList
     {
@@ -145,6 +95,9 @@ namespace WS.Music.Define
         public static readonly string NotFoundMsg = "找不到歌单，可能是注册时未创建默认歌单";
     }
 
+    /// <summary>
+    /// 文本格式化
+    /// </summary>
     public static class Format
     {
         public static readonly string FullTime = "yyyy-MM-dd mm:ss.FFFFFFK";
@@ -161,7 +114,7 @@ namespace WS.Music.Define
         /// <typeparam name="TSrc"></typeparam>
         /// <param name="response">响应体</param>
         /// <param name="src">未找到的用户</param>
-        public static void UserNotFound<TSrc>(ResponseMessage response, TSrc src)
+        public static void UserNotFound<TSrc>([Required]ResponseMessage response, TSrc src)
         {
             response.Code = ResponseDefine.NotFound;
             response.Message += "\r\n" + User.NotFoundMsg;
@@ -174,9 +127,14 @@ namespace WS.Music.Define
         /// <param name="response"></param>
         /// <param name="code"></param>
         /// <param name="msgAppend"></param>
-        public static void Wrap(ResponseMessage response, string code, string msgAppend)
+        public static void Wrap([Required]ResponseMessage response, [Required]string code, [Required]string msgAppend)
         {
             response.Code = code;
+            response.Message += string.IsNullOrWhiteSpace(msgAppend) ? "" : ("\r\n" + msgAppend);
+        }
+
+        public static void Append([Required]ResponseMessage response, [Required]string msgAppend)
+        {
             response.Message += string.IsNullOrWhiteSpace(msgAppend) ? "" : ("\r\n" + msgAppend);
         }
 

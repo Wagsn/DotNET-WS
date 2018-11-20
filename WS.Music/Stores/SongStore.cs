@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,8 +46,9 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="playListId"></param>
         /// <returns></returns>
-        public IQueryable<Song> ByPlayListId (string playListId)
+        public IQueryable<Song> ByPlayListId ([Required]string playListId)
         {
+            // 操作日志
             var query = from s in Context.Songs
                         where (from rps in Context.RelPlayListSongs
                                where rps.PlayListId == playListId
@@ -56,13 +58,23 @@ namespace WS.Music.Stores
             // C:\Users\wagsn\Documents\Tencent Files\850984728\FileRecv\
         }
 
+        public IQueryable<Song> ById ([Required]string songId)
+        {
+            // 操作日志
+            var query = from s in Context.Songs
+                        where s.Id == songId
+                        select new Song(s);
+            return query;
+        }
+
         /// <summary>
         /// 查询ID通过歌单ID
         /// </summary>
         /// <param name="playListId"></param>
         /// <returns></returns>
-        public IQueryable<string> FindIdByPlayListId(string playListId)
+        public IQueryable<string> IdsByPlayListId([Required]string playListId)
         {
+            // 操作日志
             var query = from rps in Context.RelPlayListSongs
                         where rps.PlayListId == playListId
                         select rps.SongId;
@@ -74,7 +86,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> LikeAllName(string name)
+        public IQueryable<Song> LikeAllName([Required]string name)
         {
             // TODO 优化查询速度
             var query = from s in Context.Songs
@@ -98,7 +110,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> LikeName(string name)
+        public IQueryable<Song> LikeName([Required]string name)
         {
             var query = from s in Context.Songs
                         where s.Name.Contains(name)
@@ -111,7 +123,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IQueryable<Song> LikeArtistName(string name)
+        public IQueryable<Song> LikeArtistName([Required]string name)
         {
             var query = from s in Context.Songs
                         where (from rsoar in Context.RelSongArtists
@@ -128,7 +140,7 @@ namespace WS.Music.Stores
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public IQueryable<Song> LikeAlbumName(string Name)
+        public IQueryable<Song> LikeAlbumName([Required]string Name)
         {
             var query = from s in Context.Songs
                         where (from rsoal in Context.RelSongAlbums

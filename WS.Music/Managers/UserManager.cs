@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WS.Core.Dto;
-using WS.Music.Common;
 using WS.Music.Dto;
 using WS.Music.Models;
 using WS.Music.Stores;
@@ -23,7 +23,7 @@ namespace WS.Music.Managers
 
         public RelPlayListSongStore _RelPlayListSongStore { get; set; }
 
-        public SongStore _SongStore { get; set; }
+        public SongStore TheSongs { get; set; }
 
         public UserStore TheUsers { get; set; }
 
@@ -33,7 +33,7 @@ namespace WS.Music.Managers
         {
             _RelUserPlayListStore = RelUserPlayListStore;
             _RelPlayListSongStore = RelPlayListSongStore;
-            _SongStore = SongStore;
+            TheSongs = SongStore;
             TheUsers = theUsers;
             _Mapper = Mapper;
         }
@@ -58,30 +58,24 @@ namespace WS.Music.Managers
             if (user==null)
             {
                 response.Code = ResponseDefine.NotFound;
-                response.Message += "\r\n"+ Define.User.NotFoundMsg;
+                response.Message += "\r\n"+ Def.User.NotFoundMsg;
                 return;
             }
             // 找到PlayListId
-            var RecommendPlayListId = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.User.Id && b.Type == PlayListType.Recommend).Select(c=>c.PlayListId), cancellationToken);
+            var RecommendPlayListId = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == request.User.Id && b.Type == Def.PlayList.Type.Recommend).Select(c=>c.PlayListId), cancellationToken);
             // 找不到歌单
             if(RecommendPlayListId==null)
             {
                 response.Code = ResponseDefine.NotFound;
-                response.Message += "\r\n" + Define.PlayList.NotFoundMsg;
+                response.Message += "\r\n" + Def.PlayList.NotFoundMsg;
                 return;
             }
             // 判断是否已经收藏
-            var playListSong = _RelPlayListSongStore.ReadAsync(a => a.Where(b => b.SongId == request.SongId), cancellationToken);
+            var playListSong = _RelPlayListSongStore.BySongId(user.Id, request.SongId).SingleOrDefault();
             if (playListSong == null)
             {
                 // 判断歌曲是否存在
-                //var song = 
-                // 在RelPlayListSong中插入数据
-                await _RelPlayListSongStore.CreateAsync(new RelPlayListSong
-                {
-                    PlayListId = RecommendPlayListId,
-                    SongId = request.SongId
-                }, cancellationToken);
+                await _RelPlayListSongStore.Create(user.Id, RecommendPlayListId, request.SongId, cancellationToken);
             }
             else
             {
@@ -90,51 +84,56 @@ namespace WS.Music.Managers
         }
 
         /// <summary>
-        /// 收藏歌曲取消
+        /// 取消收藏歌曲
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         public async Task CollectionSongCancel([Required]ResponseMessage response, [Required]SongCollectionRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            // Check arguments
+            // Check arguments.
             if (request.User == null || request.User.Id == null)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "请求体未包含系统用户信息，用户未登陆不能进行收藏歌曲操作");
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "请求体未包含系统用户信息，用户未登陆不能进行收藏歌曲操作");
                 return;
             }
             if (request.SongId == null)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "取消歌曲收藏，其ID不能为null");
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "取消歌曲收藏，其ID不能为空");
                 return;
             }
-            // Check whether user exist
+            // Check whether user exist.
             var user = TheUsers.ById(request.User.Id).SingleOrDefault();
             if (user == null)
             {
-                Define.Response.Wrap(response, Define.Response.NotFoundCode, Define.User.NotFoundMsg);
+                Def.Response.Wrap(response, Def.Response.NotFoundCode, Def.User.NotFoundMsg);
                 return;
             }
-            // 歌曲是否存在
-
-            // 通过用户查询收藏歌单
-            var playListId = TheUsers.FindPlayListIdByType(request.User.Id, Define.PlayList.Type.Collection).SingleOrDefault();
+            // Check song exist.
+            var songs =TheSongs.ById(request.SongId);
+            if (songs.Count() == 0)
+            {
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "你所取消收藏的歌曲不存在");
+                return;
+            }
+            // Check play list exist.
+            var playListId = TheUsers.FindPlayListIdByType(request.User.Id, Def.PlayList.Type.Collection).SingleOrDefault();
             if (playListId == null)
             {
-                // 如果之前没有创建可以在这里创建
-                Define.Response.Wrap(response, Define.Response.NotFoundCode, "收藏歌单未找到，可能的原因是创建账号时没有默认创建收藏歌单！");
+                Def.Response.Wrap(response, Def.Response.NotFoundCode, "收藏歌单未找到，可能的原因是创建账号时没有默认创建收藏歌单！");
+                return;
             }
-            // 通过收藏歌单查询歌曲 PlayListStore.FindSongByPlayListId
-            var songId =_SongStore.FindIdByPlayListId(playListId).SingleOrDefault();
-            // 比对歌曲
-            if (songId == null)
+            // Check the correlation between songs and songs.
+            var playListSong = _RelPlayListSongStore.ById(request.User.Id, playListId, request.SongId).SingleOrDefault();
+            if (playListSong == null)
             {
-                response.Message += "\r\n" + "你所取消收藏的歌曲不在你的收藏歌单中！";
+                Def.Response.Append(response, "你所取消收藏的歌曲不在你的收藏歌单中！");  // 修改ResponseMessage方法，添加追加函数？
+                return;
             }
-            else  // 歌曲在歌单中则断开链接，软删除 RelPlayListSong
+            else
             {
-                await _RelPlayListSongStore.Delete(request.User.Id, playListId, songId);
-                response.Message += "\r\n"+"歌曲取消成功！";
+                await _RelPlayListSongStore.Delete(request.User.Id, playListSong, cancellationToken);
+                response.Append("歌曲取消收藏成功！");
             }
         }
 
@@ -149,7 +148,7 @@ namespace WS.Music.Managers
             // 判断用户是否存在
             if (user == null)
             {
-                Define.Response.UserNotFound(response, userJson);
+                Def.Response.UserNotFound(response, userJson);
             }
             return user;
         }
@@ -167,7 +166,7 @@ namespace WS.Music.Managers
             // 判断用户是否存在
             if (user == null)
             {
-                Define.Response.UserNotFound(response, userJson);
+                Def.Response.UserNotFound(response, userJson);
             }
             return user;
         }
@@ -201,14 +200,14 @@ namespace WS.Music.Managers
             var signupUserJson = request.SignupUser;  // 不采用request.User的原因是为了后台手动注册时也有账户登陆
             if (signupUserJson == null || signupUserJson.Name == null || signupUserJson.Pwd == null)
             {
-                Define.Response.Wrap(response, ResponseDefine.BadRequset, "用户注册信息不全");
+                Def.Response.Wrap(response, ResponseDefine.BadRequset, "用户注册信息不全");
                 return;
             }
             // 检查用户是否已经存在
             var dbuser = TheUsers.ByName(signupUserJson.Name).SingleOrDefault();
             if (dbuser != null)
             {
-                Define.Response.Wrap(response, ResponseDefine.BadRequset, "该用户名已经存在，不能重复注册，若是你注册的请登陆或到密码找回处找回密码");
+                Def.Response.Wrap(response, ResponseDefine.BadRequset, "该用户名已经存在，不能重复注册，若是你注册的请登陆或到密码找回处找回密码");
                 return;
             }
             // 创建用户
@@ -218,7 +217,7 @@ namespace WS.Music.Managers
             var user = await TheUsers.CreateAsync(dbuser, cancellationToken);
             if (user == null)
             {
-                Define.Response.Wrap(response, ResponseDefine.ServiceError, "在数据库插入数据失败");
+                Def.Response.Wrap(response, ResponseDefine.ServiceError, "在数据库插入数据失败");
                 return;
             }
             response.Extension = _Mapper.Map<UserJson>(user);
@@ -235,30 +234,30 @@ namespace WS.Music.Managers
             // 检查参数格式
             if(request.User==null || request.User.Id == null || request.User.Name == null || request.User.Pwd == null)
             {
-                Define.Response.Wrap(response, Define.Response.NotAllowCode, "你还没有登陆，不能够修改用户信息");
+                Def.Response.Wrap(response, Def.Response.NotAllowCode, "你还没有登陆，不能够修改用户信息");
                 return;
             }
             if(request.UpdateUser == null||request.UpdateUser.Id==null)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "修改用户信息的请求有误");
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "修改用户信息的请求有误");
                 return;
             }
             // 判断用户是否存在及其密码是否正确
             if (request.User.Id != request.UpdateUser.Id)
             {
-                Define.Response.Wrap(response, Define.Response.NotSupportCode, "抱歉，暂时不支持修改其他账号的用户信息");  // 用户是不应该知道自己的ID的
+                Def.Response.Wrap(response, Def.Response.NotSupportCode, "抱歉，暂时不支持修改其他账号的用户信息");  // 用户是不应该知道自己的ID的
             }
             // 检查参数有效
             var dbuser = TheUsers.ById(request.UpdateUser.Id).SingleOrDefault();
             if (dbuser == null)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, Define.User.NotFoundMsg);
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, Def.User.NotFoundMsg);
                 return;
             }
             // 判断密码是否错误
             else if (dbuser.Pwd!=request.User.Pwd)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "用户密码错误");
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "用户密码错误");
                 return;
             }
             // 用户数据更新: 将数据库中拿出的user更新几个变化的值

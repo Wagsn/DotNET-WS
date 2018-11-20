@@ -51,7 +51,7 @@ namespace WS.Music.Managers
                     Duration = request.SongInfo.Duration ?? 0,
                     _CreateUserId = request.User.Id
                 }, CancellationToken.None);
-                response.Message += "\r\n" + ResponseDefine.CreatedMsg + "\r\n" + Define.Song.CreatedMsg;
+                response.Message += "\r\n" + ResponseDefine.CreatedMsg + "\r\n" + Def.Song.CreatedMsg;
             }
             else
             {
@@ -65,7 +65,7 @@ namespace WS.Music.Managers
                     Duration = request.SongInfo.Duration ?? 0,
                     _UpdateUserId = request.User.Id
                 }, CancellationToken.None);
-                response.Message += "\r\n" + Define.Song.UpdatedMsg;
+                response.Message += "\r\n" + Def.Song.UpdatedMsg;
             }
         }
         /// <summary>
@@ -78,7 +78,7 @@ namespace WS.Music.Managers
             // Check arguments.
             if (request.Word == null)
             {
-                Define.Response.Wrap(response, Define.Response.BadRequsetCode, "Keywords can not be empty!");
+                Def.Response.Wrap(response, Def.Response.BadRequsetCode, "Keywords can not be empty!");
             }
 
             // Search Song by Song Name.
@@ -102,7 +102,7 @@ namespace WS.Music.Managers
                 default:
                     if (response.Extension == null)
                     {
-                        Define.Response.Wrap(response, Define.Response.NotSupportCode, "Does not support query songs by other ways!");
+                        Def.Response.Wrap(response, Def.Response.NotSupportCode, "Does not support query songs by other ways!");
                     }
                     break;
             }

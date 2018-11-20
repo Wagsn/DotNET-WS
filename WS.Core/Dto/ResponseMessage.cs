@@ -16,6 +16,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using WS.Core.Helpers;
 
@@ -88,7 +89,7 @@ namespace WS.Core.Dto
         /// 响应体包装
         /// </summary>
         /// <param name="code"></param>
-        public void Wrap(string code)
+        public void Wrap([Required]string code)
         {
             Code = code;
         }
@@ -98,10 +99,35 @@ namespace WS.Core.Dto
         /// </summary>
         /// <param name="code"></param>
         /// <param name="msgAppend"></param>
-        public void Wrap<TAppend>(string code, TAppend append)
+        public void Wrap<TAppend>([Required]string code, TAppend append)
         {
             Code = code;
-            Message += "\r\n"+JsonHelper.ToJson(append);
+            if (!string.IsNullOrWhiteSpace(JsonHelper.ToJson(append)))
+            {
+                Message += "\r\n" + JsonHelper.ToJson(append);
+            }
+        }
+
+        /// <summary>
+        /// 通过安全的方式追加内容
+        /// </summary>
+        /// <typeparam name="TAppend"></typeparam>
+        /// <param name="append"></param>
+        public void Append<TAppend>(TAppend append)
+        {
+            if (append == null)
+            {
+                return;
+            }
+            if (append is string)
+            {
+                var ap = append as string;
+                Message += "\r\n" + ap;
+            }
+            if (!string.IsNullOrWhiteSpace(JsonHelper.ToJson(append)))
+            {
+                Message += "\r\n" + JsonHelper.ToJson(append);
+            }
         }
 
         public bool IsSuccess()

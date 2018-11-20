@@ -79,7 +79,7 @@ namespace WS.Music.Controllers
             }
             catch (Exception e)
             {
-                Define.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
+                Def.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
                 // 日志输出：服务器错误
                 Console.WriteLine("WS------ ServiceError: \r\n" + e);
             }
@@ -112,7 +112,7 @@ namespace WS.Music.Controllers
             }
             catch (Exception e)
             {
-                Define.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
+                Def.Response.Wrap(response, ResponseDefine.ServiceError, e.Message);
                 // 日志输出：服务器错误
                 Console.WriteLine("WS------ ServiceError: \r\n" + e);
             }
@@ -174,8 +174,8 @@ namespace WS.Music.Controllers
             }
             try
             {
-                /// 业务处理
-                await Manager.CollectionSongAsync(response, request);
+                // 业务处理
+                await Manager.CollectionSongCancel(response, request, default(CancellationToken));
             }
             catch (Exception e)
             {
