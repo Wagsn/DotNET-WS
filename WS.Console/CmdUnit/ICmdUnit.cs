@@ -94,7 +94,7 @@ namespace WS.Shell
         }
 
         /// <summary>
-        /// 显示各种命令，需要动态计算每个元素的长度
+        /// 显示各种命令，需要动态计算每个元素的长度，控制台或文本文件输出表格
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
@@ -104,13 +104,66 @@ namespace WS.Shell
             // maxLenOfName
             // maxLenOfUsage
             // maxLenOfDesc
-            Console.WriteLine("[command]\t[usage]\t\t\t\t[decription]");
-            foreach (var cmdpairs in AppContext.CmdMap)
+            // 构建二维字串矩阵
+            int rowNum = AppContext.cmdManager.Count;
+            string[][] strMat2D = new string[rowNum+1][];
+            // 表头
+            strMat2D[0] = new string[] { "[command]：命令", "[usage]：用法" , "[decription]：描述" }; 
+            // 表体
+            int i = 1;
+            foreach (var cmdpairs in AppContext.cmdManager.CmdMap)
             {
                 var cmd = cmdpairs.Value;
-                Console.WriteLine(cmd.Name + "\t\t" + cmd.Usage + "\t\t" + cmd.Desc);
+                strMat2D[i] = new string[3];
+                strMat2D[i][0] = cmd.Name;
+                strMat2D[i][1] = cmd.Usage;
+                strMat2D[i][2] = cmd.Desc;
+                i++;
             }
+            string grid =Core.Text.Grid.ToGrid(strMat2D);
+            Console.WriteLine(grid);
+            Core.IO.File.WriteAllText("./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt", grid);
+            //File.WriteAllText("./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt", );
             return 0;
+        }
+
+        // 在这里写制表函数，输入二维字符串数组，输出表格
+
+        /// <summary>
+        /// 获取字符串的宽度
+        /// 输入：不含制表符之类的字符串
+        /// 处理：中文占2半角宽度，英文数字占1半角宽度
+        /// 输出：字符串在控制台显示的宽度
+        /// </summary>
+        /// <param name="str">不含制表符的字符串</param>
+        /// <returns></returns>
+        private int WidthOf(string str)
+        {
+            // 不考虑制表符且字符集为GBK System.Text.Encoding.GetEncoding("GBK").GetByteCount(str);
+            return DisplayLength(str);
+        }
+
+        /// <summary>
+        /// 显示长度，考虑制表符
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static int DisplayLength(string str)
+        {
+            int lengthCount = 0;
+            var splits = str.ToCharArray();
+            for (int i = 0; i < splits.Length; i++)
+            {
+                if (splits[i] == '\t')
+                {
+                    lengthCount += 8 - lengthCount % 8;
+                }
+                else
+                {
+                    lengthCount += Encoding.Unicode.GetByteCount(splits[i].ToString());
+                }
+            }
+            return lengthCount;
         }
 
         private string SpaceFor(int len)
@@ -154,7 +207,7 @@ namespace WS.Shell
         public override void Init()
         {
             Name = "tojson";
-            Desc = "将对象转换成字符串、暂时功能不全。";  // tojson需要将argument参数解析成变量组，在变量表中寻找变量的实际值，然后传递给tojson函数，这里需要将tojson封装成一个函数。
+            Desc = "将对象转换成字符串。《暂时功能不全》";  // 控制台不支持emoji😟（UTF-32）符号，可能因为系统默认UTF-16，// tojson需要将argument参数解析成变量组，在变量表中寻找变量的实际值，然后传递给tojson函数，这里需要将tojson封装成一个函数。
             Usage = "tojson [argument]";
         }
 
@@ -194,7 +247,7 @@ namespace WS.Shell
     }
 
     /// <summary>
-    /// 变量声明
+    /// 变量声明，以后用抽象语法树（AST）来解决吧
     /// </summary>
     public class VarCmd : CmdUnitBase
     {
@@ -223,6 +276,43 @@ namespace WS.Shell
             string declare = vars[0];
             // 值部分 字符串形式
             string valueRaw = vars[1];
+
+            string name = null;
+            string type = null; 
+            int value = 0;
+            if (declare.IndexOf(":") > 0)
+            {
+                var declares = declare.Split(":");
+                name = declares[0];  // 命名规则验证
+                type = declares[1];  // 类型校验 
+            } else
+            {
+                name = declare;  // 命名规则验证
+            }
+            try
+            {
+                value = int.Parse(valueRaw);
+                // 将解析的数字注入到上下文中
+                // 首先判断是否已经存在
+                if (AppContext.VarTable.ContainsKey(name))
+                {
+                    AppContext.VarTable[name].name = name;
+                    AppContext.VarTable[name].raw = arg;  // 包含变量名类型值的部分
+                    AppContext.VarTable[name].value.value = value;
+                    AppContext.VarTable[name].value.type = typeof(int);
+                } else
+                {
+                    AppContext.VarTable[name].name = name;
+                    AppContext.VarTable[name].raw = arg;  // 包含变量名类型值的部分
+                    AppContext.VarTable[name].value.value = value;
+                    AppContext.VarTable[name].value.type = typeof(int);
+                }
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("字符串转换成数字失败: "+e);
+            }
             return -1;
         }
     }
