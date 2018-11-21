@@ -17,13 +17,32 @@ namespace WS.Shell
         /// <returns></returns>
         static int Main(string[] args)
         {
-            if (args != null && args.Length != 0 && !string.IsNullOrWhiteSpace(args[0]))
+            try
             {
-                return App.New(args).Run();
+                if (args != null && args.Length != 0 && !string.IsNullOrWhiteSpace(args[0]))
+                {
+                    return App.New(args).Run();
+                }
+                else
+                {
+                    return App.New().Run();
+                }
             }
-            else
+            catch(Exception e)
             {
-                return App.New().Run();
+                try
+                {
+                    // 尝试将错误写入日志
+                    Core.IO.File.WriteAllText("./log/err/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-FFFFFF") + ".log", e.ToString());
+                    Console.WriteLine(e);
+                    Console.ReadKey();
+                }
+                catch(Exception e2)
+                {
+                    Console.WriteLine(e2);
+                    Console.ReadKey();
+                }
+                return -1;
             }
         }
     }

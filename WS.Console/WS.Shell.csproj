@@ -5,17 +5,26 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <StartupObject>WS.Shell.Program</StartupObject>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
-    <FileVersion>1.0.0.2</FileVersion>
-    <SignAssembly>false</SignAssembly>
+    <AssemblyVersion>1.0.0.3</AssemblyVersion>
+    <FileVersion>1.0.0.3</FileVersion>
+    <SignAssembly>true</SignAssembly>
     <Description>Wagsn Shell</Description>
     <Copyright>Wagsn</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>1.0.0.2</Version>
+    <Version>1.0.0.3</Version>
     <ApplicationIcon></ApplicationIcon>
     <Win32Resource />
     <DelaySign>false</DelaySign>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <AssemblyOriginatorKeyFile>WS.Shell.pfx</AssemblyOriginatorKeyFile>
+    <Authors>Wagsn</Authors>
+    <Product>Wagsn Shell</Product>
+    <PackageReleaseNotes>Wagsn Shell</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>out\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

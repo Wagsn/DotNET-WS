@@ -46,7 +46,7 @@ namespace WS.Core.IO
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
-                    System.IO.File.CreateText(path);
+                    System.IO.File.CreateText(path).Close();
                 }
                 System.IO.File.WriteAllText(path, contents);
             }

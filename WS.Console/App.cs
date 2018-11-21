@@ -60,7 +60,7 @@ namespace WS.Shell
             //    throw;
             //}
 
-            return App.New();
+            return New();
         }
 
         /// <summary>
@@ -102,6 +102,8 @@ namespace WS.Shell
                         Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonHelper.ToJson("hello world".Split(" "))); // ["hello","world"]
                         Console.WriteLine("String.Split \"\" with \" \": " + JsonHelper.ToJson("".Split(" ")));  // [""]
                         break;
+                    case "exception":
+                        throw new Exception("test exception");
                     default:
                         AppContext.cmdManager.Run(cmd, arg);
                         break;

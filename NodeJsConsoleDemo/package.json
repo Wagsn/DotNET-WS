@@ -1,0 +1,15 @@
+{
+  "name": "node-js-console-demo",
+  "version": "0.0.0",
+  "description": "NodeJsConsoleDemo",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/node": "^8.10.38"
+  },
+  "dependencies": {
+    "electron": "^1.8.8"
+  }
+}
