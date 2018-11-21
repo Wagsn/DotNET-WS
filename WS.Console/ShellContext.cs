@@ -74,7 +74,7 @@ namespace WS.Shell
         public readonly Dictionary<string, ICmdUnit> CmdMap = new Dictionary<string, ICmdUnit>();
 
         /// <summary>
-        /// 
+        /// 指令管理器
         /// </summary>
         public readonly CmdManager cmdManager = new CmdManager();
 
@@ -129,6 +129,11 @@ namespace WS.Shell
             {
                 // 验证
                 CmdMap.Remove(key);
+            }
+
+            public bool Contains(string key)
+            {
+                return CmdMap.ContainsKey(key);
             }
 
             /// <summary>

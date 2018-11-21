@@ -219,8 +219,29 @@ namespace WS.Shell
         /// <returns></returns>
         public override int Excute(string arg)
         {
-            // 解析arg为参数组，在context的变量表中找出这些变量，再将变量转换成JSON字符串输出的到控制台
-            Console.WriteLine(JsonHelper.ToJson(arg) + "\r\n");
+            Console.WriteLine("raw: " + JsonHelper.ToJson(arg));
+            // 在变量表中查询arg所含有的参数
+            // 解析arg为参数组，在context的变量表中找出这些变量，再将变量转换成JSON字符串输出的到控制台，如果找不到
+            string normal = Core.Text.Format.NormalSpace(arg);
+            string[] words = normal.Split(" ");
+            Console.Write("out: ");
+            // 这里最好和原始输入对应起来，只是将变量替换
+            for (int i=0; i< words.Length; i++)
+            {
+                if (AppContext.VarTable.ContainsKey(words[i]))
+                {
+                    Console.Write(AppContext.VarTable[words[i]].value.value);
+                }
+                else
+                {
+                    Console.Write(words[i]);
+                }
+                if (i < words.Length)
+                {
+                    Console.Write(" ");
+                }
+            }
+            Console.WriteLine();
             return 0;
         }
     }
@@ -246,76 +267,7 @@ namespace WS.Shell
         }
     }
 
-    /// <summary>
-    /// 变量声明，以后用抽象语法树（AST）来解决吧
-    /// </summary>
-    public class VarCmd : CmdUnitBase
-    {
-        public VarCmd(ShellContext context) : base(context) { }
-
-        public override void Init()
-        {
-            Name = "var";
-            Desc = "变量声明";
-            Usage = "var num:Int32=32141";
-        }
-
-        /// <summary>
-        /// 执行
-        /// 参数; "num:Int32=32141"  // 单变量定义
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        public override int Excute(string arg)
-        {
-            // 单变量定义
-            // 正则验证
-            // 切割
-            string[] vars = arg.Split("=");
-            // 声明部分
-            string declare = vars[0];
-            // 值部分 字符串形式
-            string valueRaw = vars[1];
-
-            string name = null;
-            string type = null; 
-            int value = 0;
-            if (declare.IndexOf(":") > 0)
-            {
-                var declares = declare.Split(":");
-                name = declares[0];  // 命名规则验证
-                type = declares[1];  // 类型校验 
-            } else
-            {
-                name = declare;  // 命名规则验证
-            }
-            try
-            {
-                value = int.Parse(valueRaw);
-                // 将解析的数字注入到上下文中
-                // 首先判断是否已经存在
-                if (AppContext.VarTable.ContainsKey(name))
-                {
-                    AppContext.VarTable[name].name = name;
-                    AppContext.VarTable[name].raw = arg;  // 包含变量名类型值的部分
-                    AppContext.VarTable[name].value.value = value;
-                    AppContext.VarTable[name].value.type = typeof(int);
-                } else
-                {
-                    AppContext.VarTable[name].name = name;
-                    AppContext.VarTable[name].raw = arg;  // 包含变量名类型值的部分
-                    AppContext.VarTable[name].value.value = value;
-                    AppContext.VarTable[name].value.type = typeof(int);
-                }
-
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("字符串转换成数字失败: "+e);
-            }
-            return -1;
-        }
-    }
+    
 
     /// <summary>
     /// 不定个数的32位数字加法运算
@@ -327,8 +279,14 @@ namespace WS.Shell
         // 上下文用于对变量进行加法运算
         public AddCmd(ShellContext context) : base(context) { }
 
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public override int Excute(string arg)
         {
+            // TODO 添加环境变量支持
             if (string.IsNullOrWhiteSpace(arg))
             {
                 Console.WriteLine(0);
@@ -435,7 +393,14 @@ namespace WS.Shell
 
         public override int Excute(string arg)
         {
-            Console.WriteLine(AppContext.StartId);
+            if (arg == "app")
+            {
+                Console.WriteLine(ShellContext.AppId);
+            }
+            else
+            {
+                Console.WriteLine(AppContext.StartId);
+            }
             return 0;
         }
 

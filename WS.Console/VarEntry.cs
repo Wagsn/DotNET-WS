@@ -27,6 +27,7 @@ namespace WS.Shell
     /// </summary>
     public class VarValue
     {
+        public string kind; // var kind boolean number string function
         public Type type;  // var type
         public object value; // var value
     }

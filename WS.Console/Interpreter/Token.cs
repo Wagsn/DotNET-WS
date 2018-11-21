@@ -26,12 +26,12 @@ namespace WS.Shell
     public class Token
     {
         /// <summary>
-        /// 类型（Keyword、Identifier、Punctuator、Numeric）
+        /// 类型（Keyword：关键字、Identifier：标识符、Punctuator：符号，符号表、Numeric：数字，Literal：字面量）
         /// </summary>
         public string Type { get; set; }
 
         /// <summary>
-        /// 值
+        /// 值（文本）
         /// </summary>
         public string Value { get; set; }
 

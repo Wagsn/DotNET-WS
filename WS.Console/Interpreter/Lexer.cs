@@ -30,9 +30,14 @@ namespace WS.Shell
         /// </summary>
         /// <param name="sourceCode">源代码文本</param>
         /// <returns></returns>
-        public Token[] Lexing(string sourceCode)
+        public static Token[] Lexing(string sourceCode)
         {
             return new Token[0];
         }
+
+        private static readonly string LetterRegex = @"[a-zA-Z]";
+        private static readonly string DigitRegex = @"[0-9]";  // \d
+        private static readonly string IdentifierRegex = $"{LetterRegex}({DigitRegex}|{LetterRegex})*";
+
     }
 }
