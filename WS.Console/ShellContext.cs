@@ -39,6 +39,16 @@ namespace WS.Shell
         public static string AppName = "Wagsn Shell";
 
         /// <summary>
+        /// 应用ID
+        /// </summary>
+        public static readonly string AppId = "d3eef080-f523-404c-8b0c-d7c764f59190";
+
+        /// <summary>
+        /// 应用版本
+        /// </summary>
+        public static readonly string AppVersion = "1.0.0";
+
+        /// <summary>
         /// 版权信息
         /// </summary>
         public static string CopyrightInfo = "版权所有 (C) Wagsn。保留所有权利。";
