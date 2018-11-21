@@ -261,7 +261,7 @@ namespace WS.Music.Controllers
                 RelUserPlayList relUserPlayList = await _RelUserPlayListStore.ReadAsync(a => a.Where(b => b.UserId == user.Id && b.Type == "Recommend"), CancellationToken.None);  //await Context.RelUserPlayLists.Where(a => a.UserId == request.UserId && a._IsDeleted == false).AsNoTracking().SingleOrDefaultAsync();
                 var playListId = relUserPlayList.PlayListId;
                 // 再在RelPlayListSong中查询出List<long>
-                var songIds = await _RelPlayListSongStore.ListAsync(a => a.Where(b => b.PlayListId == playListId).Select(c => c.SongId), CancellationToken.None);
+                var songIds = _SongStore.IdsByPlayListId(playListId);
                 // 最后在Song中查出List<Song>
                 response.Extension = await _SongStore.ListAsync(a => a.Where(b => songIds.Contains(b.Id)), CancellationToken.None);
             }
