@@ -7,8 +7,15 @@ namespace WS.Core.Log
 {
     public interface ILogger
     {
+        /// <summary>
+        /// 设置日志器名
+        /// </summary>
         string LoggerName { get; set; }
 
+        /// <summary>
+        /// 调试
+        /// </summary>
+        /// <param name="message"></param>
         void Debug(string message);
         void Debug(string formatString, params object[] args);
         void Error(string message);
