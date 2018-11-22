@@ -39,5 +39,15 @@ namespace WS.Shell
         private static readonly string DigitRegex = @"[0-9]";  // \d
         private static readonly string IdentifierRegex = $"{LetterRegex}({DigitRegex}|{LetterRegex})*";
 
+
+        /// <summary>
+        /// 预处理，将字符串拆分
+        /// (in: "var num: int =  46516"->out: ["var", " ", "num", ":", " ", "int", " ", "=", "  ", "46516"])
+        /// (in: "var num/* note*/ :int;"->out: ["var", " ", "num", "/* note*/", " ", ":", "int", ";"])
+        /// </summary>
+        private string[] Preprocessing(string src)
+        {
+            return null;
+        }
     }
 }

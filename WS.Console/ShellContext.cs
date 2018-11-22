@@ -18,6 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using WS.Shell.CmdUnit;
+
 namespace WS.Shell
 {
     /// <summary>
@@ -79,7 +81,7 @@ namespace WS.Shell
         public readonly CmdManager cmdManager = new CmdManager();
 
         /// <summary>
-        /// 变量表(VariableTable) varName:varValue
+        /// 变量表(VariableTable) [varName : varEntry]
         /// </summary>
         public readonly Dictionary<string, VarEntry> VarTable = new Dictionary<string, VarEntry>();
 
@@ -95,7 +97,7 @@ namespace WS.Shell
             // 指令集装载
             cmdManager.Add(new ToJsonCmd(this));
             cmdManager.Add(new HelpCmd(this));
-            cmdManager.Add(new NowCmd());
+            cmdManager.Add(new NowCmd(this));
             cmdManager.Add(new VarCmd(this));
             cmdManager.Add(new AddCmd(this));
             cmdManager.Add(new EchoCmd(this));

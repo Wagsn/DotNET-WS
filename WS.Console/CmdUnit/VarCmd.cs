@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WS.Shell
+namespace WS.Shell.CmdUnit
 {
     /// <summary>
     /// 变量声明，以后用抽象语法树（AST）来解决吧
@@ -27,16 +27,18 @@ namespace WS.Shell
     {
         public VarCmd(ShellContext context) : base(context) { }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public override void Init()
         {
             Name = "var";
-            Desc = "变量声明<暂时只有Int声明>";
-            Usage = "var num:Int32=32141";
+            Desc = "变量声明<暂时有Number，Boolean，String类型>";
+            Usage = "var num:Number=32141";
         }
 
         /// <summary>
-        /// 执行
-        /// 参数; "num:Int32=32141"  // 单变量定义
+        /// 执行: TODO 支持对象创建
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
@@ -50,59 +52,58 @@ namespace WS.Shell
             string declare = vars[0];
             // 值部分 字符串形式
             string valueRaw = vars[1];
-
-            string name = null;
-            string type = null;
-            int value = 0;
+            
+            string varName = null;
+            string varType = null;
             if (declare.IndexOf(":") > 0)
             {
                 var declares = declare.Split(":");
-                name = declares[0];  // 命名规则验证
-                type = declares[1];  // 类型校验 
+                varName = declares[0];  // 命名规则验证
+                varType = declares[1];  // 类型校验 
             }
             else
             {
-                name = declare;  // 命名规则验证
+                varName = declare;  // 命名规则验证
             }
             // 值解析
             try
             {
                 VarEntry entry;
-                if (AppContext.VarTable.ContainsKey(name))
+                if (AppContext.VarTable.ContainsKey(varName))
                 {
-                    entry = AppContext.VarTable[name];
-                    entry.raw = arg;
+                    entry = AppContext.VarTable[varName];
+                    entry.Raw = arg;
                 }
                 else
                 {
                     entry = new VarEntry
                     {
-                        name = name,
-                        raw = arg,
-                        value = new VarValue()
+                        Name = varName,
+                        Raw = arg,
+                        Value = new VarValue()
                     };
-                    AppContext.VarTable.Add(name, entry);
+                    AppContext.VarTable.Add(varName, entry);
                 }
                 // 匹配数字
                 if (MatchNumber(valueRaw, out double dbval))
                 {
-                    entry.value.value = dbval;
-                    entry.value.type = typeof(double);
-                    entry.value.kind = "number";
+                    entry.Value.Value = dbval;
+                    entry.Value.Type = typeof(double);
+                    entry.Value.Kind = "number";
                 }
                 // 匹配布尔
                 else if (MatchBoolean(valueRaw, out bool blval))
                 {
-                    entry.value.value = blval;
-                    entry.value.type = typeof(bool);
-                    entry.value.kind = "boolean";
+                    entry.Value.Value = blval;
+                    entry.Value.Type = typeof(bool);
+                    entry.Value.Kind = "boolean";
                 }
                 // 其它作字符串处理
                 else
                 {
-                    entry.value.value = valueRaw;
-                    entry.value.type = typeof(string);
-                    entry.value.kind = "string";
+                    entry.Value.Value = valueRaw;
+                    entry.Value.Type = typeof(string);
+                    entry.Value.Kind = "string";
                 }
                 return 0;
             }
