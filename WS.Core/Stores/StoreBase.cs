@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using WS.Core.Models;
-using WS.Core.Helpers;
+using WS.Core.Text;
 
 namespace WS.Core.Stores
 {

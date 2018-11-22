@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using WS.Core.Dto;
-using WS.Core.Helpers;
+using WS.Core.Text;
 
 /// <summary>
 /// 项目专用的总常量池，TODO：将所有常量迁移到这里来，不过这样会导致其它地方不好创建常量，建议一个模块一个常量池类，其他地方的常量也可以采用这种命名空间

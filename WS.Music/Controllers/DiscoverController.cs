@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Core.Dto;
-using WS.Core.Helpers;
+using WS.Core.Text;
 using WS.Music.Dto;
 using WS.Music.Managers;
 
