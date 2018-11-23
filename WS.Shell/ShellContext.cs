@@ -95,13 +95,7 @@ namespace WS.Shell
             // 运行时路径
             CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
             // 指令集装载
-            cmdManager.Add(new ToJsonCmd(this));
-            cmdManager.Add(new HelpCmd(this));
-            cmdManager.Add(new NowCmd(this));
-            cmdManager.Add(new VarCmd(this));
-            cmdManager.Add(new AddCmd(this));
-            cmdManager.Add(new EchoCmd(this));
-            cmdManager.Add(new IdCmd(this));
+            this.AddCmds();
         }
 
         public class CmdManager
