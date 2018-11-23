@@ -56,7 +56,7 @@ namespace WS.Music.Models
 
             builder.Entity<User>(b=> 
             {
-                b.ToTable("ws_music_user");  // 映射到ws_music_user表中
+                b.ToTable("ws_music_user");  // .HasKey(k => new[k.Id, k.Name]); 映射到ws_music_user表中
                 b.Property<bool>("_IsDeleted");  // 指明有额外列_IsDeleted
                 //b.HasKey(new string[] { "Id", "Name" });  // 双主键
                 //b.HasQueryFilter(a => EF.Property<bool>(User, "_IsDeleted") == false);  // 字段过滤器，过滤之后恢复删除有点麻烦，现在的情况是写在Store
