@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace WS.Core.Text
 {
     /// <summary>
-    /// JSON助手，使用Newtonsoft.Json
+    /// JSON助手（序列化工具），使用Newtonsoft.Json
     /// </summary>
     public static class JsonHelper
     {

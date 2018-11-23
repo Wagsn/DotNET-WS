@@ -24,16 +24,27 @@ namespace WS.Core.Text
     /// <summary>
     /// 字符串格式化
     /// </summary>
-    public class Format
+    public static class Format
     {
         /// <summary>
         /// 去除首尾空格，再合并连续空格
         /// </summary>
         /// <param name="src">原始字符串</param>
         /// <returns></returns>
-        public static string NormalSpace(string src)
+        public static string NormalSpace(this string src)
         {
             return Regex.Replace(src.Trim(), "\\s{2,}", " ");
         }
+
+        /// <summary>
+        /// 使文件路径标准化（首先剔除掉文件路径不能包含的特殊字符）
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string NormalPath(this string path)
+        {
+            return null;
+        }
     }
 }
+
