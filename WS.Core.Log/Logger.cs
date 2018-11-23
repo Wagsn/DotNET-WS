@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WS.Core.IO;
 
 namespace WS.Core.Log
 {
@@ -10,61 +11,70 @@ namespace WS.Core.Log
     /// </summary>
     class Logger : ILogger
     {
-        public string LoggerName { get; set; }
-
-        public Logger(string loggerName)
+        /// <summary>
+        /// 配置文件
+        /// </summary>
+        public LoggerConfig Config { get; set; }
+        
+        /// <summary>
+        /// 配置文件包含日志器名以及文件位置和日志格式等内容
+        /// </summary>
+        /// <param name="config"></param>
+        public Logger(LoggerConfig config)
         {
-            LoggerName = loggerName;
+            Config = config;
         }
 
         public void Debug(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
+            // save to file
+            File.WriteAllText(Config.LoggerRoot +"/"+ Config.FileFormat + ".log", message);
         }
 
         public void Debug(string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
         }
 
         public void Error(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Error(string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
         }
 
         public void Fatal(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Fatal(string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
         }
 
         public void Info(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Info(string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
         }
 
         public void Log(LogLevels logLevel, string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Log(LogLevels logLevel, string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
         }
 
         public void Trace(string message)
@@ -79,12 +89,24 @@ namespace WS.Core.Log
 
         public void Warn(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Warn(string formatString, params object[] args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(formatString, args);
+        }
+
+        /// <summary>
+        /// 记录
+        /// </summary>
+        /// <param name="config">记录配置（文件保存路径）</param>
+        /// <param name="entity">记录实体（记录包含信息）</param>
+        public static void Log(LoggerConfig config,  LogEntity entity)
+        {
+            // log item: [timeformat] [level] [name] [message]
+            string logItem = $"[{entity.LogTime.ToString(config.TimeFormat)}] [{entity.LogLevel.ToString()}] [{entity.LogName}] {entity.Message}";
+            File.WriteAllText(config.LoggerRoot + "/" + config.LoggerName + ".log", logItem, true);
         }
     }
 }

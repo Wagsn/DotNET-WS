@@ -27,29 +27,38 @@ namespace WS.Core.IO
     public class File
     {
         /// <summary>
-        /// 文件写入内容
+        /// 文件写入内容(是否追加：默认false，如果文件存在将被删除重建)
         /// </summary>
         /// <param name="path"></param>
         /// <param name="contents"></param>
-        public static void WriteAllText(string path, string contents)
+        public static void WriteAllText(string path, string contents, bool append =false)
         {
-            // File.ReadAllText(FilePath) //File.ReadAllText(FilePath, Encoding)
-            // File.WriteAllText(@"c:\temp\test\ascii.txt", str1);
-            // "./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt"
-            if (System.IO.File.Exists(path))
+            // 得到file，不存在则新建
+            FileInfo textFile = new FileInfo(path);
+            StreamWriter writer;
+            if (!textFile.Exists)
             {
-                System.IO.File.WriteAllText(path, contents);
+                DirectoryInfo textDir = textFile.Directory;
+                if (!textDir.Exists)
+                {
+                    textDir.Create();
+                }
+                writer =textFile.CreateText();
             }
             else
             {
-                string dir = Path.GetDirectoryName(path);
-                if (!Directory.Exists(dir))
+                if (!append)
                 {
-                    Directory.CreateDirectory(dir);
-                    System.IO.File.CreateText(path).Close();
+                    textFile.Delete();
+                    writer =textFile.CreateText();
                 }
-                System.IO.File.WriteAllText(path, contents);
+                else
+                {
+                    writer = textFile.AppendText();
+                }
             }
+            writer.Write(contents);
+            writer.Close();
         }
     }
 }

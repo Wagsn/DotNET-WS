@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace WS.Core.Log
 {
+    /// <summary>
+    /// 日志层级
+    /// </summary>
     public enum LogLevels
     {
-        // 000011 痕迹与调试
+        // 000011 痕迹与调试  curr 与 传入的 做且运算
         /// <summary>
         /// 痕迹 000001
         /// </summary>

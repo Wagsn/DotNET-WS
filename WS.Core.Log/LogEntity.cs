@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 namespace WS.Core.Log
 {
     /// <summary>
-    /// 一条日志的实体
+    /// 一条日志的实体，将会输出到日志文件中
+    /// LogName
+    /// LogTime
+    /// Message
+    /// LogLevel
     /// </summary>
     public class LogEntity
     {
@@ -16,7 +20,7 @@ namespace WS.Core.Log
         public LogEntity() { }
 
         /// <summary>
-        /// 哪个日志器，LoggerManager.GetLogger(string LogName)
+        /// 哪个日志器，LoggerManager.GetLogger(string LoggerName)
         /// </summary>
         public string LogName { get; set; }
         /// <summary>

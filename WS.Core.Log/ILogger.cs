@@ -8,9 +8,9 @@ namespace WS.Core.Log
     public interface ILogger
     {
         /// <summary>
-        /// 设置日志器名
+        /// 日志器配置
         /// </summary>
-        string LoggerName { get; set; }
+        LoggerConfig Config { get; set; }
 
         /// <summary>
         /// 调试
