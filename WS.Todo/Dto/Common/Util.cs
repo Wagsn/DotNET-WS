@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WS.Todo.Dto
 {
     /// <summary>
-    /// 工具类，可能会被拆分至各个Helper中
+    /// TODO：将其迁移到专有工具集中，工具类，可能会被拆分至各个Helper中
     /// </summary>
     public static class Util
     {

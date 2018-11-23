@@ -24,7 +24,11 @@ namespace WS.Core.Helpers
             setting.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
-
+        /// <summary>
+        /// 转化成JSON工具
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string ToJson(object obj)
         {
             if (obj == null)

@@ -10,6 +10,6 @@ namespace WS.Todo.Managers
     /// </summary>
     public class TodoItemManager
     {
-
+        public 
     }
 }

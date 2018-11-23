@@ -56,9 +56,11 @@ function getData() {
 
 // 添加待办
 function addItem() {
+    // 对待办名称进行正则表达式输入校验
+    let todoItemName = $('#add-name').val();
     const item = {
         'UseId': 0,
-        'Name': $('#add-name').val(),
+        'Name': todoItemName,
         'IsComplete': false
     };
 
