@@ -75,9 +75,12 @@ namespace WS.Core.Dto
         #region 请求错误
 
         /// <summary>
-        /// 请求体错误
+        /// 请求体错误 400
         /// </summary>
         public static readonly string BadRequset = "400";
+        /// <summary>
+        /// 请求体错误
+        /// </summary>
         public static readonly string BadRequsetMsg = "请求体错误";
 
         /// <summary>
