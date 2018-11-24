@@ -5,9 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-
+using WS.Core.Text;
 using WS.Todo.Models;
-using WS.Core.Helpers;
 
 namespace WS.Todo.Stores
 {
@@ -16,11 +15,11 @@ namespace WS.Todo.Stores
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
     /// <typeparam name="TModel"></typeparam>
-    public abstract class StoreBase<TContext, TModel> : IStore<TModel> where TContext : DbContext where TModel : TraceUpdateBase // IdentityDbContext
+    public abstract class TraceUpdateStoreBase<TContext, TModel>: ITraceUpdateStore<TModel> where TContext : DbContext where TModel : TraceUpdate // IdentityDbContext
     {
         protected virtual TContext Context { get; }
 
-        public StoreBase(TContext context)
+        public TraceUpdateStoreBase(TContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -36,8 +35,8 @@ namespace WS.Todo.Stores
             CheckNull(model);
 
             // 添加时间
-            model.CreateTime = DateTime.Now;
-            model.IsDeleted = false;
+            model._CreateTime = DateTime.Now;
+            model._IsDeleted = false;
 
             Context.Add(model);
 
@@ -62,8 +61,8 @@ namespace WS.Todo.Stores
             var currTime = DateTime.Now;
             models.ForEach(model =>
             {
-                model.CreateTime = currTime;
-                model.IsDeleted = false;
+                model._CreateTime = currTime;
+                model._IsDeleted = false;
             });
 
             Context.AddRange(models);
@@ -85,8 +84,8 @@ namespace WS.Todo.Stores
             CheckNull(model);
 
             // 软删除
-            model.DeleteTime = DateTime.Now;
-            model.IsDeleted = true;
+            model._DeleteTime = DateTime.Now;
+            model._IsDeleted = true;
             Context.Update(model);
 
             // 硬删除
@@ -112,8 +111,8 @@ namespace WS.Todo.Stores
             var currTime = DateTime.Now;
             models.ForEach(model =>
             {
-                model.DeleteTime = currTime;
-                model.IsDeleted = true;
+                model._DeleteTime = currTime;
+                model._IsDeleted = true;
             });
             Context.UpdateRange(models);
 
@@ -142,10 +141,9 @@ namespace WS.Todo.Stores
 
             var model = await ReadAsync(a => a.Where(b => model2.Equals(b)), cancellationToken);
             Console.WriteLine("WS------- StoreBase UpdateAsync 从数据库中获取的Model：\r\n"+JsonHelper.ToJson(model));
-            model.Update(model2);
             
             // 更新时间
-            model.UpdateTime = DateTime.Now;
+            model._UpdateTime = DateTime.Now;
 
             Context.Attach(model);
             Context.Update(model);
@@ -167,7 +165,7 @@ namespace WS.Todo.Stores
             var currTime = DateTime.Now;
             models.ForEach(model => 
             {
-                model.UpdateTime = currTime;
+                model._UpdateTime = currTime;
             });
 
             Context.AttachRange(models);

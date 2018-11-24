@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using WS.Todo.Dto;
 using WS.Todo.Models;
 using WS.Todo.Stores;
-using WS.Core.Helpers;
+using WS.Core.Text;
+using WS.Core.Dto;
 
 namespace WS.Todo.Controllers
 {
     /// <summary>
-    /// 待办控制器
+    /// 待办控制器，做到用户登录，每个人的待办项是不一样的
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]  // api/todo
@@ -40,11 +41,10 @@ namespace WS.Todo.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]  // api/todo
-        public async Task<ResponseMessage<List<TodoItem>>> GetAll()
+        public async Task<ResponseMessage<List<Models.TodoItem>>> GetAll()
         {
             Console.WriteLine("WS------ Request:  GetAll() " );  // 打印请求日志
-            ResponseMessage<List<TodoItem>> response = new ResponseMessage<List<TodoItem>>();
-            response.Extension = await Store.ListAsync(a => a.Where(b => true), CancellationToken.None);
+            ResponseMessage<List<Models.TodoItem>> response = new ResponseMessage<List<Models.TodoItem>>();
             if (response.Extension ==null)
             {
                 response.Code = "404";
@@ -59,11 +59,10 @@ namespace WS.Todo.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}", Name = "GetTodo")]  // ActionName
-        public async Task<ResponseMessage<TodoItem>> GetById(long id)
+        public async Task<ResponseMessage<Models.TodoItem>> GetById(long id)
         {
             Console.WriteLine("WS------ Request:  GetAll() ");  // 打印请求日志
-            ResponseMessage<TodoItem> response = new ResponseMessage<TodoItem>();
-            response.Extension = await Store.ReadAsync(a => a.Where(b => b.Id == id), CancellationToken.None);
+            ResponseMessage<Models.TodoItem> response = new ResponseMessage<Models.TodoItem>();
             if (response.Extension == null)
             {
                 response.Code = "404";
@@ -78,25 +77,19 @@ namespace WS.Todo.Controllers
         /// <param name="request">待办创建请求体</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResponseMessage<TodoItem>> Create([FromBody]TodoItemCreateRequest request)
+        public ResponseMessage<Models.TodoItem> Create([FromBody]TodoItemRequest request)
         {
-            Console.WriteLine("WS-- Request:  "+JsonHelper.ToJson(request));  // 打印请求日志
-            ResponseMessage<TodoItem> response = new ResponseMessage<TodoItem>();
-            response.Extension = await Store.CreateAsync(new TodoItem
-            {
-                CreateUserId = request.UserId,
-                Name = request.Name,
-                IsComplete = request.IsComplete
-            }, CancellationToken.None);
+            Console.WriteLine("WS-- Request:  " + JsonHelper.ToJson(request));  // 打印请求日志
+            ResponseMessage<Models.TodoItem> response = new ResponseMessage<Models.TodoItem>();
             if (response.Extension == null)
             {
-                response.Code = ResponseCodeDefines.ServiceError;  // 添加失败
+                response.Code = ResponseDefine.ServiceError;  // 添加失败
                 response.Message = "添加失败，可能传入的参数有误!";
                 return response;
             }
             return response;
         }
-        
+
         /// <summary>
         /// 更新待办，根据传入的非空字段进行修改
         /// </summary>
@@ -104,10 +97,9 @@ namespace WS.Todo.Controllers
         /// <param name="item">编辑后的待办</param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task Update(long userId, TodoItem item)
+        public async Task Update(long userId, Models.TodoItem item)
         {
             Console.WriteLine("WS-- Request:  id="+userId+", item=" + JsonHelper.ToJson(item));
-            await Store.UpdateAsync(item, CancellationToken.None);
             return;
         }
 
@@ -119,7 +111,6 @@ namespace WS.Todo.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(long id)
         {
-            await Store.DeleteIfAsync(a => a.Where(b => b.Id == id), CancellationToken.None);
             return;
         }
     }

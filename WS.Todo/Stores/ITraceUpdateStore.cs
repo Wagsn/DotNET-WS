@@ -11,7 +11,7 @@ namespace WS.Todo.Stores
     /// <summary>
     /// Store接口，CRUD操作通用接口
     /// </summary>
-    public interface IStore<TModel> where TModel : ITraceUpdate
+    public interface ITraceUpdateStore<TModel> where TModel : TraceUpdate
     {
         /// <summary>
         /// 新增一条数据，建议与新增多条数据合并

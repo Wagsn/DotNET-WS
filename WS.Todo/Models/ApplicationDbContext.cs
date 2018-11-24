@@ -15,7 +15,20 @@ namespace WS.Todo.Models
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options){ }
 
+        /// <summary>
+        /// 待办项
+        /// </summary>
         public DbSet<TodoItem> TodoItems { get; set; }
+
+        /// <summary>
+        /// 待办项历史变更
+        /// </summary>
+        public DbSet<TodoItemHistory> TodoItemHistories { get; set; }
+        
+        /// <summary>
+        /// 用户核心信息，扩展信息只与Id挂钩，不与Name和Pwd挂钩
+        /// </summary>
+        public DbSet<UserBase> UserBases { get; set; }
 
         /// <summary>
         /// 模型创建
@@ -28,7 +41,18 @@ namespace WS.Todo.Models
             builder.Entity<TodoItem>(b =>
             {
                 b.ToTable("ws_todo_todoitem");
-                b.Property<bool?>("IsDeleted");
+                b.Property<bool>(p=>p._IsDeleted);
+            });
+
+            builder.Entity<TodoItemHistory>(b =>
+            {
+                b.ToTable("ws_todo_todoitem_history");
+            });
+
+            builder.Entity<UserBase>(b =>
+            {
+                b.ToTable("ws_todo_userbase");
+                b.Property<bool>(p => p._IsDeleted);
             });
         }
     }
