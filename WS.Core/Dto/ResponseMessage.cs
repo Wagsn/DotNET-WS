@@ -160,7 +160,7 @@ namespace WS.Core.Dto
     public class PagingResponseMessage<Tentity> : ResponseMessage<List<Tentity>>
     {
         /// <summary>
-        /// 分页索引，当前页码
+        /// 分页索引，当前页码，从0开始
         /// </summary>
         public int PageIndex { get; set; }
 
@@ -168,6 +168,11 @@ namespace WS.Core.Dto
         /// 每页记录数量
         /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// 页数
+        /// </summary>
+        public int PageCount { get; set; }
 
         /// <summary>
         /// 记录总数

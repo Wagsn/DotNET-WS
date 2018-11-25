@@ -46,7 +46,7 @@ namespace WS.Todo.Stores
         /// <param name = "todoItem">用户Id</param>
         /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>
-        Task<TodoItem> Create([Required]TodoItem todoItem, CancellationToken cancellationToken);
+        Task<TodoItem> Create([Required]TodoItem todoItem, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// 更新
@@ -54,7 +54,7 @@ namespace WS.Todo.Stores
         /// <param name="todoItem"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<TodoItem> Update([Required]TodoItem todoItem, CancellationToken cancellationToken);
+        Task<TodoItem> Update([Required]TodoItem todoItem, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// 批量删除，通过Id

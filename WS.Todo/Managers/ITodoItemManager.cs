@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WS.Core.Dto;
 using WS.Todo.Dto;
@@ -23,12 +24,12 @@ namespace WS.Todo.Managers
         TStore Store { get; set; }
 
         /// <summary>
-        /// 删除该用户所有待办，通过用户ID
+        /// 获取该用户所有待办，通过用户ID
         /// </summary>
         /// <param name="response">响应体</param>
         /// <param name="request">请求体</param>
         /// <returns></returns>
-        void List([Required]ResponseMessage<List<TodoItemJson>> response, [FromBody]ModelRequest<TodoItemJson> request);
+        Task List([Required]PagingResponseMessage<TodoItemJson> response, [FromBody]PageRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// 创建当没有Id时，更新当有Id时
@@ -36,15 +37,14 @@ namespace WS.Todo.Managers
         /// <param name="response"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task CreateOrUpdate([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request);
+        Task CreateOrUpdate([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// 删除，通过用户ID和待办ID
         /// </summary>
-        /// <typeparam name="TJson"></typeparam>
         /// <param name="response"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        void Delete([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request);
+        Task Delete([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

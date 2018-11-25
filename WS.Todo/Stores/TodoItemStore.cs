@@ -42,20 +42,25 @@ namespace WS.Todo.Stores
         /// <returns></returns>
         public IQueryable<TodoItem> ById([Required]string userid, [Required]string id)
         {
-            return List(userid, a=>a.Where(b=>b.Id==id));
+            // 查询User包含的Todo
+            var todoIds = from rut in Context.RelationUserTodos
+                          where rut.UserId == userid && rut.TodoId == id
+                          select rut.TodoId;
+            return List(userid, a => a.Where(b => todoIds.Contains(b.Id)));
         }
 
         /// <summary>
         /// 批量获取待办项（过滤IsDeleted==true），通用函数
+        /// 用户数据隔离
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
-        /// <param name="userid"></param>
-        /// <param name="query"></param>
+        /// <param name="userid">用户ID</param>
+        /// <param name="query">查询</param>
         /// <returns></returns>
         public IQueryable<TResult> List<TResult>([Required]string userid, [Required]Func<IQueryable<TodoItem>, IQueryable<TResult>> query)
         {
             // 软删除，过滤
-            return query.Invoke(Context.TodoItems.Where(it => !it._IsDeleted));
+            return query.Invoke(Context.TodoItems.Where(it => it._CreateUserId==userid&&!it._IsDeleted));
         }
 
         /// <summary>
@@ -66,10 +71,21 @@ namespace WS.Todo.Stores
         /// <returns></returns>
         public async Task<TodoItem> Create([Required] TodoItem todoItem, CancellationToken cancellationToken = default(CancellationToken))
         {
+            // 创建的时候必须保证创建人ID不能为空
+            if (todoItem._CreateUserId==null)
+            {
+                throw new ArgumentNullException("用户ID不能为空");
+            }
+            todoItem.ActualTime = null;
             todoItem.IsComplete = false;
             todoItem._CreateTime = DateTime.Now;
             todoItem._IsDeleted = false;
             Context.Add(todoItem);
+            Context.Add(new RelationUserTodo
+            {
+                UserId = todoItem._CreateUserId,  // 确保 UserId 不为空
+                TodoId = todoItem.Id
+            });
             // 添加变更历史
             TodoItemHistory history = new TodoItemHistory
             {
@@ -100,9 +116,26 @@ namespace WS.Todo.Stores
         /// <returns></returns>
         public async Task<TodoItem> Update([Required] TodoItem todoItem, CancellationToken cancellationToken)
         {
+            // TODO 判断UserTodo关联
+            //var usertodo =Context.RelationUserTodos.Where(a => a.UserId == todoItem._CreateUserId && a.TodoId == todoItem.Id);
+            //if (usertodo == null)
+            //{
+            //    return null;
+            //}  // 按理说在创建的时候已经关联了的，而已删除的todoitem客户端接收不到，所以传入的todoitem应该是合法数据
+            var currTime = DateTime.Now;
+            todoItem._UpdateTime = currTime;
             Context.Attach(todoItem);
             var item =Context.Update(todoItem).Entity;
-
+            // 添加变更历史
+            TodoItemHistory history = new TodoItemHistory
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserId = item._UpdateUserId,
+                Type = "Delete",  // 放到常量池
+                Time = currTime,
+                Content = JsonHelper.ToJson(item)
+            };
+            Context.Add(history);
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
@@ -128,6 +161,7 @@ namespace WS.Todo.Stores
             DateTime currTime = DateTime.Now;
             foreach(var item in query)
             {
+                // 软删除去掉，改为变更历史 TodoItemHistory
                 item._DeleteUserId = userid;
                 item._DeleteTime = currTime;
                 item._IsDeleted = true;
@@ -141,6 +175,8 @@ namespace WS.Todo.Stores
                     Content = JsonHelper.ToJson(item)
                 };
                 Context.Add(history);
+                // 删除UserTodo关联
+                Context.Remove(Context.RelationUserTodos.Where(a => a.UserId == userid && a.TodoId == id));
             }
             // 软删除
             Context.UpdateRange(query);
@@ -185,6 +221,8 @@ namespace WS.Todo.Stores
                 };
                 Context.Add(history);
             }
+            // 删除UserTodo关联
+            Context.Remove(Context.RelationUserTodos.Where(a => a.UserId == userid && query.Select(i=> i.Id).Contains(a.TodoId)));
             // 软删除
             Context.UpdateRange(query);
 

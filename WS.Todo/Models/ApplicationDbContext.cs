@@ -31,6 +31,11 @@ namespace WS.Todo.Models
         public DbSet<UserBase> UserBases { get; set; }
 
         /// <summary>
+        /// 用户待办关联
+        /// </summary>
+        public DbSet<RelationUserTodo> RelationUserTodos { get; set; }
+
+        /// <summary>
         /// 模型创建
         /// </summary>
         /// <param name="builder"></param>
@@ -53,6 +58,11 @@ namespace WS.Todo.Models
             {
                 b.ToTable("ws_todo_userbase");
                 b.Property<bool>(p => p._IsDeleted);
+            });
+
+            builder.Entity<RelationUserTodo>(b =>
+            {
+                b.ToTable("ws_todo_relation_usertodo").HasKey(k => new { k.TodoId, k.UserId });
             });
         }
     }

@@ -11,9 +11,20 @@ namespace WS.Todo.Models
     /// </summary>
     public class RelationUserTodo
     {
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        [Key]
+        [Required]
         [MaxLength(length: 36, ErrorMessage = Define.Constants.IdLengthErrMsg)]
         public string UserId { get; set; }
 
+        /// <summary>
+        /// 待办项ID
+        /// </summary>
+        [Key]
+        [Required]
+        [MaxLength(length: 36, ErrorMessage = Define.Constants.IdLengthErrMsg)]
         public string TodoId { get; set; }
     }
 }
