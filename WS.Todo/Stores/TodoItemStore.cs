@@ -15,7 +15,7 @@ namespace WS.Todo.Stores
     /// <summary>
     /// 待办项存储
     /// </summary>
-    public class TodoItemStore : ITodoItemStore<ApplicationDbContext, Models.TodoItem>
+    public class TodoItemStore : ITodoItemStore<ApplicationDbContext, TodoItem>
     {
         /// <summary>
         /// 数据库上下文
@@ -60,7 +60,7 @@ namespace WS.Todo.Stores
         public IQueryable<TResult> List<TResult>([Required]string userid, [Required]Func<IQueryable<TodoItem>, IQueryable<TResult>> query)
         {
             // 软删除，过滤
-            return query.Invoke(Context.TodoItems.Where(it => it._CreateUserId==userid&&!it._IsDeleted));
+            return query.Invoke(Context.TodoItems.Where(it => it._CreateUserId==userid&&it._IsDeleted==false));
         }
 
         /// <summary>
@@ -156,7 +156,8 @@ namespace WS.Todo.Stores
         /// <returns></returns>
         public async Task DeleteIfId([Required]string userid, [Required]string id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var query = List(userid, (IQueryable<TodoItem> a) => a.Where(b => b.Id == id));
+            // 找到所有关联的未删除的待办
+            var query = List(userid, a => a.Where(b => b.Id == id));
 
             DateTime currTime = DateTime.Now;
             foreach(var item in query)

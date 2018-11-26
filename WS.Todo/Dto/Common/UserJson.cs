@@ -15,11 +15,11 @@ namespace WS.Todo.Dto
         public string Id;
 
         [MaxLength(31)]
-        [MinLength(3)]
+        [MinLength(3, ErrorMessage ="用户名字符数不能低于3")]
         public string Name;
 
-        [MaxLength(31)]
-        [MinLength(8)]  // 添加密码验证正则表达式特性
+        [MaxLength(63)]
+        [MinLength(8, ErrorMessage ="密码字符数不能低于8")]  // 添加密码验证正则表达式特性
         public string Pwd;
     }
 }

@@ -1,0 +1,36 @@
+﻿
+ws_todo
+
+ws_todo_userbase
+
+Id	varchar	36	0	0	0	-1	0				ID			utf8	utf8_general_ci	0	0	0	0	0	0	0
+Name	varchar	31	0	0	0	0	0				名称			utf8	utf8_general_ci	0	0	0	0	0	0	0
+Pwd	varchar	63	0	-1	0	0	0				密码			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_CreateUserId	varchar	36	0	-1	0	0	0				创建人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_CreateTime	datetime	6	0	-1	0	0	0				创建时间，由王森创建					0	0	0	0	0	0	0
+_UpdateUserId	varchar	36	0	-1	0	0	0				更新人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_UpdateTime	datetime	6	0	-1	0	0	0				更新时间，由王森创建					0	0	0	0	0	0	0
+_DeleteUserId	varchar	36	0	-1	0	0	0				删除人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_DeleteTime	datetime	6	0	-1	0	0	0				删除时间，由王森创建					0	0	0	0	0	0	0
+_IsDeleted	bit	1	0	0	0	0	0			b'0'	是否删除，由王森创建					0	0	0	0	0	0	0
+
+ws_todo_tosoitem
+
+Id	bigint	64	0	0	0	-1	0				主键，待办ID，由王森创建					0	0	0	0	-1	0	0
+Name	varchar	127	0	-1	0	0	0				待办名称，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+Content	varchar	256	0	-1	0	0	0				待办正文，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+IsComplete	bit	1	0	0	0	0	0			b'0'	是否完成，由王森创建					0	0	0	0	0	0	0
+ExpectTime	datetime	6	0	-1	0	0	0				预期时间，由王森创建					0	0	0	0	0	0	0
+ActualTime	datetime	6	0	-1	0	0	0				实际时间，由王森创建					0	0	0	0	0	0	0
+_CreateUserId	varchar	36	0	-1	0	0	0				创建人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_CreateTime	datetime	6	0	-1	0	0	0				创建时间，由王森创建					0	0	0	0	0	0	0
+_UpdateUserId	varchar	36	0	-1	0	0	0				更新人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_UpdateTime	datetime	6	0	-1	0	0	0				更新时间，由王森创建					0	0	0	0	0	0	0
+_DeleteUserId	varchar	36	0	-1	0	0	0				删除人ID，由王森创建			utf8	utf8_general_ci	0	0	0	0	0	0	0
+_DeleteTime	datetime	6	0	-1	0	0	0				删除时间，由王森创建					0	0	0	0	0	0	0
+_IsDeleted	bit	1	0	-1	0	0	0			b'0'	是否删除，由王森创建					0	0	0	0	0	0	0
+
+ws_todo_relation_usertodo
+
+UserId	varchar	36	0	0	0	-1	0				用户ID			utf8	utf8_general_ci	0	0	0	0	0	0	0
+TodoId	varchar	36	0	0	0	-1	0				待办ID			utf8	utf8_general_ci	0	0	0	0	0	0	0

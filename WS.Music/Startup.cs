@@ -42,6 +42,7 @@ namespace WS.Music
                 //options.UseOpenIddict();
             });
             
+            // 这里应该是依赖注入
             services.AddAutoMapper();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

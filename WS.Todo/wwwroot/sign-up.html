@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>注册</title>
+	<link href="css/base.css" rel="stylesheet">
+	<link href="css/sign-form.css" rel="stylesheet">
+	<script type="text/javascript" src="assets/js//jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+	<script type="text/javascript">
+	// 注册
+	function signup_btn() {
+	    // TODO: 
+	    if (!confirmpw()) {
+	        alert("请输入正确格式的密码");
+	        return;
+	    }
+	    $.ajax({
+	        type: "post", /* 提交方式 */
+	        url: "SingupServlet", /* servlet 或者 url */
+	        data: signup_reqdata(),
+	        contentType: "application/json;charset=utf-8", /* 采用json格式数据 */
+	        dateType: "json", /* 数据类型为json */
+	        success: function (result) { /* 请求成功时被调用，result为服务器传来的数据 */
+	            /* 页面数据初始化 */
+	            let data = eval(result);  // 将json转换为jso
+	            if (data && data.bbs_res_code == 0) {
+	                let body =data.bbs_res_body;
+	                if (body.ret_code == 0) {
+	                    alert("注册成功");
+	                    // TODO: 跳转到其他界面，是否由服务器端跳转？
+	                } else if (body.ret_code == 1) {
+	                    alert("用户名已存在");
+	                } else if (body.ret_code == 2) {
+						alert("密码格式错误");
+					}
+	            }
+	        },
+	        error: function (XMLHttpRequest, textStatus, errorThrown) { /* 请求错误时调用，errorThrown为错误数据 */
+	            alert("失败: " + errorThrown);
+	        }
+	    });
+	}
+	// 确认密码是否相同
+	function confirmpw() {
+	    return ($("#password").val()!="")&&($("#password").val()==$("#confirmpw").val());
+	}
+	// 生成输入中注册请求jso
+	function signup_reqdata() {
+		return JSON.stringify({
+	        "req_type": "signup",
+	        "timestamp": new Date().getTime(),
+	        "username": $("#username").val(),
+	        "password": $("#password").val()
+	    });
+	}
+	
+	</script>
+</head>
+
+<body>
+
+	<div id="top-nav" class="top-nav card">
+		<a href="./">
+			<span>首页</span>
+			<span class="en">Home</span>
+		</a>
+		<a class="f_r" href="sign-up.html">
+			<span>注册</span>
+			<span class="en">Sign up</span>
+		</a>
+		<a class="f_r" href="sign-in.html">
+			<span>登录</span>
+			<span class="en">Sign in</span>
+		</a>
+	</div>
+
+	<div id="wrapper">
+		<!-- 页面主体内容 -->
+		<article>
+			<div class="card sign-box">
+				<form id="form">
+					<div class="group-box">
+						<label class="label-box">用户名</label>
+						<input id="username" class="input-box" name="username" type="text" placeholder="Pick a username" />
+					</div>
+					<div class="group-box">
+						<label class="label-box">密码</label>
+						<input id="password" class="input-box" name="password" type="password" placeholder="Create a password" />
+					</div>
+					<div class="group-box">
+						<label class="label-box">确认密码</label>
+						<input id="confirmpw" class="input-box" name="password" type="password" placeholder="Confirm you password" />
+					</div>
+				</form>
+					<button  class="button" onclick="signup_btn()" >提交</button>
+					<button class="button" onclick="reset_btn()">重置</button>
+			</div>
+		</article>
+		<!-- End 页面主体内容 -->
+	</div>
+	<!-- wraper end -->
+	<footer>
+		<div class="center card">
+			<p>Copyright&copy; 2018 Wagsn</p>
+		</div>
+	</footer>
+
+</body>
+
+</html>

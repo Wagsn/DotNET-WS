@@ -18,6 +18,7 @@ using Swashbuckle.AspNetCore.Swagger;
 
 using WS.Todo.Models;
 using WS.Todo.Stores;
+using AutoMapper;
 
 namespace WS.Todo
 {
@@ -65,11 +66,12 @@ namespace WS.Todo
             //services.AddDbContext<ApplicationDbContext>
             //    (options => options.UseSqlServer(connection));
 
-            
-            
+            // 这里应该是依赖注入
+            services.AddAutoMapper();
+
             // 依赖注入
             //services.AddTransient<IStore<TodoItem>, TodoItemStore>();
-            services.AddTransient<TodoItemStore>();
+            services.AddUserDefined();
 
             services.AddSwaggerGen(c =>
             {

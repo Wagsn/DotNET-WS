@@ -20,6 +20,15 @@ namespace WS.Todo.Stores
 
         public Type ModelType { get; set; }
 
+        /// <summary>
+        /// 构造器
+        /// </summary>
+        /// <param name="context"></param>
+        public UserBaseStore(ApplicationDbContext context)
+        {
+            Context = context ?? throw new ArgumentNullException();
+        }
+
         public IQueryable<UserBase> ById([Required]string userid, [Required]string id)
         {
             return List(userid, a => a.Where(b => b.Id == id));

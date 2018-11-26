@@ -19,8 +19,6 @@ namespace WS.Todo.Dto
         /// <summary>
         /// 每页数量，1至50
         /// </summary>
-        [MinLength(1)]
-        [MaxLength(50, ErrorMessage ="分页查询每页数量不超过50")]
         public int PageSize { get; set; }
 
         /// <summary>

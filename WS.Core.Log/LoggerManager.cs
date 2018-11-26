@@ -64,8 +64,8 @@ namespace WS.Core.Log
             {
                 LoggerRoot = "./log/"+loggerName,
                 LoggerName = loggerName,
-                FileFormat = loggerName,
-                TimeFormat = "yyyy-MM-dd HH:mm:ss.SSSSSSK"
+                FileFormat = "yyyy-MM-dd",
+                TimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFK"
             });
         }
         /// <summary>

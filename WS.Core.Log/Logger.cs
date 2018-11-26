@@ -27,86 +27,116 @@ namespace WS.Core.Log
 
         public void Debug(string message)
         {
-            Console.WriteLine(message);
-            // save to file
-            File.WriteAllText(Config.LoggerRoot +"/"+ Config.FileFormat + ".log", message);
+            Log(Config, LogLevels.Debug, message);
         }
 
         public void Debug(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, LogLevels.Debug, formatString, args);
         }
 
         public void Error(string message)
         {
-            Console.WriteLine(message);
+            Log(Config, LogLevels.Error, message);
         }
 
         public void Error(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+
+            Log(Config, LogLevels.Debug, formatString, args);
         }
 
         public void Fatal(string message)
         {
-            Console.WriteLine(message);
+            Log(Config, LogLevels.Fatal, message);
         }
 
         public void Fatal(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, LogLevels.Fatal, formatString, args);
         }
 
         public void Info(string message)
         {
-            Console.WriteLine(message);
+            Log(Config, LogLevels.Info, message);
         }
 
         public void Info(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, LogLevels.Info, formatString, args);
         }
 
         public void Log(LogLevels logLevel, string message)
         {
-            Console.WriteLine(message);
+            Log(Config, logLevel, message);
         }
 
         public void Log(LogLevels logLevel, string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, logLevel, formatString, args);
         }
 
         public void Trace(string message)
         {
-            Console.WriteLine(message);
+            Log(Config, LogLevels.Trace, message);
         }
 
         public void Trace(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, LogLevels.Trace, formatString, args);
         }
 
         public void Warn(string message)
         {
-            Console.WriteLine(message);
+            Log(Config, LogLevels.Warn, message);
         }
 
         public void Warn(string formatString, params object[] args)
         {
-            Console.WriteLine(formatString, args);
+            Log(Config, LogLevels.Warn, formatString, args);
         }
 
         /// <summary>
-        /// 记录
+        /// 带格式化的
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="levels"></param>
+        /// <param name="formatString"></param>
+        /// <param name="args"></param>
+        public static void Log(LoggerConfig config, LogLevels levels, string formatString, params object[] args)
+        {
+            Log(config, LogLevels.Warn, string.Format(formatString, args));
+        }
+
+        /// <summary>
+        /// 不带格式化的
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="levels"></param>
+        /// <param name="message"></param>
+        public static void Log(LoggerConfig config, LogLevels levels, string message)
+        {
+            Console.WriteLine(message);
+            Log(config, new LogEntity
+            {
+                LogLevel = LogLevels.Warn,
+                LogName = config.LoggerName,
+                LogTime = DateTime.Now,
+                Message = message
+            });
+        }
+
+        /// <summary>
+        /// 写日志
         /// </summary>
         /// <param name="config">记录配置（文件保存路径）</param>
         /// <param name="entity">记录实体（记录包含信息）</param>
         public static void Log(LoggerConfig config,  LogEntity entity)
         {
-            // log item: [timeformat] [level] [name] [message]
+            //string consoleInfo = $"[{entity.LogLevel.ToString()}] [{entity.LogName}] {entity.Message}";
             string logItem = $"[{entity.LogTime.ToString(config.TimeFormat)}] [{entity.LogLevel.ToString()}] [{entity.LogName}] {entity.Message}";
-            File.WriteAllText(config.LoggerRoot + "/" + config.LoggerName + ".log", logItem, true);
+            Console.WriteLine(logItem);
+            File.WriteAllText(config.LoggerRoot + "/" + DateTime.Now.ToString(config.FileFormat) + ".log", logItem+"\r\n", true);
         }
     }
 }

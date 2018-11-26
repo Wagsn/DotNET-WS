@@ -29,17 +29,18 @@ namespace Microsoft.Extensions.DependencyInjection
 
             #region << 在这里添加依赖注入 >>
 
-            //services.AddScoped<DbContext, ApplicationDbContext>();
+            services.AddScoped<DbContext, ApplicationDbContext>();
 
             #region << Store >>
 
             services.AddScoped<ITodoItemStore<ApplicationDbContext, TodoItem>, TodoItemStore>();
+            services.AddScoped <IUserBaseStore<ApplicationDbContext, UserBase>, UserBaseStore>();
 
             #endregion
 
             #region << Manager >>
             
-            services.AddScoped<ITodoItemManager<ITodoItemStore<DbContext, TodoItem>>, TodoItemManager>();
+            services.AddScoped<ITodoItemManager<ITodoItemStore<ApplicationDbContext, TodoItem>>, TodoItemManager>();
 
             #endregion
 

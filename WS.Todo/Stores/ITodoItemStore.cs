@@ -13,7 +13,7 @@ namespace WS.Todo.Stores
     /// <summary>
     /// 需要追踪的统一接口
     /// </summary>
-    public interface ITodoItemStore<TContext, TModel> where TContext : DbContext where TModel : TodoItem
+    public interface ITodoItemStore<TContext, TModel> where TContext : ApplicationDbContext where TModel : TodoItem
     {
         /// <summary>
         /// 数据库上下文

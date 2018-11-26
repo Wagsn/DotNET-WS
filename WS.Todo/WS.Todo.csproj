@@ -17,6 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dto\Response\**" />
+    <Content Remove="Dto\Response\**" />
+    <EmbeddedResource Remove="Dto\Response\**" />
+    <None Remove="Dto\Response\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
 
@@ -25,6 +32,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+    <None Include="wwwroot\assets\js\jquery-3.3.1.min.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,12 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WS.Core.Log\WS.Core.Log.csproj" />
     <ProjectReference Include="..\WS.Core.Text\WS.Core.Text.csproj" />
     <ProjectReference Include="..\WS.Core\WS.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dto\Response\" />
   </ItemGroup>
 
 </Project>

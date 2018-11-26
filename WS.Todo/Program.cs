@@ -19,6 +19,9 @@ namespace WS.Todo
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                //.UseUrls("http://*:56470")
+                //.UseKestrel()
+                //.UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>();
     }
 }

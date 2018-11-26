@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WS.Core.Log
 {
     /// <summary>
-    /// 一条日志的实体，将会输出到日志文件中
+    /// 一条日志的实体，将会输出到日志文件中，不直接输出到
     /// LogName
     /// LogTime
     /// Message
@@ -34,6 +34,6 @@ namespace WS.Core.Log
         /// <summary>
         /// 日志层级，Trace Debug Info Warn Fatal All
         /// </summary>
-        public string LogLevel { get; set; }
+        public LogLevels LogLevel { get; set; }
     }
 }

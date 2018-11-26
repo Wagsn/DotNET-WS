@@ -17,25 +17,30 @@ namespace WS.Todo.Managers
     /// <summary>
     /// 待办管理器
     /// </summary>
-    public class TodoItemManager : ITodoItemManager<ITodoItemStore<DbContext, TodoItem>>
+    public class TodoItemManager : ITodoItemManager<ITodoItemStore<ApplicationDbContext, TodoItem>>
     {
         /// <summary>
         /// 存储器
         /// </summary>
-        public ITodoItemStore<DbContext, TodoItem> Store { get; set; }
+        public ITodoItemStore<ApplicationDbContext, TodoItem> Store { get; set; }
 
         /// <summary>
         /// 用户核心信息存储
         /// </summary>
-        public IUserBaseStore<DbContext, UserBase> UserBaseStore { get; set; }
+        public IUserBaseStore<ApplicationDbContext, UserBase> UserBaseStore { get; set; }
 
         /// <summary>
         /// 实体映射
         /// </summary>
         public IMapper Mapper { get; set; }
 
-
-        public TodoItemManager([Required]ITodoItemStore<DbContext, TodoItem> store, [Required]IUserBaseStore<DbContext, UserBase> userBaseStore, [Required]IMapper mapper )
+        /// <summary>
+        /// 构造器
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="userBaseStore"></param>
+        /// <param name="mapper"></param>
+        public TodoItemManager([Required]ITodoItemStore<ApplicationDbContext, TodoItem> store, [Required]IUserBaseStore<ApplicationDbContext, UserBase> userBaseStore, [Required]IMapper mapper )
         {
             Store = store;
             UserBaseStore = userBaseStore;
@@ -112,7 +117,7 @@ namespace WS.Todo.Managers
         }
 
         /// <summary>
-        /// 
+        /// 删除待办项
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
@@ -125,6 +130,7 @@ namespace WS.Todo.Managers
             }
             // 删除Todo
             await Store.DeleteIfId(user.Id, request.model.Id, cancellationToken);
+            response.Extension = request.model;
         }
 
         /// <summary>
@@ -140,6 +146,7 @@ namespace WS.Todo.Managers
             UserBase user = await UserChecck(response, request.User);
             if (user == null)
             {
+                //response.Wrap(ResponseDefine.BadRequset, "用户名不存在");
                 return;
             }
             var todos = await Store.List(user.Id, a => a).Select(s=>Mapper.Map<TodoItemJson>(s)).ToListAsync(cancellationToken);
@@ -174,6 +181,13 @@ namespace WS.Todo.Managers
             }
         }
 
+        /// <summary>
+        /// 用户检查
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="userJson"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task<UserBase> UserChecck([Required]ResponseMessage response, UserJson userJson, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserBase user = null;
@@ -182,6 +196,7 @@ namespace WS.Todo.Managers
             {
                 response.Code = ResponseDefine.BadRequset;
                 response.Message += "请求体中不存在用户信息，未登录将不能执行删除功能";
+                return null;
             }
             if (!string.IsNullOrWhiteSpace(userJson.Id))
             {
@@ -206,8 +221,14 @@ namespace WS.Todo.Managers
                 user = await UserBaseStore.ByName("System", userJson.Name).SingleOrDefaultAsync(cancellationToken);
                 if (user == null)
                 {
-                    response.Code = ResponseDefine.BadRequset;
-                    response.Message += "找不到该用户";
+                    var uid = Guid.NewGuid().ToString();
+                    user = await UserBaseStore.Create(new UserBase
+                    {
+                        Id = uid,
+                        Name = userJson.Name,
+                        Pwd = userJson.Pwd,
+                        _CreateUserId = uid
+                    }, cancellationToken);
                 }
                 else
                 {
@@ -217,6 +238,10 @@ namespace WS.Todo.Managers
                         response.Message += "密码错误";
                     }
                 }
+            }
+            else
+            {
+                response.Wrap(ResponseDefine.BadRequset, "用户ID和用户名不能同时为空");
             }
             return user;
         }

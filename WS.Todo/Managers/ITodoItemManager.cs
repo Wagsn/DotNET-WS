@@ -16,7 +16,7 @@ namespace WS.Todo.Managers
     /// <summary>
     /// 待办项管理
     /// </summary>
-    public interface ITodoItemManager<TStore> where TStore : ITodoItemStore<DbContext, Models.TodoItem>
+    public interface ITodoItemManager<TStore> where TStore : ITodoItemStore<ApplicationDbContext, TodoItem>
     {
         /// <summary>
         /// 待办项存储
