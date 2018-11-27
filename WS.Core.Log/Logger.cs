@@ -43,7 +43,7 @@ namespace WS.Core.Log
         public void Error(string formatString, params object[] args)
         {
 
-            Log(Config, LogLevels.Debug, formatString, args);
+            Log(Config, LogLevels.Error, formatString, args);
         }
 
         public void Fatal(string message)
@@ -99,27 +99,26 @@ namespace WS.Core.Log
         /// <summary>
         /// 带格式化的
         /// </summary>
-        /// <param name="config"></param>
-        /// <param name="levels"></param>
-        /// <param name="formatString"></param>
-        /// <param name="args"></param>
-        public static void Log(LoggerConfig config, LogLevels levels, string formatString, params object[] args)
+        /// <param name="config">日志器配置文件</param>
+        /// <param name="level">日志层级</param>
+        /// <param name="formatString">模板字符串</param>
+        /// <param name="args">填充字符串数组</param>
+        public static void Log(LoggerConfig config, LogLevels level, string formatString, params object[] args)
         {
-            Log(config, LogLevels.Warn, string.Format(formatString, args));
+            Log(config, level, string.Format(formatString, args));
         }
 
         /// <summary>
         /// 不带格式化的
         /// </summary>
-        /// <param name="config"></param>
-        /// <param name="levels"></param>
-        /// <param name="message"></param>
-        public static void Log(LoggerConfig config, LogLevels levels, string message)
+        /// <param name="config">日志器配置文件</param>
+        /// <param name="level">日志层级</param>
+        /// <param name="message">日志正文</param>
+        public static void Log(LoggerConfig config, LogLevels level, string message)
         {
-            Console.WriteLine(message);
             Log(config, new LogEntity
             {
-                LogLevel = LogLevels.Warn,
+                LogLevel = level,
                 LogName = config.LoggerName,
                 LogTime = DateTime.Now,
                 Message = message
