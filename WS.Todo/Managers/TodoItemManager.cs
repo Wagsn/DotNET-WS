@@ -92,8 +92,7 @@ namespace WS.Todo.Managers
                     TodoItem todo = await Store.ById(user.Id, request.model.Id).SingleOrDefaultAsync(cancellationToken);
                     if (todo == null)
                     {
-                        response.Code = ResponseDefine.NotFound;
-                        response.Message += "找不到该待办项";
+                        response.Wrap(ResponseDefine.NotFound, "找不到该待办项");
                         return;
                     }
                     else
@@ -191,36 +190,36 @@ namespace WS.Todo.Managers
         private async Task<UserBase> UserChecck([Required]ResponseMessage response, UserJson userJson, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserBase user = null;
-            // 删除关联和待办项
+            // 参数检查
             if (userJson == null)
             {
-                response.Code = ResponseDefine.BadRequset;
-                response.Message += "请求体中不存在用户信息，未登录将不能执行删除功能";
+                response.Wrap(ResponseDefine.BadRequset, "不存在用户信息，未登录将不能执行该项操作");
                 return null;
             }
+            // 请求体：存在用户ID
             if (!string.IsNullOrWhiteSpace(userJson.Id))
             {
                 user = await UserBaseStore.ById("System", userJson.Id).SingleOrDefaultAsync(cancellationToken);
                 if (user == null)
                 {
-                    response.Code = ResponseDefine.BadRequset;
-                    response.Message += "找不到该用户";
+                    response.Wrap(ResponseDefine.BadRequset, "找不到该用户");
                 }
                 else
                 {
                     if (user.Pwd != userJson.Pwd)
                     {
-                        response.Code = ResponseDefine.BadRequset;
-                        response.Message += "密码错误";
+                        response.Wrap(ResponseDefine.BadRequset, "密码错误");
                     }
                 }
             }
-            // 查看是否存在，不存在则创建
+            // 请求体：存在用户Name
             else if (!string.IsNullOrWhiteSpace(userJson.Name))
             {
                 user = await UserBaseStore.ByName("System", userJson.Name).SingleOrDefaultAsync(cancellationToken);
+                // 该用户不存在
                 if (user == null)
                 {
+                    // 创建用户
                     var uid = Guid.NewGuid().ToString();
                     user = await UserBaseStore.Create(new UserBase
                     {
@@ -230,12 +229,13 @@ namespace WS.Todo.Managers
                         _CreateUserId = uid
                     }, cancellationToken);
                 }
+                // 该用户存在
                 else
                 {
+                    // 密码错误
                     if (user.Pwd != userJson.Pwd)
                     {
-                        response.Code = ResponseDefine.BadRequset;
-                        response.Message += "密码错误";
+                        response.Wrap(ResponseDefine.BadRequset, "密码错误");  // IncorrectPassWord
                     }
                 }
             }

@@ -33,7 +33,7 @@ namespace WS.Todo.Models
         /// <summary>
         /// 变更内容（原始待办的JSON字符串）
         /// </summary>
-        [MaxLength(511)]
+        [MaxLength(1023)]
         public string Content { get; set; }
 
         /// <summary>

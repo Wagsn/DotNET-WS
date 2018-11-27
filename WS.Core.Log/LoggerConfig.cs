@@ -40,7 +40,7 @@ namespace WS.Core.Log
         public string LoggerRoot { get; set; }
 
         /// <summary>
-        /// 文件名格式（loggerName_yyyyMMdd）
+        /// 文件名格式（yyyy-MM-dd）
         /// </summary>
         public string FileFormat { get; set; }
 

@@ -50,9 +50,7 @@ namespace WS.Todo.Controllers
         public async Task<PagingResponseMessage<TodoItemJson>> GetAll([Required][FromBody]PageRequest request)
         {
             // 日志输出：请求体
-            Console.WriteLine("WS------ Request: " );
-            Console.WriteLine(JsonHelper.ToJson(request));
-            Logger.Trace("WS------ Request: \r\n{0}", JsonHelper.ToJson(request));
+            Logger.Trace("[{0}Action] Request: \r\n{0}", "GetAll", JsonHelper.ToJson(request));
             PagingResponseMessage <TodoItemJson> response = new PagingResponseMessage<TodoItemJson>();
             // 模型验证在模型本身存在
             try
@@ -64,29 +62,10 @@ namespace WS.Todo.Controllers
             {
                 response.Wrap(ResponseDefine.ServiceError, e.Message);
                 // 日志输出：服务器错误
-                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+                Logger.Error("[{0}Action] ServiceError: \r\n{1}", "GetAll", e);
             }
             // 日志输出：响应体
-            Console.WriteLine("WS------ Response: ");
-            Console.WriteLine(JsonHelper.ToJson(response));
-            return response;
-        }
-
-        /// <summary>
-        /// Get Todo item by id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}", Name = "GetTodo")]  // ActionName
-        public async Task<ResponseMessage<TodoItem>> GetById(long id)
-        {
-            Console.WriteLine("WS------ Request:  GetAll() ");  // 打印请求日志
-            ResponseMessage<TodoItem> response = new ResponseMessage<TodoItem>();
-            if (response.Extension == null)
-            {
-                response.Code = "404";
-                response.Message = "Not Fund";
-            }
+            Logger.Trace("[{0}Action] Response: \r\n{1}", "GetAll", JsonHelper.ToJson(response));
             return response;
         }
 
@@ -98,7 +77,9 @@ namespace WS.Todo.Controllers
         [HttpPost]
         public async Task<ResponseMessage<TodoItemJson>> Create([FromBody]ModelRequest<TodoItemJson> request)
         {
-            Console.WriteLine("WS-- Request:  " + JsonHelper.ToJson(request));  // 打印请求日志
+            // 打印请求日志
+            Logger.Trace("[{0}Action] Request: \r\n{1}", "Create", JsonHelper.ToJson(request));
+
             ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
 
             // 模型验证在模型本身存在
@@ -111,36 +92,51 @@ namespace WS.Todo.Controllers
             {
                 response.Wrap(ResponseDefine.ServiceError, e.Message);
                 // 日志输出：服务器错误
-                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+                Logger.Error("[{0}Action] ServiceError: \r\n{1}", "Create", e);
             }
             // 日志输出：响应体
-            Console.WriteLine("WS------ Response: ");
-            Console.WriteLine(JsonHelper.ToJson(response));
+            Logger.Trace("[{0}Action] Response: \r\n{1}", "Create", JsonHelper.ToJson(response));
             return response;
         }
 
         /// <summary>
         /// 更新待办，根据传入的非空字段进行修改
         /// </summary>
-        /// <param name="userId">用户ID</param>
-        /// <param name="item">编辑后的待办</param>
+        /// <param name="request">单一模型请求</param>
         /// <returns></returns>
-        [HttpPut("{id}")]
-        public async Task Update([FromBody]ModelRequest<TodoItemJson> request)
+        [HttpPost("edittodo", Name ="EditTodo")]
+        public async Task<ResponseMessage<TodoItemJson>> Update([FromBody]ModelRequest<TodoItemJson> request)
         {
-            Logger.Trace("WS------ Request: \r\n{0}", JsonHelper.ToJson(request));
-            return;
+            Logger.Trace("[{0}] Request: \r\n{1}", "TodoUpdate", JsonHelper.ToJson(request));
+            ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
+
+            try
+            {
+                // 业务调用
+                await TodoItemManager.CreateOrUpdate(response, request, default(CancellationToken));
+            }
+            catch (Exception e)
+            {
+                response.Wrap(ResponseDefine.ServiceError, e.Message);
+                // 日志输出：服务器错误
+                Logger.Error("ServiceError: \r\n{0}", e);
+            }
+
+            // 日志输出：响应体
+            Logger.Trace("Response: \r\n{0}", JsonHelper.ToJson(response));
+            return response;
         }
 
         /// <summary>
         /// 删除待办
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="request">单一模型请求</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<ResponseMessage<TodoItemJson>> Delete([FromBody]ModelRequest<TodoItemJson> request)
         {
-            Console.WriteLine("WS-- Request:  " + JsonHelper.ToJson(request));  // 打印请求日志
+            // 打印请求日志
+            Logger.Trace("Request: \r\n{0}", JsonHelper.ToJson(request));
 
             ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
 
@@ -154,11 +150,10 @@ namespace WS.Todo.Controllers
             {
                 response.Wrap(ResponseDefine.ServiceError, e.Message);
                 // 日志输出：服务器错误
-                Console.WriteLine("WS------ ServiceError: \r\n" + e);
+                Logger.Error("ServiceError: \r\n{0}", e);
             }
             // 日志输出：响应体
-            Console.WriteLine("WS------ Response: ");
-            Console.WriteLine(JsonHelper.ToJson(response));
+            Logger.Trace("Response: \r\n{0}", JsonHelper.ToJson(response));
             return response;
         }
     }

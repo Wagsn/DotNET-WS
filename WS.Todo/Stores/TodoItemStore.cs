@@ -60,7 +60,11 @@ namespace WS.Todo.Stores
         public IQueryable<TResult> List<TResult>([Required]string userid, [Required]Func<IQueryable<TodoItem>, IQueryable<TResult>> query)
         {
             // 软删除，过滤
-            return query.Invoke(Context.TodoItems.Where(it => it._CreateUserId==userid&&it._IsDeleted==false));
+            // 查询User包含的Todo
+            var todoIds = from rut in Context.RelationUserTodos
+                          where rut.UserId == userid
+                          select rut.TodoId;
+            return query.Invoke(Context.TodoItems.Where(it => todoIds.Contains(it.Id) && !it._IsDeleted));
         }
 
         /// <summary>
@@ -173,11 +177,11 @@ namespace WS.Todo.Stores
                     UserId = userid,
                     Type = "Delete",  // 放到常量池
                     Time = currTime,
-                    Content = JsonHelper.ToJson(item)
+                    Content = JsonHelper.ToJson(item)  // 可能超过长度，截取或者将Content改为Text
                 };
                 Context.Add(history);
                 // 删除UserTodo关联
-                Context.Remove(Context.RelationUserTodos.Where(a => a.UserId == userid && a.TodoId == id));
+                Context.RemoveRange(Context.RelationUserTodos.Where(a => a.UserId == userid && a.TodoId == id));
             }
             // 软删除
             Context.UpdateRange(query);

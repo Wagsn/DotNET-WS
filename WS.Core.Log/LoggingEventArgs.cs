@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WS.Core.Log
 {
     /// <summary>
-    /// 日志事件
+    /// 日志事件（）
     /// </summary>
     public class LoggingEventArgs : EventArgs
     {

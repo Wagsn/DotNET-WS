@@ -34,15 +34,72 @@ function getCount(data) {
 // 当文档加载完之后获取待办数据
 $(document).ready(function () {
     eventInit();  // 初始化，事件监听
-    
 });
 
-// 事件监听初始化
+// 点击事件监听初始化，等页面加载完
 function eventInit() {
     // 刷新按钮点击事件监听
     $("#refresh").on("click", function () {
         getData();
     })
+    // 提交修改待办
+    $('#edit-submit').on('click', function () {
+        const todoItem = {
+            user: getSignUser(),
+            model: {
+                name: $('#edit-name').val(),
+                isComplete: $('#edit-isComplete').is(':checked'),
+                id: $('#edit-id').val()
+            }
+        }
+        console.log('edit todo request:', todoItem)
+        $.ajax({
+            url: uri + '/edittodo',
+            type: 'POST',
+            accepts: 'application/json',
+            contentType: 'application/json',
+            data: JSON.stringify(todoItem),
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            },
+            success: function (result) {
+                console.log("edit todo response:", result)
+                getData();
+            }
+        });
+
+        closeEditBox();
+    })
+
+    // 提交修改待办
+    $('.my-form').on('submit', function () {
+        const todoItem = {
+            user: getSignUser(),
+            model: {
+                name: $('#edit-name').val(),
+                isComplete: $('#edit-isComplete').is(':checked'),
+                id: $('#edit-id').val()
+            }
+        }
+
+        $.ajax({
+            url: uri + '/edittodo',
+            type: 'POST',
+            accepts: 'application/json',
+            contentType: 'application/json',
+            data: JSON.stringify(todoItem),
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            },
+            success: function (result) {
+                console.log("response:", result)
+                getData();
+            }
+        });
+
+        closeEditBox();
+        return true;
+    });
 }
 
 // 获取所有待办数据并显示在屏幕上
@@ -53,15 +110,18 @@ function getData() {
         PageSize: 10,
         FlowType: 0
     }
-    console.log(JSON.stringify(all));
+    console.log("all todos request:", all);
     $.ajax({
         type: 'POST',
         accepts: 'application/json',
         url: uri + "/all",
         contentType: 'application/json',
         data: JSON.stringify(all),
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        },
         success: function (data) {
-            console.log("all items respone: ", data);
+            console.log("all todos respone: ", data);
             $('#todos').empty();
             if (data.code != 0) {
                 alert(data.message);
@@ -157,31 +217,7 @@ function editItem(eleItem) {
     $('#spoiler').css({ 'display': 'block' });
 }
 
-// 提交修改待办
-$('.my-form').on('submit', function () {
-    const item = {
-        'name': $('#edit-name').val(),
-        'isComplete': $('#edit-isComplete').is(':checked'),
-        'id': $('#edit-id').val()
-    };
-
-    $.ajax({
-        url: uri + '/' + $('#edit-id').val(),
-        type: 'PUT',
-        accepts: 'application/json',
-        contentType: 'application/json',
-        data: JSON.stringify(item),
-        success: function (result) {
-            console.log("response: ", result)
-            getData();
-        }
-    });
-
-    closeInput();
-    return false;
-});
-
 // 关闭编辑框，在页面中隐藏
-function closeInput() {
+function closeEditBox() {
     $('#spoiler').css({ 'display': 'none' });
 }

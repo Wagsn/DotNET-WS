@@ -34,8 +34,8 @@
     <script src="js/site.js"></script>
 </head>
 <body>
-    <h1>To-do CRUD</h1>
-    <button id="refresh">刷新</button>
+    <h1>待办（CRUD操作）</h1>
+    <button id="refresh">待办项列表刷新</button>
     <h3>用户登陆</h3>
     <form action="javascript:void(0);">
         <input type="text" id="username" placeholder="用户名称">
@@ -52,12 +52,12 @@
 
     <div id="spoiler">
         <h3>编辑待办</h3>
-        <form class="my-form">
+        <form action="javascript:void(0);">
             <input type="hidden" id="edit-id">
             <input type="checkbox" id="edit-isComplete">
             <input type="text" id="edit-name">
-            <input type="submit" value="编辑">
-            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+            <button id="edit-submit">编辑</button>
+            <a onclick="closeEditBox()" aria-label="Close">&#10006;</a>
         </form>
     </div>
 

@@ -22,15 +22,18 @@ namespace WS.Core.Log
         /// <summary>
         /// 哪个日志器，LoggerManager.GetLogger(string LoggerName)
         /// </summary>
-        public string LogName { get; set; }
+        public string LoggerName { get; set; }
+
         /// <summary>
         /// 日志打印的时间
         /// </summary>
         public DateTime LogTime { get; set; }
+
         /// <summary>
         /// 日志正文
         /// </summary>
         public string Message { get; set; }
+
         /// <summary>
         /// 日志层级，Trace Debug Info Warn Fatal All
         /// </summary>
