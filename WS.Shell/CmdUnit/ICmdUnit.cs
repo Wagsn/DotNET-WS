@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Shell.CmdUnit
 {

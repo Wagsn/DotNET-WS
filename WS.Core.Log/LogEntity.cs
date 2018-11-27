@@ -15,7 +15,8 @@ namespace WS.Core.Log
     public class LogEntity
     {
         /// <summary>
-        /// [2018-11-22 17:31.421428+8:00] [Trace] [LogName] Message
+        /// 构造器 
+        /// [2018-11-22 17:31.421428+8:00] [Trace] [LoggerName] Message
         /// </summary>
         public LogEntity() { }
 

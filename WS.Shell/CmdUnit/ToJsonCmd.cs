@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Shell.CmdUnit
 {
@@ -45,10 +45,10 @@ namespace WS.Shell.CmdUnit
         /// <returns></returns>
         public override int Excute(string arg)
         {
-            Console.WriteLine("raw: " + JsonHelper.ToJson(arg));
+            Console.WriteLine("raw: " + JsonUtil.ToJson(arg));
             // 在变量表中查询arg所含有的参数
             // 解析arg为参数组，在context的变量表中找出这些变量，再将变量转换成JSON字符串输出的到控制台，如果找不到
-            string normal = Core.Text.Format.NormalSpace(arg);
+            string normal = WS.Text.Format.NormalSpace(arg);
             string[] words = normal.Split(" ");
             Console.Write("out: ");
             // 这里最好和原始输入对应起来，只是将变量替换

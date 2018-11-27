@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-using WS.Core.Text;
+using WS.Text;
 using WS.Todo.Models;
 
 namespace WS.Todo.Stores
@@ -140,7 +140,7 @@ namespace WS.Todo.Stores
             CheckNull(model2);
 
             var model = await ReadAsync(a => a.Where(b => model2.Equals(b)), cancellationToken);
-            Console.WriteLine("WS------- StoreBase UpdateAsync 从数据库中获取的Model：\r\n"+JsonHelper.ToJson(model));
+            Console.WriteLine("WS------- StoreBase UpdateAsync 从数据库中获取的Model：\r\n"+JsonUtil.ToJson(model));
             
             // 更新时间
             model._UpdateTime = DateTime.Now;

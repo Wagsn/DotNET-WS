@@ -48,7 +48,7 @@ namespace WS.Todo
         public void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("config.json")
+                .AddJsonFile("./cfg/config.json")
                 .AddEnvironmentVariables()
                 .Build();
             // 配置数据库服务

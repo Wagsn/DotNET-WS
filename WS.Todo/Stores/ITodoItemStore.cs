@@ -36,6 +36,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 批量查询，通过表达式筛选
         /// </summary>
+        /// <param name="userid">用户ID</param>
         /// <param name="query">查询函数</param>
         /// <returns></returns>
         IQueryable<TResult> List<TResult>([Required]string userid, [Required]Func<IQueryable<TodoItem>, IQueryable<TResult>> query);
@@ -59,6 +60,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 批量删除，通过Id
         /// </summary>
+        /// <param name="userid">用户ID</param>
         /// <param name="ids">批量待办项</param>
         /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>
@@ -67,6 +69,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 条件删除，如果GUID等于
         /// </summary>
+        /// <param name="userid">用户ID</param>
         /// <param name="id">待办GUID</param>
         /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>

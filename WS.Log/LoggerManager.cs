@@ -68,6 +68,20 @@ namespace WS.Log
         public static void EnableLogging() { }
 
         /// <summary>
+        /// 获取根日志器(直接将文件写入log文件夹下)
+        /// </summary>
+        /// <returns></returns>
+        public static ILogger GetLogger()
+        {
+            return new DefaultLogger(new LoggerConfig
+            {
+                LoggerRoot = "./log" ,
+                FileFormat = "yyyy-MM-dd",
+                TimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFFK"
+            });
+        }
+
+        /// <summary>
         /// 获取日志器
         /// </summary>
         /// <param name="loggerName"></param>

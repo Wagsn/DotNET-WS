@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Core.Dto
 {
@@ -102,9 +102,9 @@ namespace WS.Core.Dto
         public void Wrap<TAppend>([Required]string code, TAppend append)
         {
             Code = code;
-            if (!string.IsNullOrWhiteSpace(JsonHelper.ToJson(append)))
+            if (!string.IsNullOrWhiteSpace(JsonUtil.ToJson(append)))
             {
-                Message += "\r\n" + JsonHelper.ToJson(append);
+                Message += "\r\n" + JsonUtil.ToJson(append);
             }
         }
 
@@ -124,9 +124,9 @@ namespace WS.Core.Dto
                 var ap = append as string;
                 Message += "\r\n" + ap;
             }
-            if (!string.IsNullOrWhiteSpace(JsonHelper.ToJson(append)))
+            if (!string.IsNullOrWhiteSpace(JsonUtil.ToJson(append)))
             {
-                Message += "\r\n" + JsonHelper.ToJson(append);
+                Message += "\r\n" + JsonUtil.ToJson(append);
             }
         }
 

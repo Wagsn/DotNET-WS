@@ -18,8 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using WS.Core.IO;
-using WS.Core.Text;
+using WS.IO;
+using WS.Text;
 
 namespace WS.Shell.CmdUnit
 {

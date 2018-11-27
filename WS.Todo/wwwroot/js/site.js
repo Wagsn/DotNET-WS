@@ -12,6 +12,12 @@ let signUser = {
     "pwd": null
 };
 
+
+// 当文档加载完之后
+$(document).ready(function () {
+    eventListenInit();  // 事件监听初始化
+});
+
 // 获取登陆用户信息
 function getSignUser() {
     signUser.name = $("#username").val();
@@ -31,19 +37,15 @@ function getCount(data) {
     }
 }
 
-// 当文档加载完之后获取待办数据
-$(document).ready(function () {
-    eventInit();  // 初始化，事件监听
-});
-
-// 点击事件监听初始化，等页面加载完
-function eventInit() {
+// 事件监听初始化，等页面加载完执行
+function eventListenInit() {
     // 刷新按钮点击事件监听
     $("#refresh").on("click", function () {
         getData();
     })
-    // 提交修改待办
-    $('#edit-submit').on('click', function () {
+
+    // 修改待办提交
+    $('#edit-submit-btn').on('click', function () {
         const todoItem = {
             user: getSignUser(),
             model: {
@@ -66,12 +68,17 @@ function eventInit() {
                 console.log("edit todo response:", result)
                 getData();
             }
-        });
+        })
 
-        closeEditBox();
+        closeEditBox()
     })
 
-    // 提交修改待办
+    // 关闭编辑框按钮 事件监听
+    $('#close-edit-box').on('click', function () {
+        closeEditBox()
+    })
+
+    // 提交修改待办 未使用
     $('.my-form').on('submit', function () {
         const todoItem = {
             user: getSignUser(),
@@ -98,13 +105,13 @@ function eventInit() {
         });
 
         closeEditBox();
-        return true;
+        return false;
     });
 }
 
 // 获取所有待办数据并显示在屏幕上
 function getData() {
-    var all = {
+    const all = {
         user: getSignUser(),
         PageIndex: 0,
         PageSize: 10,
@@ -127,10 +134,10 @@ function getData() {
                 alert(data.message);
                 return;
             }
-            let items = data.extension;
-            getCount(items.length);
+            let items = data.extension
+            getCount(items.length)
             $.each(items, function (key, item) {
-                const checked = item.isComplete ? 'checked' : '';
+                const checked = item.isComplete ? 'checked' : ''
 
                 $('<tr><td><input disabled="true" type="checkbox" ' + checked + '></td>' +
                     '<td>' + item.name + '</td>' +
@@ -145,16 +152,17 @@ function getData() {
             $('.item-delete').on("click", function () {
                 deleteItem(this);
             })
-            todos = items;
+            todos = items
         }
-    });
+    })
 }
 
 // 添加待办
 function addItem() {
+    // 请求体构造
     // 对待办名称进行正则表达式输入校验
-    let todoItemName = $('#add-name').val();
-    let user = getSignUser();
+    const todoItemName = $('#add-name').val();
+    const user = getSignUser();
     const item = {
         user: user,
         model: {
@@ -162,6 +170,7 @@ function addItem() {
         }
     };
     console.log("add item request: ", item)
+    // 发送请求
     $.ajax({
         type: 'POST',
         accepts: 'application/json',
@@ -181,21 +190,22 @@ function addItem() {
 
 // 删除待办
 function deleteItem(eleItem) {
-    let index = $(eleItem).parent().parent().index()  // 找到表行所在的节点
-    let id = todos[index].id
-    let item = {
+    const index = $(eleItem).parent().parent().index()  // 找到表行所在的节点
+    const id = todos[index].id
+    const request = {
         user: getSignUser(),
         model: {
             id: id
         }
     }
+    console.log('delete todo request:', request)
     $.ajax({
         url: uri,  // 可以通过加密的方式将数据用url携带
         type: 'DELETE',
         accepts: 'application/json',
         url: uri,
         contentType: 'application/json',
-        data: JSON.stringify(item),
+        data: JSON.stringify(request),
         error: function (jqXHR, textStatus, errorThrown) {
             alert(errorThrown);
         },
@@ -209,7 +219,7 @@ function deleteItem(eleItem) {
 // 编辑待办，将被编辑的待办数据传到编辑框中
 function editItem(eleItem) {
     let index = $(eleItem).parent().parent().index()  // 找到表行所在的节点
-    console.log("index: " + index + ", todo id: ", todos[index].id)
+    console.log("click todo item, index: " + index + ", id: ", todos[index].id)
     let todoitem = todos[index]
     $('#edit-name').val(todoitem.name);
     $('#edit-id').val(todoitem.id);

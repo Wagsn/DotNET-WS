@@ -132,10 +132,16 @@ namespace WS.Log
         /// <param name="entity">记录实体（记录包含信息）</param>
         public static void Log(LoggerConfig config,  LogEntity entity)
         {
-            //string consoleInfo = $"[{entity.LogLevel.ToString()}] [{entity.LogName}] {entity.Message}";
-            string logItem = $"[{entity.LogTime.ToString(config.TimeFormat)}] [{entity.LogLevel.ToString()}] [{entity.LoggerName}] {entity.Message}";
+            string logItem = $"[{entity.LogTime.ToString(config.TimeFormat)}] [{entity.LogLevel.ToString()}] {(entity.LoggerName==null?"":"["+ entity.LoggerName + "]")} {entity.Message}";
             Console.WriteLine(logItem);
-            File.WriteAllText(config.LoggerRoot + "/" + DateTime.Now.ToString(config.FileFormat) + ".log", logItem+"\r\n", true);
+            File.WriteAllText(config.LoggerRoot + "/" + entity.LogTime.ToString(config.FileFormat) + ".log", logItem+"\r\n", true);
+            switch (entity.LogLevel)
+            {
+                case LogLevels.Error:
+                    // 是否错误日志输出独立，默认独立
+                    File.WriteAllText(config.LoggerRoot + "/error/" + entity.LogTime.ToString(config.FileFormat) + ".log", logItem + "\r\n", true);
+                    break;
+            }
         }
     }
 }

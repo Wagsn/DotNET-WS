@@ -54,6 +54,7 @@ namespace WS.Todo.Managers
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         public async Task CreateOrUpdate([Required] ResponseMessage<TodoItemJson> response, [FromBody] ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserBase user = await UserChecck(response, request.User);
@@ -108,7 +109,7 @@ namespace WS.Todo.Managers
                         todo._UpdateUserId = user.Id;
                         todo._UpdateTime = user._UpdateTime;
                         response.Extension = Mapper.Map<TodoItemJson>(await Store.Update(todo, cancellationToken));
-                        response.Message += "更新待办项成功";
+                        response.Append("更新待办项成功");
                         return;
                     }
                 }
@@ -120,6 +121,7 @@ namespace WS.Todo.Managers
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         public async Task Delete([Required] ResponseMessage<TodoItemJson> response, [FromBody] ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserBase user = await UserChecck(response, request.User);

@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Shell
 {
@@ -99,8 +99,8 @@ namespace WS.Shell
                         Console.SetCursorPosition(0, Console.CursorSize - 1);
                         break;
                     case "test_split":
-                        Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonHelper.ToJson("hello world".Split(" "))); // ["hello","world"]
-                        Console.WriteLine("String.Split \"\" with \" \": " + JsonHelper.ToJson("".Split(" ")));  // [""]
+                        Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonUtil.ToJson("hello world".Split(" "))); // ["hello","world"]
+                        Console.WriteLine("String.Split \"\" with \" \": " + JsonUtil.ToJson("".Split(" ")));  // [""]
                         break;
                     // 
                     case "exception":

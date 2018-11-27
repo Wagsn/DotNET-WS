@@ -30,6 +30,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 通过Id查询用户
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         IQueryable<TModel> ById([Required]string userid, [Required]string id);
@@ -37,6 +38,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="name"></param>
         /// <returns></returns>
         IQueryable<TModel> ByName([Required]string userid, [Required]string name);
@@ -44,6 +46,7 @@ namespace WS.Todo.Stores
         /// <summary>
         /// 批量查询
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="query"></param>
         /// <returns></returns>
         IQueryable<TModel> List([Required]string userid, [Required]Func<IQueryable<TModel>, IQueryable<TModel>> query);

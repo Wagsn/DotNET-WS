@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using WS.Core.Models;
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Core.Stores
 {
@@ -232,9 +232,9 @@ namespace WS.Core.Stores
         public virtual async Task UpdateAsync(TModel model2, CancellationToken cancellationToken)
         {
             CheckNull(model2);
-            Console.WriteLine("WS------- StoreBase UpdateAsync 传入的Model：\r\n" + JsonHelper.ToJson(model2));
+            Console.WriteLine("WS------- StoreBase UpdateAsync 传入的Model：\r\n" + JsonUtil.ToJson(model2));
             var model = await ReadAsync(a => a.Where(b => model2.Equals(b)), cancellationToken);
-            Console.WriteLine("WS------- StoreBase UpdateAsync 从数据库中获取的Model：\r\n"+JsonHelper.ToJson(model));
+            Console.WriteLine("WS------- StoreBase UpdateAsync 从数据库中获取的Model：\r\n"+JsonUtil.ToJson(model));
             model._Update(model2);
             
             // 更新时间

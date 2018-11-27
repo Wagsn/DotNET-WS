@@ -35,12 +35,12 @@ namespace WS.Log
         public string LoggerName { get; set; }
         
         /// <summary>
-        /// 日志文件根路径（./log/loggerName）
+        /// 日志器日志文件根路径（./log/loggerName）
         /// </summary>
         public string LoggerRoot { get; set; }
 
         /// <summary>
-        /// 文件名格式（yyyy-MM-dd）
+        /// template日志文件名模板（yyyy-MM-dd）TODO：模板化  "${loggerName} ${year} ${month} ${day}"  // 花括号里面的是日志器识别的标签，如果在标签库存在则将 ${tagname} -> tagValue 否则就将 ${tagName} 消去
         /// </summary>
         public string FileFormat { get; set; }
 

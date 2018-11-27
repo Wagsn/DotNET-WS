@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-using WS.Core.Text;
+using WS.Text;
 using WS.Todo.Dto;
 using WS.Todo.Models;
 
@@ -97,7 +97,7 @@ namespace WS.Todo.Stores
                 UserId = todoItem._CreateUserId,
                 Type = "Create",  // 放到常量池
                 Time = DateTime.Now,
-                Content = JsonHelper.ToJson(todoItem)
+                Content = JsonUtil.ToJson(todoItem)
             };
             Context.Add(history);
             try
@@ -137,7 +137,7 @@ namespace WS.Todo.Stores
                 UserId = item._UpdateUserId,
                 Type = "Delete",  // 放到常量池
                 Time = currTime,
-                Content = JsonHelper.ToJson(item)
+                Content = JsonUtil.ToJson(item)
             };
             Context.Add(history);
             try
@@ -177,7 +177,7 @@ namespace WS.Todo.Stores
                     UserId = userid,
                     Type = "Delete",  // 放到常量池
                     Time = currTime,
-                    Content = JsonHelper.ToJson(item)  // 可能超过长度，截取或者将Content改为Text
+                    Content = JsonUtil.ToJson(item)  // 可能超过长度，截取或者将Content改为Text
                 };
                 Context.Add(history);
                 // 删除UserTodo关联
@@ -222,7 +222,7 @@ namespace WS.Todo.Stores
                     UserId = userid,
                     Type = "Delete",  // 常量池
                     Time = currTime,
-                    Content = JsonHelper.ToJson(item)
+                    Content = JsonUtil.ToJson(item)
                 };
                 Context.Add(history);
             }

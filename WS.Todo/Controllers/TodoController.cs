@@ -1,20 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+
+using WS.Core.Dto;
+using WS.Log;
+using WS.Text;
 
 using WS.Todo.Dto;
+using WS.Todo.Managers;
 using WS.Todo.Models;
 using WS.Todo.Stores;
-using WS.Core.Text;
-using WS.Core.Dto;
-using System.ComponentModel.DataAnnotations;
-using WS.Todo.Managers;
-using Microsoft.EntityFrameworkCore;
-using WS.Core.Log;
 
 namespace WS.Todo.Controllers
 {
@@ -50,7 +51,7 @@ namespace WS.Todo.Controllers
         public async Task<PagingResponseMessage<TodoItemJson>> GetAll([Required][FromBody]PageRequest request)
         {
             // 日志输出：请求体
-            Logger.Trace("[{0}Action] Request: \r\n{0}", "GetAll", JsonHelper.ToJson(request));
+            Logger.Trace("[{0}Action] Request: \r\n{0}", "GetAll", JsonUtil.ToJson(request));
             PagingResponseMessage <TodoItemJson> response = new PagingResponseMessage<TodoItemJson>();
             // 模型验证在模型本身存在
             try
@@ -65,7 +66,7 @@ namespace WS.Todo.Controllers
                 Logger.Error("[{0}Action] ServiceError: \r\n{1}", "GetAll", e);
             }
             // 日志输出：响应体
-            Logger.Trace("[{0}Action] Response: \r\n{1}", "GetAll", JsonHelper.ToJson(response));
+            Logger.Trace("[{0}Action] Response: \r\n{1}", "GetAll", JsonUtil.ToJson(response));
             return response;
         }
 
@@ -78,7 +79,7 @@ namespace WS.Todo.Controllers
         public async Task<ResponseMessage<TodoItemJson>> Create([FromBody]ModelRequest<TodoItemJson> request)
         {
             // 打印请求日志
-            Logger.Trace("[{0}Action] Request: \r\n{1}", "Create", JsonHelper.ToJson(request));
+            Logger.Trace("[{0}Action] Request: \r\n{1}", "Create", JsonUtil.ToJson(request));
 
             ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
 
@@ -95,7 +96,7 @@ namespace WS.Todo.Controllers
                 Logger.Error("[{0}Action] ServiceError: \r\n{1}", "Create", e);
             }
             // 日志输出：响应体
-            Logger.Trace("[{0}Action] Response: \r\n{1}", "Create", JsonHelper.ToJson(response));
+            Logger.Trace("[{0}Action] Response: \r\n{1}", "Create", JsonUtil.ToJson(response));
             return response;
         }
 
@@ -107,7 +108,7 @@ namespace WS.Todo.Controllers
         [HttpPost("edittodo", Name ="EditTodo")]
         public async Task<ResponseMessage<TodoItemJson>> Update([FromBody]ModelRequest<TodoItemJson> request)
         {
-            Logger.Trace("[{0}] Request: \r\n{1}", "TodoUpdate", JsonHelper.ToJson(request));
+            Logger.Trace("[{0}] Request: \r\n{1}", "TodoUpdate", JsonUtil.ToJson(request));
             ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
 
             try
@@ -123,7 +124,7 @@ namespace WS.Todo.Controllers
             }
 
             // 日志输出：响应体
-            Logger.Trace("Response: \r\n{0}", JsonHelper.ToJson(response));
+            Logger.Trace("Response: \r\n{0}", JsonUtil.ToJson(response));
             return response;
         }
 
@@ -136,7 +137,7 @@ namespace WS.Todo.Controllers
         public async Task<ResponseMessage<TodoItemJson>> Delete([FromBody]ModelRequest<TodoItemJson> request)
         {
             // 打印请求日志
-            Logger.Trace("Request: \r\n{0}", JsonHelper.ToJson(request));
+            Logger.Trace("Request: \r\n{0}", JsonUtil.ToJson(request));
 
             ResponseMessage<TodoItemJson> response = new ResponseMessage<TodoItemJson>();
 
@@ -153,7 +154,7 @@ namespace WS.Todo.Controllers
                 Logger.Error("ServiceError: \r\n{0}", e);
             }
             // 日志输出：响应体
-            Logger.Trace("Response: \r\n{0}", JsonHelper.ToJson(response));
+            Logger.Trace("Response: \r\n{0}", JsonUtil.ToJson(response));
             return response;
         }
     }

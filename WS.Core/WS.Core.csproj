@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WS.Core.Text\WS.Core.Text.csproj" />
+    <ProjectReference Include="..\WS.Text\WS.Text.csproj" />
   </ItemGroup>
 
 </Project>

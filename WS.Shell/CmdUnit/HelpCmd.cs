@@ -61,9 +61,9 @@ namespace WS.Shell.CmdUnit
                 strMat2D[i][2] = cmd.Desc;
                 i++;
             }
-            string grid = Core.Text.Grid.ToGrid(strMat2D);
+            string grid = WS.Text.Grid.ToGrid(strMat2D);
             Console.WriteLine(grid);
-            Core.IO.File.WriteAllText("./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt", grid);
+            WS.IO.File.WriteAllText("./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt", grid);
             //File.WriteAllText("./grid/" + DateTime.Now.ToString("yyyyMMdd") + Guid.NewGuid() + ".txt", );
             return 0;
         }

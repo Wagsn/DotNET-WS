@@ -1,0 +1,27 @@
+﻿@charset "UTF-8";
+
+/* <登陆注册相关form布局> */
+
+/* <表单整体布局> */
+.sign-box {
+  width: 400px;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #EEE;
+}
+/* <输入条目> */
+.group-box {
+  margin-bottom: 15px;
+}
+/* <输入框标签> */
+.label-box {
+  display: block;
+  color: #E00;
+  margin-bottom: 5px;
+}
+/* <输入框> */
+.input-box {
+	width: 100%;
+	padding: 10px;
+}

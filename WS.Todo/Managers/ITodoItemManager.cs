@@ -28,6 +28,7 @@ namespace WS.Todo.Managers
         /// </summary>
         /// <param name="response">响应体</param>
         /// <param name="request">请求体</param>
+        /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>
         Task List([Required]PagingResponseMessage<TodoItemJson> response, [FromBody]PageRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -36,6 +37,7 @@ namespace WS.Todo.Managers
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>
         Task CreateOrUpdate([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -44,6 +46,7 @@ namespace WS.Todo.Managers
         /// </summary>
         /// <param name="response"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken">是否取消</param>
         /// <returns></returns>
         Task Delete([Required]ResponseMessage<TodoItemJson> response, [FromBody]ModelRequest<TodoItemJson> request, CancellationToken cancellationToken = default(CancellationToken));
     }

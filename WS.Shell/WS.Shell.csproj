@@ -28,8 +28,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WS.Core.IO\WS.Core.IO.csproj" />
-    <ProjectReference Include="..\WS.Core.Text\WS.Core.Text.csproj" />
+    <ProjectReference Include="..\WS.IO\WS.IO.csproj" />
+    <ProjectReference Include="..\WS.Log\WS.Log.csproj" />
+    <ProjectReference Include="..\WS.Text\WS.Text.csproj" />
   </ItemGroup>
 
 </Project>

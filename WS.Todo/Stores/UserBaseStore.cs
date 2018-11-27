@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using WS.Core.Text;
+using WS.Text;
 using WS.Todo.Models;
 
 namespace WS.Todo.Stores

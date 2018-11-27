@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WS.Core.IO\WS.Core.IO.csproj" />
+    <ProjectReference Include="..\WS.IO\WS.IO.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@ namespace WS.Core.Log
         /// <summary>
         /// 日志记录事件
         /// </summary>
-        public static event EventHandler<LoggingEventArgs> Logging;
+        //public static event EventHandler<LoggingEventArgs> Logging;
 
         /// <summary>
         /// 删除日志文件
@@ -81,6 +81,16 @@ namespace WS.Core.Log
                 FileFormat = "yyyy-MM-dd",
                 TimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFFK"
             });
+        }
+
+        /// <summary>
+        /// 通过日志器配置获取Logger
+        /// </summary>
+        /// <param name="config">日志器配置</param>
+        /// <returns></returns>
+        public static ILogger GetLogger(LoggerConfig config)
+        {
+            return new DefaultLogger(config);
         }
 
         /// <summary>
