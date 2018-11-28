@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,7 +47,7 @@ namespace WS.Todo.Controllers
         public async Task<PagingResponseMessage<TodoItemJson>> GetAll([Required][FromBody]PageRequest request)
         {
             // 日志输出：请求体
-            Logger.Trace("[{0}Action] Request: \r\n{0}", "GetAll", JsonUtil.ToJson(request));
+            Logger.Trace("[{0}Action] Request: \r\n{1}", "GetAll", JsonUtil.ToJson(request));
             PagingResponseMessage <TodoItemJson> response = new PagingResponseMessage<TodoItemJson>();
             // 模型验证在模型本身存在
             try

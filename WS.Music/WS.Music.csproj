@@ -16,6 +16,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\WS.Core\WS.Core.csproj" />
+    <ProjectReference Include="..\WS.Text\WS.Text.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <title>待办（CRUD操作）</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; 
+        }
+
+        html, body {
+            min-height: 100%;
+            height: 100%;
+            display: block;
+            background: #DDD;
+        }
+
+        body {
+            padding: 10px;
+        }
+
         input[type='submit'], button, [aria-label] {
             cursor: pointer;
         }
@@ -27,6 +44,14 @@
             border: 1px solid;
             padding: 5px;
         }
+        #wrapper {
+            padding: 10px;
+            min-height: 90%;
+            width: 1000px;
+            margin: auto;
+            margin-bottom: 120px;
+            background: white;
+        }
     </style>
     <script src="assets/js/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -34,43 +59,45 @@
     <script src="js/site.js"></script>
 </head>
 <body>
-    <h1>待办（CRUD操作）</h1>
-    <button id="refresh">待办项列表刷新</button>
-    <h3>用户登陆</h3>
-    <form action="javascript:void(0);">
-        <input type="text" id="username" placeholder="用户名称">
-        <input type="password" id="password" placeholder="用户密码">
-        <!-- 加些注册登陆按钮 -->
-        <button id="sign-up" >注册</button>
-        <button id="sign-in" >登陆</button>
-    </form>
-    <h3>添加待办</h3>
-    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
-        <input type="text" id="add-name" placeholder="新的待办项">
-        <input type="submit" value="添加">
-    </form>
-
-    <div id="spoiler">
-        <h3>编辑待办</h3>
+    <div id="wrapper">
+        <h1>待办（CRUD操作）</h1>
+        <button id="refresh">待办项列表刷新</button>
+        <h3>用户登陆</h3>
         <form action="javascript:void(0);">
-            <input type="hidden" id="edit-id">
-            <input type="checkbox" id="edit-isComplete">
-            <input type="text" id="edit-name">
-            <button id="edit-submit-btn">编辑提交</button>
-            <a id="close-edit-box" aria-label="Close">&#10006;</a>
+            <input type="text" id="username" placeholder="用户名称">
+            <input type="password" id="password" placeholder="用户密码">
+            <!-- 加些注册登陆按钮 -->
+            <button id="sign-up">注册</button>
+            <button id="sign-in">登陆</button>
         </form>
+        <h3>添加待办</h3>
+        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+            <input type="text" id="add-name" placeholder="新的待办项">
+            <input type="submit" value="添加">
+        </form>
+
+        <div id="spoiler">
+            <h3>编辑待办</h3>
+            <form action="javascript:void(0);">
+                <input type="hidden" id="edit-id">
+                <input type="checkbox" id="edit-isComplete">
+                <input type="text" id="edit-name">
+                <button id="edit-submit-btn">编辑提交</button>
+                <a id="close-edit-box" aria-label="Close">&#10006;</a>
+            </form>
+        </div>
+
+        <p id="counter"></p>
+
+        <table>
+            <tr>
+                <th>已完成</th>
+                <th>待办名称</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tbody id="todos"></tbody>
+        </table>
     </div>
-
-    <p id="counter"></p>
-
-    <table>
-        <tr>
-            <th>已完成</th>
-            <th>待办名称</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tbody id="todos"></tbody>
-    </table>
 </body>
 </html>

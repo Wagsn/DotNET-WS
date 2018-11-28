@@ -37,6 +37,11 @@ namespace WS.Todo.Models
         public bool IsComplete { get; set; }
 
         /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime? BuildTime { get; set; }
+
+        /// <summary>
         /// 预期完成时间
         /// </summary>
         public DateTime? ExpectTime { get; set; } 

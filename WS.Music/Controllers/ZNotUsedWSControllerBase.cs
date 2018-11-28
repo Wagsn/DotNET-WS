@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WS.Core.Dto;
-using WS.Core.Text;
+using WS.Text;
 
 namespace WS.Music.Controllers
 {
@@ -51,7 +51,7 @@ namespace WS.Music.Controllers
                 Console.WriteLine("WS------ NotFund: \r\n" + "");
             }
             // 日志输出：响应体
-            Console.WriteLine("WS------ Response: \r\n" + JsonHelper.ToJson(response));
+            Console.WriteLine("WS------ Response: \r\n" + JsonUtil.ToJson(response));
             return response;
         }
 

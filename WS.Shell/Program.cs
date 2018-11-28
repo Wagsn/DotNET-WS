@@ -23,15 +23,22 @@ namespace WS.Shell
             {
                 try
                 {
-                    // 尝试将错误写入日志  // 写一个日志工具
-                    IO.File.WriteAllText("./log/err/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_FFFFFF") + ".log", e.ToString());
-                    Console.WriteLine(e);
-                    Console.ReadKey();
+                    return App.New(args).Run();
                 }
-                catch (Exception e2)
+                catch(Exception e)
                 {
-                    Console.WriteLine(e2);
-                    Console.ReadKey();
+                    try
+                    {
+                        // 尝试将错误写入日志  // 写一个日志工具
+                        IO.File.WriteAllText("./log/err/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_FFFFFF") + ".log", e.ToString());
+                        Console.WriteLine(e);
+                        Console.ReadKey();
+                    }
+                    catch (Exception e2)
+                    {
+                        Console.WriteLine(e2);
+                        Console.ReadKey();
+                    }
                 }
                 return -1;
             }

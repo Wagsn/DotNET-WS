@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.0.0.3</AssemblyVersion>
     <FileVersion>1.0.0.3</FileVersion>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <Description>Wagsn Shell</Description>
     <Copyright>Wagsn</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

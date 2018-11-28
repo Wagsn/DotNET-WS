@@ -1,11 +1,11 @@
 ﻿#region << 版 本 注 释 >>
 /*----------------------------------------------------------------
 * 项目名称 ：WS.Text
-* 项目描述 ：
+* 项目描述 ：文本格式化
 * 类 名 称 ：Format
-* 类 描 述 ：
+* 类 描 述 ：字符串格式化
 * 所在的域 ：DESKTOP-KA4M82K
-* 命名空间 ：WS.Core.Text
+* 命名空间 ：WS.Text
 * 机器名称 ：DESKTOP-KA4M82K 
 * CLR 版本 ：4.0.30319.42000
 * 作    者 ：wagsn
@@ -14,6 +14,8 @@
 * 版 本 号 ：v1.0.0.0
 //----------------------------------------------------------------*/
 #endregion
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -74,10 +76,12 @@ namespace WS.Text
 
         /// <summary>
         /// 占位符替换: ${}
+        /// ${TagName} 如果TagName找不到将整体消去${TagName}.
+        /// "${Date} ${NotFoundTagName}end" -> "2018-11-28 end".
         /// </summary>
-        /// <param name="template"></param>
+        /// <param name="template">模板字符串</param>
         /// <returns></returns>
-        public static string ReplacePlaceholder(string template, SafeMap<object> pairs)
+        public static string ReplacePlaceholder<TValue>(string template, SafeMap<TValue> pairs)
         {
             string result = new string(template.ToCharArray());
 
@@ -85,8 +89,30 @@ namespace WS.Text
             foreach(var key in pairs.Keys)
             {
                 Regex regex = new Regex(@"\$\{"+key+@"\}");
-                result =regex.Replace(result, pairs[key].ToString());
+                result =regex.Replace(result, pairs[key].ToString()); // 
 
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 占位符替换: ${}.
+        /// ${TagName} 如果TagName找不到将保留${TagName}. 
+        /// "${Date} ${NotFoundTagName}" -> "2018-11-28 ${NotFoundTagName}"
+        /// Created by Wagsn on 2018/11/28 11:29.
+        /// </summary>
+        /// <param name="template">模板字符串</param>
+        /// <returns></returns>
+        public static string ReplacePlaceholderByIgnore<TValue>(string template, SafeMap<TValue> pairs)
+        {
+            string result = new string(template.ToCharArray());
+
+            // 需要优化为，匹配到 \$\{\S*?\} 后按照匹配到的内容作为Key在Map中寻找Value替换
+            foreach (var key in pairs.Keys)
+            {
+                Regex regex = new Regex(@"\$\{" + key + @"\}");  // 如果Key也是正则表达式
+                result = regex.Replace(result, pairs[key].ToString());
+                result = regex.Replace(result, new MatchEvaluator(m => pairs.ContainsKey(key) ? pairs.UnSafeGet(key).ToString() : m.Groups[1].Value));  // ?? 这里的m. m.Groups[1] 难道指的是一个值，而不是所有匹配项
             }
             return result;
         }
@@ -108,65 +134,6 @@ namespace WS.Text
     }
 
     /// <summary>
-    /// 安全的映射表，不存在的Key返回默认的Value，string返回string.Empty
-    /// </summary>
-    public class SafeMap<TValue>
-    {
-        /// <summary>
-        /// 获取Keys
-        /// </summary>
-        public IEnumerable<string> Keys { get
-            {
-                return kvs.Keys;
-            } }
-
-        private Dictionary<string, TValue> kvs = new Dictionary<string, TValue>();
-        
-        /// <summary>
-        /// 索引器
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public TValue this[string index]
-        {
-            get
-            {
-                return Get(index);
-            }
-            set
-            {
-                Set(index, value);
-            }
-        }
-
-        /// <summary>
-        /// 获取Key对应的值
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public TValue Get(string index)
-        {
-            if (kvs.ContainsKey(index))
-            {
-                return kvs[index];
-            }
-            else
-            {
-                return default(TValue);
-            }
-        }
-        /// <summary>
-        /// 设置Key对应的值
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="value"></param>
-        public void Set(string index, TValue value)
-        {
-            kvs[index] = value;
-        }
-    }
-
-    /// <summary>
     /// 键值对
     /// </summary>
     public static class InstallContext
@@ -177,7 +144,6 @@ namespace WS.Text
 
         public static string Get(string index)
         {
-        kvs.Keys
             if (kvs.ContainsKey(index))
             {
                 return kvs[index];
@@ -191,21 +157,6 @@ namespace WS.Text
         {
             kvs[index] = value;
         }
-
-
-
-        //private static InstallContext instance = new InstallContext();
-
-        //private InstallContext()
-        //{
-
-        //}
-
-        //public static InstallContext GetInstance()
-        //{ 
-        //    return instance;
-        //}
-
     }
 }
 
