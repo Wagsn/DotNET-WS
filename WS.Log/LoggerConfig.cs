@@ -14,9 +14,8 @@
 * 版 本 号 ：v1.0.0.0
 //----------------------------------------------------------------*/
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Newtonsoft.Json;
+using WS.Text;
 
 namespace WS.Log
 {
@@ -32,21 +31,42 @@ namespace WS.Log
         /// <summary>
         /// 日志器名称
         /// </summary>
-        public string LoggerName { get; set; }
+        public string LogName { get; set; }
         
         /// <summary>
         /// 日志器日志文件根路径（./log/loggerName）
         /// </summary>
-        public string LoggerRoot { get; set; }
+        public string LogOut { get; set; }
 
         /// <summary>
-        /// template日志文件名模板（yyyy-MM-dd）TODO：模板化  "${loggerName} ${year} ${month} ${day}"  // 花括号里面的是日志器识别的标签，如果在标签库存在则将 ${tagname} -> tagValue 否则就将 ${tagName} 消去
+        /// 日志文件名模板
+        /// 暂时支持标签（LoggerName：TodoContriller、DateTime：yyy-MM-dd）
+        /// TODO：模板化  "${LoggerName} ${Year} ${Month} ${Day}"  
+        /// 花括号里面的是日志器识别的标签，如果在标签库存在则将 ${TagName} -> TagValue 否则就将 ${TagName} 消去
         /// </summary>
-        public string FileFormat { get; set; }
+        public string FileNameFormat { get; set; }
 
         /// <summary>
-        /// 时间格式（2018-11-23 09:53:12.154451+8:00）
+        /// 日志项模板
+        /// "[${DateTime}] [${LoggerLevel}] [${LoggerName}] ${Message}" -> "[2018-11-18 17:15.452154+8:00] [Trace] [TodoController] logging content"
+        /// </summary>
+        public string ItemFormat { get; set; }
+
+        /// <summary>
+        /// 日期格式（yyyy-MM-dd）
+        /// </summary>
+        public string DateFormat { get; set; }
+
+        /// <summary>
+        /// 时间格式（09:53:12.154451+8:00）
         /// </summary>
         public string TimeFormat { get; set; }
+
+        /// <summary>
+        /// 键值对，占位符与实际值的映射（LoggerName：TodoContriller）
+        /// 不在JSON中映射
+        /// </summary>
+        [JsonIgnore]
+        public SafeMap<object> KVs = new SafeMap<object>();
     }
 }

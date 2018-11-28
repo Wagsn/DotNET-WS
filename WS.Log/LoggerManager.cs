@@ -75,9 +75,10 @@ namespace WS.Log
         {
             return new DefaultLogger(new LoggerConfig
             {
-                LoggerRoot = "./log" ,
-                FileFormat = "yyyy-MM-dd",
-                TimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFFK"
+                LogOut = "./log" ,
+                FileNameFormat = "${Date}",
+                TimeFormat = "HH:mm:ss.FFFFFFK",
+                DateFormat = "yyyy-MM-dd"
             });
         }
 
@@ -90,10 +91,11 @@ namespace WS.Log
         {
             return new DefaultLogger(new LoggerConfig
             {
-                LoggerRoot = "./log/"+loggerName,
-                LoggerName = loggerName,
-                FileFormat = "yyyy-MM-dd",
-                TimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFFK"
+                LogOut = "./log/"+loggerName,
+                LogName = loggerName,
+                FileNameFormat = "${Date}",
+                TimeFormat = "HH:mm:ss.FFFFFFK",
+                DateFormat = "yyyy-MM-dd"
             });
         }
 
