@@ -64,8 +64,7 @@ namespace WS.Todo.Managers
             }
             if (request.model == null)
             {
-                response.Code = ResponseDefine.BadRequset;
-                response.Message += "待办项为空，无法执行操作";
+                response.Wrap(ResponseDefine.BadRequset, "待办项为空，无法执行操作");
                 return;
             }
             else
@@ -83,7 +82,7 @@ namespace WS.Todo.Managers
                         _CreateUserId = user.Id
                     }, cancellationToken);
                     response.Extension = Mapper.Map<TodoItemJson>(todo);
-                    response.Message += "新建待办项成功";
+                    response.Append("新建待办项成功");
                     return;
                 }
                 // 待办项ID存在，更新操作
