@@ -44,6 +44,7 @@
             this.另存为ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.格式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.状态栏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具栏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,15 +52,14 @@
             this.状态栏标签 = new System.Windows.Forms.ToolStripStatusLabel();
             this.当前状态 = new System.Windows.Forms.ToolStripStatusLabel();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
-            this.EditForm = new System.Windows.Forms.TabPage();
-            this.MainTabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.文件.SuspendLayout();
             this.菜单.SuspendLayout();
             this.MainStatusStrip.SuspendLayout();
             this.MainToolStrip.SuspendLayout();
-            this.MainTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // 文件
@@ -103,7 +103,9 @@
             this.菜单.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件ToolStripMenuItem,
             this.编辑ToolStripMenuItem,
-            this.视图ToolStripMenuItem});
+            this.格式ToolStripMenuItem,
+            this.视图ToolStripMenuItem,
+            this.帮助ToolStripMenuItem});
             this.菜单.Location = new System.Drawing.Point(0, 0);
             this.菜单.Name = "菜单";
             this.菜单.Size = new System.Drawing.Size(1014, 25);
@@ -128,6 +130,7 @@
             this.新建ToolStripMenuItem1.Name = "新建ToolStripMenuItem1";
             this.新建ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.新建ToolStripMenuItem1.Text = "新建";
+            this.新建ToolStripMenuItem1.Click += new System.EventHandler(this.新建ToolStripMenuItem1_Click);
             // 
             // 打开ToolStripMenuItem1
             // 
@@ -140,12 +143,14 @@
             this.关闭ToolStripMenuItem.Name = "关闭ToolStripMenuItem";
             this.关闭ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.关闭ToolStripMenuItem.Text = "关闭";
+            this.关闭ToolStripMenuItem.Click += new System.EventHandler(this.关闭ToolStripMenuItem_Click);
             // 
             // 保存ToolStripMenuItem1
             // 
             this.保存ToolStripMenuItem1.Name = "保存ToolStripMenuItem1";
             this.保存ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.保存ToolStripMenuItem1.Text = "保存";
+            this.保存ToolStripMenuItem1.Click += new System.EventHandler(this.保存ToolStripMenuItem1_Click);
             // 
             // 另存为ToolStripMenuItem
             // 
@@ -164,6 +169,12 @@
             this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
             this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.编辑ToolStripMenuItem.Text = "编辑";
+            // 
+            // 格式ToolStripMenuItem
+            // 
+            this.格式ToolStripMenuItem.Name = "格式ToolStripMenuItem";
+            this.格式ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.格式ToolStripMenuItem.Text = "格式";
             // 
             // 视图ToolStripMenuItem
             // 
@@ -194,13 +205,13 @@
             // 
             this.MainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.状态栏标签,
-            this.当前状态});
+            this.当前状态,
+            this.toolStripStatusLabel1});
             this.MainStatusStrip.Location = new System.Drawing.Point(0, 521);
             this.MainStatusStrip.Name = "MainStatusStrip";
             this.MainStatusStrip.Size = new System.Drawing.Size(1014, 22);
             this.MainStatusStrip.TabIndex = 2;
             this.MainStatusStrip.Text = "状态栏";
-            this.MainStatusStrip.Visible = false;
             this.MainStatusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
             // 
             // 状态栏标签
@@ -226,40 +237,6 @@
             this.MainToolStrip.Text = "工具栏";
             this.MainToolStrip.Visible = false;
             // 
-            // EditForm
-            // 
-            this.EditForm.Location = new System.Drawing.Point(4, 22);
-            this.EditForm.Name = "EditForm";
-            this.EditForm.Padding = new System.Windows.Forms.Padding(3);
-            this.EditForm.Size = new System.Drawing.Size(1006, 492);
-            this.EditForm.TabIndex = 0;
-            this.EditForm.Tag = "WS.Note.EditForm";
-            this.EditForm.Text = "EditForm";
-            this.EditForm.UseVisualStyleBackColor = true;
-            // 
-            // MainTabControl
-            // 
-            this.MainTabControl.Controls.Add(this.EditForm);
-            this.MainTabControl.Controls.Add(this.tabPage1);
-            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Location = new System.Drawing.Point(0, 25);
-            this.MainTabControl.Name = "MainTabControl";
-            this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1014, 518);
-            this.MainTabControl.TabIndex = 4;
-            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.mainTabControl_SelectedIndexChanged);
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1006, 445);
-            this.tabPage1.TabIndex = 1;
-            this.tabPage1.Tag = "WS.Note.EditForm";
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
             // toolStripButton1
             // 
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
@@ -268,6 +245,30 @@
             this.toolStripButton1.Size = new System.Drawing.Size(52, 22);
             this.toolStripButton1.Text = "运行";
             // 
+            // MainTabControl
+            // 
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 25);
+            this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.Padding = new System.Drawing.Point(0, 0);
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(1014, 496);
+            this.MainTabControl.TabIndex = 0;
+            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 17);
+            this.toolStripStatusLabel1.Text = "当前时间";
+            // 
+            // 帮助ToolStripMenuItem
+            // 
+            this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.帮助ToolStripMenuItem.Text = "帮助";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -275,8 +276,8 @@
             this.ClientSize = new System.Drawing.Size(1014, 543);
             this.Controls.Add(this.MainTabControl);
             this.Controls.Add(this.MainToolStrip);
-            this.Controls.Add(this.MainStatusStrip);
             this.Controls.Add(this.菜单);
+            this.Controls.Add(this.MainStatusStrip);
             this.MainMenuStrip = this.菜单;
             this.Name = "MainWindow";
             this.Text = "Note";
@@ -288,7 +289,6 @@
             this.MainStatusStrip.PerformLayout();
             this.MainToolStrip.ResumeLayout(false);
             this.MainToolStrip.PerformLayout();
-            this.MainTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,14 +313,15 @@
         private System.Windows.Forms.ToolStripMenuItem 保存ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem1;
         private System.Windows.Forms.ToolStrip MainToolStrip;
-        private System.Windows.Forms.TabPage EditForm;
-        private System.Windows.Forms.TabControl MainTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ToolStripMenuItem 另存为ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 视图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 状态栏ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 工具栏ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem 格式ToolStripMenuItem;
+        private System.Windows.Forms.TabControl MainTabControl;
+        private System.Windows.Forms.ToolStripMenuItem 帮助ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 
