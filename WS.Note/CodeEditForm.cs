@@ -11,26 +11,16 @@ using System.Windows.Forms;
 namespace WS.Note
 {
     /// <summary>
-    /// 文本编辑框
+    /// 代码编辑框
     /// </summary>
-    public partial class EditForm : Form
+    public partial class CodeEditForm : EditForm
     {
         /// <summary>
-        /// 正文
+        /// 构造器
         /// </summary>
-        public string Content {
-            get
-            {
-                return ""; // RichTextBox.
-            } set
-            {
-
-            } }
-
-        public EditForm()
+        public CodeEditForm() : base()
         {
             InitializeComponent();
         }
     }
-
 }

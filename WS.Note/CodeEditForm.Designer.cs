@@ -1,6 +1,6 @@
 ﻿namespace WS.Note
 {
-    partial class EditForm
+    partial class CodeEditForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,33 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.RichTextBox = new System.Windows.Forms.RichTextBox();
-            this.SuspendLayout();
-            // 
-            // RichTextBox
-            // 
-            this.RichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RichTextBox.Location = new System.Drawing.Point(0, 0);
-            this.RichTextBox.Name = "RichTextBox";
-            this.RichTextBox.Size = new System.Drawing.Size(800, 450);
-            this.RichTextBox.TabIndex = 0;
-            this.RichTextBox.Text = "";
-            this.RichTextBox.WordWrap = false;
-            // 
-            // EditForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.RichTextBox);
-            this.Name = "EditForm";
-            this.Text = "EditForm";
-            this.ResumeLayout(false);
-
+            this.Text = "CodeEditForm";
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox RichTextBox;
     }
 }

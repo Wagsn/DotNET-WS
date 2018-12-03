@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace WS.Note
 {
@@ -56,27 +57,6 @@ namespace WS.Note
             // 选项卡初始化
             TabManager.Init(control:MainTabControl);
             TabManager.MainWindow_Loadd();
-
-            //// 初始默认添加一个TabPage
-            //string Title = "新增选项卡 " + (MainTabControl.TabCount + 1).ToString();
-            //TabPage MyTabPage = new TabPage(Title);  // 创建TabPage对象
-            //MyTabPage.Tag = "WS.Note.EditForm";   // Tag 表示选项卡添加的Form的全称类名
-            //// 使用TabControl控件的TabPages 属性的Add方法添加新的选项卡
-            //MainTabControl.TabPages.Add(MyTabPage);
-            //IsSelectedList.Add(0);
-
-            //// 反射生成窗体  
-            //Form fm = (Form)Assembly.GetExecutingAssembly().CreateInstance(MyTabPage.Tag.ToString());
-
-            ////设置窗体没有边框 加入到选项卡中  
-            //fm.FormBorderStyle = FormBorderStyle.None;
-            //fm.TopLevel = false;
-            //fm.Parent = MainTabControl.SelectedTab;  // 将新生成的Form添加到选择的TabPage里面去
-            //fm.ControlBox = false;
-            //fm.Dock = DockStyle.Fill;
-            //fm.Show();
-
-            //IsSelectedList[0] = 1;
         }
 
         /// <summary>
@@ -108,36 +88,14 @@ namespace WS.Note
         /// <param name="e"></param>
         private void MainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //// 还存在选项卡
-            //if (MainTabControl.SelectedIndex >= 0)
-            //{
-            //    //只生成一次
-            //    if (IsSelectedList[MainTabControl.SelectedIndex] == 0)
-            //    {
-            //        btn_Click(sender, e);
-            //    }
-            //    //// 显示选择的选项卡是哪一个
-            //    //string P_str_TabName = MainTabControl.SelectedTab.Text;//获取选择的选项卡名称
-            //    //MessageBox.Show("您选择的选项卡为：" + P_str_TabName, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);//弹出信息提示
-            //}
         }
 
         /// <summary>
-        /// 菜单-视图-状态栏选则框
+        /// 状态栏菜单--菜单>视图>状态栏
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void 状态栏ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 状态栏菜单被点击
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 状态栏ToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             // MainStatusStrip
             if (!MainStatusStrip.Visible)
@@ -153,7 +111,7 @@ namespace WS.Note
         /// <summary>
         /// 工具栏菜单被点击
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">ToolStripMenuItem</param>
         /// <param name="e"></param>
         private void 工具栏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -195,7 +153,64 @@ namespace WS.Note
         /// <param name="e"></param>
         private void 保存ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            RichTextBox richTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
 
+            string content = richTextBox.Text;
+            Console.WriteLine("保存的内容为：\r\n"+content);
+
+            // 需要打开时保存文件的路径
+            // Save the contents of the RichTextBox into the file.
+            // richTextBox.SaveFile("", RichTextBoxStreamType.PlainText);
+        }
+
+        /// <summary>
+        /// 打开文件--菜单>文件>打开
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 打开ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            TabManager.Add();
+            RichTextBox richTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+
+            DialogResult DialogResult = OpenFileDialog.ShowDialog();
+            if (DialogResult == DialogResult.Cancel)
+                return;
+            string FileName = this.OpenFileDialog.FileName;
+            if (DialogResult == DialogResult.OK && FileName.Length > 0)
+            {
+                // Save the contents of the RichTextBox into the file.
+                richTextBox.LoadFile(OpenFileDialog.FileName, RichTextBoxStreamType.PlainText);
+            }
+        }
+
+        /// <summary>
+        /// 将文件另存为
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 另存为ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RichTextBox richTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+
+            string content = richTextBox.Text;
+            Console.WriteLine("另存的内容为：\r\n" + content);
+
+            if (richTextBox.Text == "")
+                return;
+            SaveFileDialog.DefaultExt = "txt";
+            SaveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            DialogResult DialogResult = SaveFileDialog.ShowDialog();
+            if (DialogResult == DialogResult.Cancel)
+                return;
+            string FileName = this.SaveFileDialog.FileName;
+            if (DialogResult == DialogResult.OK && FileName.Length > 0)
+            {
+                // Save the contents of the RichTextBox into the file.
+                richTextBox.SaveFile(SaveFileDialog.FileName, RichTextBoxStreamType.PlainText);
+                MessageBox.Show("文件已成功保存");
+            }
         }
     }
 
@@ -206,17 +221,17 @@ namespace WS.Note
     public class TabManager
     {
         /// <summary>
-        /// 用来记录from是否打开过
-        /// </summary>
-        public List<int> IsSelectedList = new List<int>();
-
-        /// <summary>
         /// 外部引用注意是否会被其它人修改
         /// </summary>
         public TabControl TabControl { get; set; }
 
         /// <summary>
-        /// 初始化
+        /// 用来持有TabPage和文件路径，方便添加
+        /// </summary>
+        public List<Bundle> TabBudles = new List<Bundle>();
+
+        /// <summary>
+        /// 初始化，添加TabControl的引用
         /// </summary>
         /// <param name="control"></param>
         public void Init(TabControl control)
@@ -229,26 +244,7 @@ namespace WS.Note
         /// </summary>
         public void MainWindow_Loadd()
         {
-            // 初始默认添加一个TabPage
-            string Title = "新增选项卡 " + (TabControl.TabCount + 1).ToString();
-            TabPage MyTabPage = new TabPage(Title);  // 创建TabPage对象
-            MyTabPage.Tag = "WS.Note.EditForm";   // Tag 表示选项卡添加的Form的全称类名
-            // 使用TabControl控件的TabPages 属性的Add方法添加新的选项卡
-            TabControl.TabPages.Add(MyTabPage);
-            IsSelectedList.Add(0);
-
-            // 反射生成窗体  
-            Form fm = (Form)Assembly.GetExecutingAssembly().CreateInstance(MyTabPage.Tag.ToString());
-
-            //设置窗体没有边框 加入到选项卡中  
-            fm.FormBorderStyle = FormBorderStyle.None;
-            fm.TopLevel = false;
-            fm.Parent = TabControl.SelectedTab;  // 将新生成的Form添加到选择的TabPage里面去
-            fm.ControlBox = false;
-            fm.Dock = DockStyle.Fill;
-            fm.Show();
-
-            IsSelectedList[0] = 1;
+            Add();
         }
 
         /// <summary>
@@ -256,27 +252,78 @@ namespace WS.Note
         /// </summary>
         public void Add()
         {
-            //声明一个字符串变量，用于生成新增选项卡的名称
+            // 声明一个字符串变量，用于生成新增选项卡的名称
             string Title = "新增选项卡 " + (TabControl.TabCount + 1).ToString();
-            TabPage MyTabPage = new TabPage(Title);  // 创建TabPage对象
-            MyTabPage.Tag = "WS.Note.EditForm";   // Tag 表示选项卡添加的Form的全称类名
-            // 使用TabControl控件的TabPages 属性的Add方法添加新的选项卡
-            TabControl.TabPages.Add(MyTabPage);
-            IsSelectedList.Add(0);
-
-            // 反射生成窗体  
-            Form fm = (Form)Assembly.GetExecutingAssembly().CreateInstance(MyTabPage.Tag.ToString());
-
-            //设置窗体没有边框 加入到选项卡中  
-            fm.FormBorderStyle = FormBorderStyle.None;
-            fm.TopLevel = false;
-            fm.Parent = MyTabPage;  // 将新生成的Form添加到选择的TabPage里面去
-            fm.ControlBox = false;
-            fm.Dock = DockStyle.Fill;
-            fm.Show();
-
-            IsSelectedList[IsSelectedList.Count-1] = 1;
+            TabPage page = CreateTabPage(Title, (Form)Assembly.GetExecutingAssembly().CreateInstance("WS.Note.EditForm"));
+            TabBudles.Add(new Bundle
+            {
+                IsNew = true,
+                TabPage =page
+            });
+            // 使用 TabControl 控件的 TabPages 属性的 Add 方法添加新的选项卡
+            TabControl.TabPages.Add(page);
             ////MessageBox.Show("现有" + TabControl.TabCount + "个选项卡");  //获取选项卡个数
+        }
+
+        /// <summary>
+        /// 末尾添加一个指定标题的TabPage
+        /// </summary>
+        /// <param name="title">TabPage的标题</param>
+        public void Add(string title)
+        {
+            Add(title, "WS.Note.EditForm");
+        }
+
+        /// <summary>
+        /// 在选项卡列表末尾添加一个TabPage，并填充一个Form
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="FormClassName"></param>
+        public void Add(string title, string FormClassName)
+        {
+            Add(title, (Form)Assembly.GetExecutingAssembly().CreateInstance(FormClassName));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bundle">绑定TabPage与FilePath</param>
+        public void Add(Bundle bundle)
+        {
+            // 创建TabPage
+            TabPage page = CreateTabPage(bundle.TabTitle, (Form)Assembly.GetExecutingAssembly().CreateInstance("WS.Note.EditForm"));
+            if (!string.IsNullOrWhiteSpace(bundle.SrcFilePath)/* && bundle.SrcFilePath.isPath()*/)
+            {
+                ((RichTextBox)page.Controls.Find("RichTextBox", true).FirstOrDefault()).LoadFile(bundle.SrcFilePath, RichTextBoxStreamType.PlainText);
+            }
+            bundle.TabPage = page;
+        }
+
+        /// <summary>
+        /// Tabs末尾追加填充Form的TabPage
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="form"></param>
+        public void Add(string title, Form form)
+        {
+            TabControl.TabPages.Add(CreateTabPage(title, form));
+        }
+
+        /// <summary>
+        /// 将以Form填充的TabPage添加到Tabs的指定位置
+        /// 注1：如果索引为负数，将从末尾向前索引
+        /// 注2：如果索引超限，将做取模操作
+        /// </summary>
+        /// <param name="title">标题</param>
+        /// <param name="form">Form窗口</param>
+        /// <param name="position">添加的位置（插入模式）</param>
+        public void Add(string title, Form form, int position)
+        {
+            // 获取自然数索引（从0开始）
+            int index = (position % TabControl.TabCount + TabControl.TabCount) % TabControl.TabCount;
+
+            // 使用TabControl控件的TabPages 属性的Add方法添加新的选项卡
+            TabControl.TabPages.Insert(index, CreateTabPage(title, form));
         }
 
         /// <summary>
@@ -288,10 +335,51 @@ namespace WS.Note
             if (TabControl.SelectedIndex > -1)
             {
                 //使用TabControl控件的TabPages属性的Remove方法移除指定的选项卡
-                int removeId = TabControl.SelectedIndex;
+                int removeIndex = TabControl.SelectedIndex;
                 TabControl.TabPages.Remove(TabControl.SelectedTab);
-                IsSelectedList.RemoveAt(removeId);
             }
+        }
+
+        /// <summary>
+        /// 交换两个索引所在TabPage的位置
+        /// </summary>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        public void Swap(int index1, int index2)
+        {
+            // 参数检查 - 索引是否超限 -TODO 取模操作避免超限
+            if (index1 < 0 || index1 >= TabControl.TabPages.Count || index1 < 0 || index1 >= TabControl.TabPages.Count)
+            {
+                throw new IndexOutOfRangeException("Tab Page Index out of the Range");
+            }
+            // 交换TabPage
+            TabPage page = TabControl.TabPages[index1];
+            TabControl.TabPages.RemoveAt(index1);
+            TabControl.TabPages.Insert(index2, page);
+        }
+
+        /// <summary>
+        /// 生成一个新的TabPage，用Form填充
+        /// </summary>
+        /// <param name="title">Tab Page Title</param>
+        /// <param name="form">Form</param>
+        /// <returns></returns>
+        private static TabPage CreateTabPage(string title, Form form)
+        {
+            TabPage page = new TabPage
+            {
+                Text = title,
+                Tag = form.GetType().FullName
+            };
+            // 设置窗体没有边框 加入到选项卡中  
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.TopLevel = false;
+            form.Parent = page;  // 将新生成的Form添加到选择的TabPage里面去
+            form.ControlBox = false;
+            form.Dock = DockStyle.Fill;
+            form.Show();
+
+            return page;
         }
     }
 
@@ -306,6 +394,11 @@ namespace WS.Note
         public bool IsNew { get; set; }
 
         /// <summary>
+        /// 选项卡的名字
+        /// </summary>
+        public string TabTitle { get; set; }
+
+        /// <summary>
         /// 绑定的选项卡
         /// </summary>
         public TabPage TabPage { get; set; }
@@ -315,8 +408,13 @@ namespace WS.Note
         /// </summary>
         public string SrcFilePath { get; set; }
 
+        ///// <summary>
+        ///// 文件
+        ///// </summary>
+        //public FileInfo File { get; set; }
+
         /// <summary>
-        /// 选项卡 EditForm 中保存的文本
+        /// 选项卡 EditForm.RichTextBox 中保存的文本
         /// </summary>
         public string EditText { get; set; }
     }
