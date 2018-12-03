@@ -28,6 +28,9 @@ namespace WS.Todo.Controllers
         /// </summary>
         protected ITodoItemManager<ITodoItemStore<ApplicationDbContext, TodoItem>> TodoItemManager { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected ILogger Logger = LoggerManager.GetLogger("TodoController");
 
         /// <summary>
