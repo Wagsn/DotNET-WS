@@ -228,7 +228,7 @@ namespace WS.Note
         /// <summary>
         /// 用来持有TabPage和文件路径，方便添加
         /// </summary>
-        public List<Bundle> TabBudles = new List<Bundle>();
+        public List<TabBundle> TabBudles = new List<TabBundle>();
 
         /// <summary>
         /// 初始化，添加TabControl的引用
@@ -255,7 +255,7 @@ namespace WS.Note
             // 声明一个字符串变量，用于生成新增选项卡的名称
             string Title = "新增选项卡 " + (TabControl.TabCount + 1).ToString();
             TabPage page = CreateTabPage(Title, (Form)Assembly.GetExecutingAssembly().CreateInstance("WS.Note.EditForm"));
-            TabBudles.Add(new Bundle
+            TabBudles.Add(new TabBundle
             {
                 IsNew = true,
                 TabPage =page
@@ -285,16 +285,16 @@ namespace WS.Note
         }
 
         /// <summary>
-        /// 
+        /// 添加TabBundle
         /// </summary>
         /// <param name="bundle">绑定TabPage与FilePath</param>
-        public void Add(Bundle bundle)
+        public void Add(TabBundle bundle)
         {
             // 创建TabPage
             TabPage page = CreateTabPage(bundle.TabTitle, (Form)Assembly.GetExecutingAssembly().CreateInstance("WS.Note.EditForm"));
-            if (!string.IsNullOrWhiteSpace(bundle.SrcFilePath)/* && bundle.SrcFilePath.isPath()*/)
+            if (!string.IsNullOrWhiteSpace(bundle.SrcPath)/* && bundle.SrcFilePath.isPath()*/)
             {
-                ((RichTextBox)page.Controls.Find("RichTextBox", true).FirstOrDefault()).LoadFile(bundle.SrcFilePath, RichTextBoxStreamType.PlainText);
+                ((RichTextBox)page.Controls.Find("RichTextBox", true).FirstOrDefault()).LoadFile(bundle.SrcPath, RichTextBoxStreamType.PlainText);
             }
             bundle.TabPage = page;
         }
@@ -385,8 +385,9 @@ namespace WS.Note
 
     /// <summary>
     /// 将选项卡与文件绑定
+    /// IsNew TabTitle TabPage SrcPath EditText
     /// </summary>
-    public class Bundle
+    public class TabBundle
     {
         /// <summary>
         /// 是否是新建的
@@ -406,7 +407,7 @@ namespace WS.Note
         /// <summary>
         /// 原始文件路径（打开文件的位置）
         /// </summary>
-        public string SrcFilePath { get; set; }
+        public string SrcPath { get; set; }
 
         ///// <summary>
         ///// 文件

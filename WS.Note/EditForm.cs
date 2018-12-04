@@ -25,11 +25,18 @@ namespace WS.Note
             } set
             {
 
-            } }
+            }
+        }
 
         public EditForm()
         {
             InitializeComponent();
+
+
+            //System.Drawing.Text.PrivateFontCollection privateFonts = new System.Drawing.Text.PrivateFontCollection();
+            //privateFonts.AddFontFile("./res/font/Inconsolata.otf");
+            //Font font = new Font(privateFonts.Families[0], 10);
+            //this.RichTextBox.Font = font;
         }
     }
 
