@@ -35,10 +35,29 @@ namespace WS.Shell
         /// </summary>
         public string Value { get; set; }
 
+        private int[] range = new int[2];
+
         /// <summary>
         /// 所在范围 index-base range [start: int, end: int]
         /// </summary>
-        public readonly int[] Range = new int[2];
+        public int[] Range
+        {
+            get
+            {
+                return range;
+            }
+            set
+            {
+                if (value.Length != 2)
+                {
+                    throw new ArgumentException("参数错误");
+                }
+                else
+                {
+                    range = value;
+                }
+            }  
+        }
 
         // Line and column-based  Location(start: Position(line: int, column: int), end: Position(line: int, column: int))
 

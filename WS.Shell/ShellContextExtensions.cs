@@ -37,6 +37,7 @@ namespace WS.Shell
             manager.Add(new EchoCmd(context));
             manager.Add(new IdCmd(context));
             manager.Add(new TestCmd(context));
+            manager.Add(new ScriptCmd(context));
         }
     }
 }

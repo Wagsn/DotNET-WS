@@ -25,6 +25,35 @@ namespace WS.Shell
     /// </summary>
     public class AST
     {
-
+        
     }
+
+    /// <summary>
+    /// 语法树节点
+    /// </summary>
+    public class ASTNode
+    {
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public string Kind { get; set; }
+
+        /// <summary>
+        /// 种类
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// 访问节点，
+        /// 如果该节点是一个定义表达式，将会在上下文中添加一个定义的单元
+        /// 如果是一个函数调用表达式，将会执行该函数，引入上下文
+        /// </summary>
+        /// <param name="context"></param>
+        public void Visit(RunContext context)
+        {
+
+        }
+    }
+
+
 }

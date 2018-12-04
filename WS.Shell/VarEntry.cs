@@ -22,12 +22,28 @@ namespace WS.Shell
 {
     /// <summary>
     /// 包含一个变量的完整信息
+    /// 变量名与变量值
+    /// 以及在源代码中的位置
     /// </summary>
     public class VarEntry
     {
-        
+        /// <summary>
+        /// 变量的原始字符串
+        /// </summary>
         private string raw;  // var raw -> str:string="hello" | var=163511
+
+        // 在原始字符串中的位置
+        private readonly int strat;
+        private readonly int end;
+
+        /// <summary>
+        /// 变量名
+        /// </summary>
         private string name;  // var name
+
+        /// <summary>
+        /// 变量值
+        /// </summary>
         private VarValue value = new VarValue(); // var value
 
         /// <summary>
@@ -53,21 +69,54 @@ namespace WS.Shell
     /// </summary>
     public class VarValue
     {
-       
-        private string kind; // var kind boolean number string function
-        private Type type;  // var type
-        private object value; // var value
+
+        /// <summary>
+        /// var kind boolean number string function
+        /// </summary>
+        private string kind;
+
+        /// <summary>
+        /// var type
+        /// </summary>
+        private Type type;
+
+        /// <summary>
+        /// var value
+        /// </summary>
+        private object value;
+
+        public static VarValue New (double o)
+        {
+            return new VarValue
+            {
+                kind = "Number",
+                type = o.GetType(),
+                value = o
+            };
+        }
+
+        public static VarValue New (string o)
+        {
+            return new VarValue
+            {
+                kind = "String",
+                type = o.GetType(),
+                value = o
+            };
+        }
 
         /// <summary>
         /// 值的包装，将各种值包装成object
         /// </summary>
         public object Value { get => value; set => this.value = value; }
+
         /// <summary>
         /// 值的类型，C#系统标识
         /// </summary>
         public Type Type { get => type; set => type = value; }
+
         /// <summary>
-        /// 值的种类，本系统内部标识
+        /// 值的种类，本系统内部标识，如Number
         /// </summary>
         public string Kind { get => kind; set => kind = value; }
     }
