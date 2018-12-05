@@ -21,7 +21,7 @@ using System.Text;
 namespace WS.Shell
 {
     /// <summary>
-    /// 语法分析器
+    /// 语法分析器(syntactic analyzer)
     /// </summary>
     public class Parser
     {
@@ -32,7 +32,26 @@ namespace WS.Shell
         /// <returns></returns>
         public AST Parse (Token[] tokens)
         {
+            for(int i=0; i< tokens.Length; i++)
+            {
+                
+            }
             return null;
         }
+
+        /// <summary>
+        /// 直接解析源代码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public AST Parse (string source)
+        {
+            return Parse(Lexer.Lexing(source));
+        }
+
+        //public AST Syntax(Token[] tokens)
+        //{
+        //    return null;
+        //}
     }
 }

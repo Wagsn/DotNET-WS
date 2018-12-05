@@ -11,8 +11,7 @@ namespace MigrationsDemo
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(
-                "server=localhost;database=ws_test;user=admin;password=123456;");
+            optionsBuilder.UseMySql("server=localhost;database=ws_test;user=admin;password=123456;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

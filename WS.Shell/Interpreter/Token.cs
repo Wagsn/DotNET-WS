@@ -26,7 +26,7 @@ namespace WS.Shell
     public class Token
     {
         /// <summary>
-        /// 类型（Keyword：关键字、Identifier：标识符、Punctuator：符号，符号表、Numeric：数字，Literal：字面量, String Boolean Null）
+        /// 类型(描述语法树相关的类型)（Keyword：关键字、Identifier：标识符、Punctuator：符号(界符，运算符)，符号表、Numeric：数字，Literal：字面量, String Boolean Null）
         /// </summary>
         public string Type { get; set; }
 

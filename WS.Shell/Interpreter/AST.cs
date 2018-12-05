@@ -25,7 +25,10 @@ namespace WS.Shell
     /// </summary>
     public class AST
     {
-        
+        /// <summary>
+        /// 根节点
+        /// </summary>
+        public ASTNode Root { get; set; }
     }
 
     /// <summary>
@@ -33,15 +36,25 @@ namespace WS.Shell
     /// </summary>
     public class ASTNode
     {
-        /// <summary>
-        /// 类型
-        /// </summary>
-        public string Kind { get; set; }
+        ///// <summary>
+        ///// 名称（person, marth）
+        ///// </summary>
+        //public string Name { get; set; }
+
+        ///// <summary>
+        ///// 描述（语义相关的：如const，）
+        ///// </summary>
+        //public string Kind { get; set; }
 
         /// <summary>
-        /// 种类
+        /// 节点类型（语法树相关的）
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// 在源代码中的位置，共享的对象
+        /// </summary>
+        public Range Range { get; set; }
 
         /// <summary>
         /// 访问节点，
@@ -53,7 +66,59 @@ namespace WS.Shell
         {
 
         }
+
+        public void Accept(ASTVisitor visitor)
+        {
+
+        }
     }
 
+    /// <summary>
+    /// https://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTVisitor.html
+    /// 
+    /// </summary>
+    public class ASTVisitor
+    {
+        public bool Visit(ASTNode node)
+        {
+            return false;
+        }
 
+        public void PreVisit(ASTNode node)
+        {
+
+        }
+        public void EndVisit(ASTNode node)
+        {
+
+        }
+        public void PostVisit(ASTNode node)
+        {
+
+        }
+    }
+
+    public class Identifier: ASTNode
+    {
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
+
+        public Identifier()
+        {
+            Type = "Identifier";
+        }
+    }
+
+    /// <summary>
+    /// 在源代码中的范围
+    /// </summary>
+    public class Range
+    {
+        public int start =-1;
+        public int end =-1;
+
+        public Location loc;
+    }
 }

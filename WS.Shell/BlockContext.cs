@@ -238,88 +238,11 @@ namespace WS.Shell
                 // 生成语法树 AST
                 // 遍历语法树 Visitor
                 // 在这里简单读取Print函数 print "hello world"
-                string trimCode = VarMap.Get("source").Value.ToString();
-                // 匹配单词
-                // 引号开始
-                int quotationSstart = -1;
-                int letterStart = -1;
-                //int spaceStart = -1;
-                List<Token> tokens = new List<Token>();
-                for(int i =0; i<trimCode.Length; i++)
-                {
-                    // 遇到引号
-                    if (trimCode[i] == '"')
-                    {
-                        // 开始引号
-                        if (quotationSstart == -1)
-                        {
-                            quotationSstart = i;
-                        }
-                        // 结束引号
-                        else
-                        {
-                            Token token = new Token
-                            {
-                                Type = "String",
-                                Value = trimCode.Substring(quotationSstart, i - quotationSstart),
-                                Range = new int[2] { quotationSstart, i }
-                            };
-                            tokens.Add(token);
-                            quotationSstart = -1;
-                        }
-                    }
-                    // 遇到制表符及空格
-                    else if (trimCode[i] == ' '|| trimCode[i] == '\t'|| trimCode[i] == '\n'|| trimCode[i] == '\r')
-                    {
-                        // 引号未开始
-                        if(quotationSstart == -1)
-                        {
-                            // 字母结束
-                            if (letterStart != -1)
-                            {
-                                Token token = new Token
-                                {
-                                    Type = "Identifier",
-                                    Value = trimCode.Substring(letterStart, i - letterStart - 1),
-                                    Range = new int[2] { letterStart, i - 1 }
-                                };
-                                tokens.Add(token);
-                                letterStart = -1;
-                            }
-                        }
-                        // 引号已开始
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    // 遇到字母
-                    else if (trimCode[i]>='a'&& trimCode[i]<='Z')
-                    {
-                        // 引号未开始
-                        if (quotationSstart == -1)
-                        {
-                            if (letterStart == -1)
-                            {
-                                letterStart = i;
-                            }
-                        }
-                        // 引号已开始
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    // 不能包含其它字符
-                    else
-                    {
-                        throw new Exception("源代码不能包含其它字符");
-                    }
-                }
+                string code = VarMap.Get("source").Value.ToString();
 
-                Token[] tokenArr = tokens.ToArray();
+                Token[] tokenArr = Lexer.Lexing(code);
 
-                for(int i=0; i<tokenArr.Length; i++)
+                for (int i=0; i<tokenArr.Length; i++)
                 {
                     if(tokenArr[i].Type == "String")
                     {

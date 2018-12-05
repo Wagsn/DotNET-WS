@@ -46,7 +46,7 @@ namespace WS.Todo.Models
             builder.Entity<TodoItem>(b =>
             {
                 b.ToTable("ws_todo_todoitem");
-                b.Property<bool>(p=>p._IsDeleted);
+                b.Property(p=>p._IsDeleted);
             });
 
             builder.Entity<TodoItemHistory>(b =>
@@ -57,7 +57,7 @@ namespace WS.Todo.Models
             builder.Entity<UserBase>(b =>
             {
                 b.ToTable("ws_todo_userbase");
-                b.Property<bool>(p => p._IsDeleted);
+                b.Property(p => p._IsDeleted);
             });
 
             builder.Entity<RelationUserTodo>(b =>

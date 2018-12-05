@@ -33,6 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		开发日志.log = 开发日志.log
+		WS.Shell\doc\正则表达式.txt = WS.Shell\doc\正则表达式.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileMouse", "..\..\自动化点击\MobileMouse.csproj", "{EAB8DEDF-2718-4E31-A141-F701A6CD0C54}"
