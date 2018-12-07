@@ -37,6 +37,8 @@ namespace WS.Note
             //privateFonts.AddFontFile("./res/font/Inconsolata.otf");
             //Font font = new Font(privateFonts.Families[0], 10);
             //this.RichTextBox.Font = font;
+
+            this.RichTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
         }
     }
 

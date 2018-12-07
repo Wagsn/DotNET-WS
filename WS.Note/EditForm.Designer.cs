@@ -34,7 +34,7 @@
             // RichTextBox
             // 
             this.RichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RichTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RichTextBox.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.RichTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.RichTextBox.Location = new System.Drawing.Point(0, 0);
             this.RichTextBox.Name = "RichTextBox";

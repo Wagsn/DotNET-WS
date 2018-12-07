@@ -255,6 +255,8 @@ namespace WS.Note
             // 声明一个字符串变量，用于生成新增选项卡的名称
             string Title = "新增选项卡 " + (TabControl.TabCount + 1).ToString();
             TabPage page = CreateTabPage(Title, (Form)Assembly.GetExecutingAssembly().CreateInstance("WS.Note.EditForm"));
+            // 通过类型和构造参数生成实例对象
+            // Activator.CreateInstance(typeof(string), new char[3] { '1', '2','3' });
             TabBudles.Add(new TabBundle
             {
                 IsNew = true,
