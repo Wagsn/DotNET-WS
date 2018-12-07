@@ -130,6 +130,10 @@ namespace WS.Core.Dto
             }
         }
 
+        /// <summary>
+        /// 是否成功
+        /// </summary>
+        /// <returns></returns>
         public bool IsSuccess()
         {
             if (Code == ResponseDefine.SuccessCode)
