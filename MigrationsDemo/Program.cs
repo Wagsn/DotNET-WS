@@ -16,7 +16,10 @@ namespace MigrationsDemo
 
             using (BlogContext db = new BlogContext())
             {
-                db.Blogs.Add(new Blog { Name = "Another Blog" });
+                for(int i=0; i<10; i++)
+                {
+                    db.Blogs.Add(new Blog { Name = "Blog " + DateTime.Now.ToString("yyyyMMddHHmmss.FFFFFF"), Time = DateTime.Now});
+                }
                 db.SaveChanges();
 
                 foreach (var blog in db.Blogs)

@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MigrationsDemo
+namespace MigrationsDemo.Models
 {
     public class BlogContext : DbContext
     {
