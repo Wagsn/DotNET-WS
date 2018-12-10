@@ -32,10 +32,6 @@ namespace WS.Shell
         /// </summary>
         private string raw;  // var raw -> str:string="hello" | var=163511
 
-        // 在原始字符串中的位置
-        private readonly int strat;
-        private readonly int end;
-
         /// <summary>
         /// 变量名
         /// </summary>
