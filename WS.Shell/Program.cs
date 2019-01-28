@@ -10,8 +10,6 @@ namespace WS.Shell
     /// </summary>
     class Program
     {
-        public ILogger Logger = LoggerManager.GetLogger();
-
         /// <summary>
         /// 入口
         /// </summary>
@@ -29,9 +27,9 @@ namespace WS.Shell
                 {
                     try
                     {
+                        Console.WriteLine(e);
                         // 尝试将错误写入日志  // 写一个日志工具
                         IO.File.WriteAllText("./log/err/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_FFFFFF") + ".log", e.ToString());
-                        Console.WriteLine(e);
                         Console.ReadKey();
                     }
                     catch (Exception e2)

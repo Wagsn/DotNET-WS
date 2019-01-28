@@ -1,6 +1,6 @@
 ﻿#region << 版 本 注 释 >>
 /*----------------------------------------------------------------
-* 项目名称 ：WS.Shell.CmdUnit
+* 项目名称 ：WS.Shell
 * 项目描述 ：
 * 类 名 称 ：ToJsonCmd
 * 类 描 述 ：
@@ -35,13 +35,13 @@ namespace WS.Shell.CmdUnit
         {
             Name = "tojson";
             Desc = "将对象转换成字符串。（暂时不能保证文本显示与输入的统一）";  // 控制台不支持emoji😟（UTF-32）符号，可能因为系统默认UTF-16，// tojson需要将argument参数解析成变量组，在变量表中寻找变量的实际值，然后传递给tojson函数，这里需要将tojson封装成一个函数。
-            Usage = "tojson [argument]";
+            Usage = "tojson [argument|var_name]";
         }
 
         /// <summary>
         /// 执行命令
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="arg">参数</param>
         /// <returns></returns>
         public override int Excute(string arg)
         {
@@ -56,7 +56,7 @@ namespace WS.Shell.CmdUnit
             {
                 if (AppContext.VarTable.ContainsKey(words[i]))
                 {
-                    Console.Write(AppContext.VarTable[words[i]].Value.Value);
+                    Console.Write(AppContext.VarTable[words[i]].Data.Data);
                 }
                 else
                 {

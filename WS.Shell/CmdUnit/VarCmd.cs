@@ -16,7 +16,9 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using WS.Text;
 
 namespace WS.Shell.CmdUnit
 {
@@ -47,7 +49,7 @@ namespace WS.Shell.CmdUnit
             // 单变量定义
             // TODO 正则验证
             // 切割
-            string[] vars = arg.Split("=");
+            List<string> vars = arg.Split("=").ToList();
             // 声明部分
             string declare = vars[0];
             // 值部分 字符串形式
@@ -58,12 +60,12 @@ namespace WS.Shell.CmdUnit
             if (declare.IndexOf(":") > 0)
             {
                 var declares = declare.Split(":");
-                varName = declares[0];  // 命名规则验证
-                varType = declares[1];  // 类型校验 
+                varName = declares[0].NormalSpace();  // 命名规则验证
+                varType = declares[1].NormalSpace();  // 类型校验 
             }
             else
             {
-                varName = declare;  // 命名规则验证
+                varName = declare.NormalSpace();  // 命名规则验证
             }
             // 值解析
             try
@@ -80,30 +82,30 @@ namespace WS.Shell.CmdUnit
                     {
                         Name = varName,
                         Raw = arg,
-                        Value = new VarValue()
+                        Data = new VarData()
                     };
                     AppContext.VarTable.Add(varName, entry);
                 }
                 // 匹配数字
                 if (MatchNumber(valueRaw, out double dbval))
                 {
-                    entry.Value.Value = dbval;
-                    entry.Value.Type = typeof(double);
-                    entry.Value.Kind = "number";
+                    entry.Data.Data = dbval;
+                    entry.Data.Type = typeof(double);
+                    entry.Data.Kind = "number";
                 }
                 // 匹配布尔
                 else if (MatchBoolean(valueRaw, out bool blval))
                 {
-                    entry.Value.Value = blval;
-                    entry.Value.Type = typeof(bool);
-                    entry.Value.Kind = "boolean";
+                    entry.Data.Data = blval;
+                    entry.Data.Type = typeof(bool);
+                    entry.Data.Kind = "boolean";
                 }
                 // 其它作字符串处理
                 else
                 {
-                    entry.Value.Value = valueRaw;
-                    entry.Value.Type = typeof(string);
-                    entry.Value.Kind = "string";
+                    entry.Data.Data = valueRaw;
+                    entry.Data.Type = typeof(string);
+                    entry.Data.Kind = "string";
                 }
                 return 0;
             }

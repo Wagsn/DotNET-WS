@@ -84,13 +84,13 @@ namespace WS.Shell.CmdUnit
                         }
                         break;
                     default:
-                        Console.WriteLine("Not found function for the name: "+funcName);
+                        Console.WriteLine($"Not found function for the name: <{funcName}>");
                         break;
                 }
             }
             else
             {
-                Console.WriteLine("test cmd usage: test [function_name [function_arguments]]");
+                Console.WriteLine("test usage: test [function_name [function_arguments]]");
             }
             return -1;
         }

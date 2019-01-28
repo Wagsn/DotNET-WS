@@ -28,7 +28,12 @@ namespace WS.Shell
         /// <summary>
         /// 变量表，封装CS变量，保存单元的变量，如返回值，参数值
         /// </summary>
-        public Map<VarValue> VarMap { get; set; }
+        public Map<VarData> VarMap { get; set; }
+
+        /// <summary>
+        /// 变量条目集合
+        /// </summary>
+        public IList<VarEntry> VarEntries { get; set; }
 
         /// <summary>
         /// 单元表，保存域中的单元
@@ -55,7 +60,7 @@ namespace WS.Shell
         {
             return new RunContext
             {
-                VarMap = new Map<VarValue>(),
+                VarMap = new Map<VarData>(),
                 UnitMap = new Map<Unit>()
             };
         }
@@ -200,7 +205,7 @@ namespace WS.Shell
                 IsInit = false,
                 IsRan = false,
                 Scope = scope,
-                VarMap = new Map<VarValue>(),
+                VarMap = new Map<VarData>(),
                 UnitMap = new Map<Unit>()
             };
         }
@@ -213,10 +218,10 @@ namespace WS.Shell
         public virtual void Set(params Unit[] args)
         {
             // 如果传入的是字符串
-            if (args!=null&&args.Length>=1&&args[0].GetValue().Value is string)
+            if (args!=null&&args.Length>=1&&args[0].GetValue().Data is string)
             {
-                var code = args[0].GetValue().Value as string;
-                VarMap.Set("source", VarValue.New(code));  // source 用来保存源代码以及所在的位置，这里暂时只保存源代码
+                var code = args[0].GetValue().Data as string;
+                VarMap.Set("source", VarData.New(code));  // source 用来保存源代码以及所在的位置，这里暂时只保存源代码
                 IsInit = true;
             }
             else
@@ -238,7 +243,7 @@ namespace WS.Shell
                 // 生成语法树 AST
                 // 遍历语法树 Visitor
                 // 在这里简单读取Print函数 print "hello world"
-                string code = VarMap.Get("source").Value.ToString();
+                string code = VarMap.Get("source").Data.ToString();
 
                 Token[] tokenArr = Lexer.Lexing(code);
 
@@ -278,7 +283,7 @@ namespace WS.Shell
         /// </summary>
         /// <param name="unit"></param>
         /// <returns></returns>
-        public VarValue GetValue(Unit unit)
+        public VarData GetValue(Unit unit)
         {
             if (unit.IsInit)
             {
@@ -294,7 +299,7 @@ namespace WS.Shell
             }
         }
 
-        public VarValue GetValue()
+        public VarData GetValue()
         {
             if (IsInit)
             {
@@ -312,7 +317,7 @@ namespace WS.Shell
 
         public TValue TypeValue<TValue>()
         {
-            return (TValue)Scope.VarMap.Get("returnvalue").Value;
+            return (TValue)Scope.VarMap.Get("returnvalue").Data;
         }
     }
 
@@ -326,8 +331,8 @@ namespace WS.Shell
         public static WString New(string value)
         {
             Unit context = Unit.New(null);
-            context.VarMap.Set("argument", VarValue.New(value));
-            context.VarMap.Set("returnvalue", VarValue.New(value));
+            context.VarMap.Set("argument", VarData.New(value));
+            context.VarMap.Set("returnvalue", VarData.New(value));
             return new WString
             {
                 IsInit = true,
@@ -342,8 +347,8 @@ namespace WS.Shell
         public static WNumber New (double d)
         {
             Unit context = Unit.New(null);
-            context.VarMap.Set("argument", VarValue.New(d));
-            context.VarMap.Set("returnvalue", VarValue.New(d));
+            context.VarMap.Set("argument", VarData.New(d));
+            context.VarMap.Set("returnvalue", VarData.New(d));
             return new WNumber
             {
                 IsInit = true,
@@ -380,7 +385,7 @@ namespace WS.Shell
             };
             return unit;
         }
-        public static ValueUnit New (VarValue value)
+        public static ValueUnit New (VarData value)
         {
             //Run
 
@@ -448,17 +453,17 @@ namespace WS.Shell
         public override Unit Run(params Unit[] args)
         {
             // 参数解析
-            VarValue[] values = new VarValue[args.Length];
+            VarData[] values = new VarData[args.Length];
             for(int i = 0; i< values.Length; i++)
             {
                 values[i] = args[i].GetValue();
             }
             // 缓存参数
-            VarMap.Set("arguments", new VarValue
+            VarMap.Set("arguments", new VarData
             {
                 Type = values.GetType(),
                 Kind = "Array[Unit]",
-                Value = values
+                Data = values
             });
             // 函数执行
             return base.Run(args);
@@ -481,10 +486,10 @@ namespace WS.Shell
         {
             VarEntry entry = new VarEntry
             {
-                Value = new VarValue
+                Data = new VarData
                 {
                     Type = "string".GetType(),
-                    Value = "string"
+                    Data = "string"
                 }
             };
 

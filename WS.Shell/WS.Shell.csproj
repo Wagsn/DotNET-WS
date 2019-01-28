@@ -33,4 +33,8 @@
     <ProjectReference Include="..\WS.Text\WS.Text.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Test\" />
+  </ItemGroup>
+
 </Project>

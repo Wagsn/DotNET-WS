@@ -28,34 +28,19 @@ namespace WS.Shell
     public class VarEntry
     {
         /// <summary>
-        /// 变量的原始字符串
-        /// </summary>
-        private string raw;  // var raw -> str:string="hello" | var=163511
-
-        /// <summary>
         /// 变量名
         /// </summary>
-        private string name;  // var name
-
-        /// <summary>
-        /// 变量值
-        /// </summary>
-        private VarValue value = new VarValue(); // var value
-
-        /// <summary>
-        /// 变量名
-        /// </summary>
-        public string Name { get => name; set => name = value; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 原始数据，声明及定义
         /// </summary>
-        public string Raw { get => raw; set => raw = value; }
+        public string Raw { get; set; }
 
         /// <summary>
         /// 变量值（包含类型，值，种类）
         /// </summary>
-        public VarValue Value { get => value; set => this.value = value; }
+        public VarData Data { get; set; } = new VarData();
     }
 
     /// <summary>
@@ -63,77 +48,103 @@ namespace WS.Shell
     /// str:string="hello"  // type = string value = "hello"
     /// num=163511  // type = var  value = 163511 
     /// </summary>
-    public class VarValue
+    public class VarData
     {
-
         /// <summary>
-        /// var kind boolean number string function
+        /// 值名（如函数名）
         /// </summary>
-        private string kind;
-
-        /// <summary>
-        /// var type
-        /// </summary>
-        private Type type;
-
-        /// <summary>
-        /// var value
-        /// </summary>
-        private object value;
-
-        public static VarValue New (double o)
-        {
-            return new VarValue
-            {
-                kind = "Number",
-                type = o.GetType(),
-                value = o
-            };
-        }
-
-        public static VarValue New (string o)
-        {
-            return new VarValue
-            {
-                kind = "String",
-                type = o.GetType(),
-                value = o
-            };
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// 值的包装，将各种值包装成object
         /// </summary>
-        public object Value { get => value; set => this.value = value; }
+        public object Data { get; set; }
 
         /// <summary>
         /// 值的类型，C#系统标识
         /// </summary>
-        public Type Type { get => type; set => type = value; }
+        public Type Type { get; set; }
 
         /// <summary>
-        /// 值的种类，本系统内部标识，如Number
+        /// 值的种类，本系统内部标识，如Number，String
         /// </summary>
-        public string Kind { get => kind; set => kind = value; }
+        public string Kind { get; set; }
+
+        /// <summary>
+        /// 标签（"String=>Void|Void=>String"）
+        /// </summary>
+        public string Sign { get; set; }
+
+        public static VarData New (double o)
+        {
+            return new NumberData
+            {
+                Data = o
+            };
+        }
+
+        public static VarData New (string o)
+        {
+            return new StringData
+            {
+                Data = o
+            };
+        }
+
+        /// <summary>
+        /// p.age = 23;
+        /// </summary>
+        /// <param name="args">参数</param>
+        public virtual void Set(object[] args)
+        {
+            throw new NotImplementedException("没有实现");
+        }
+
+        /// <summary>
+        /// var a = p.age;
+        /// </summary>
+        /// <returns></returns>
+        public virtual object[] Get()
+        {
+            throw new NotImplementedException("没有实现");
+        }
+
+        /// <summary>
+        /// var e = p.eat("food");
+        /// </summary>
+        /// <param name="args">参数</param>
+        /// <returns></returns>
+        public virtual object[] Run(object[] args)
+        {
+            Set(args);
+            return Get();
+        }
     }
 
     /// <summary>
-    /// 数字的值描述
+    /// 数值
     /// </summary>
-    public class Number : VarValue
+    public class NumberData : VarData
     {
         /// <summary>
         /// 初始化
         /// </summary>
-        public Number()
+        public NumberData()
         {
-            Kind = "number";
-            Type = typeof(Number);
+            Kind = "Number";
+            Type = typeof(NumberData);
         }
+    }
 
-        public bool _Equals(Number num)
+    /// <summary>
+    /// 字符串
+    /// </summary>
+    public class StringData : VarData
+    {
+        public StringData()
         {
-            return false;
+            Kind = "String";
+            Type = typeof(StringData);
         }
     }
 }
