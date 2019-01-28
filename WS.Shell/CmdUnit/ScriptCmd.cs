@@ -31,6 +31,17 @@ namespace WS.Shell.CmdUnit
                         return 1;
                 }
             }
+            // 创建上下文
+            ScriptContext context = new ScriptContext();
+            context.VarTable.Add(new VarEntry
+            {
+                Name = "print",
+                Raw = "print: String=>Void{[native code]}",
+                Data = new VarData
+                {
+
+                }
+            });
             // 交互执行
             Console.WriteLine("Wagsn Script: 进入交互执行。。。\r\n");
             int code = 1;
@@ -61,10 +72,7 @@ namespace WS.Shell.CmdUnit
                         Console.WriteLine($"< {input}");
                         break;
                 }
-                if (code == 0)
-                {
-                    return 0;
-                }
+                if (code == 0) return 0;
             }
             //RunContext
         }
@@ -86,6 +94,5 @@ namespace WS.Shell.CmdUnit
         /// 变量表
         /// </summary>
         public IList<VarEntry> VarTable { get; set; }
-
     }
 }

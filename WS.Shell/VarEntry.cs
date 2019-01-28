@@ -75,6 +75,12 @@ namespace WS.Shell
         /// </summary>
         public string Sign { get; set; }
 
+        /// <summary>
+        /// 原始代码（定义的代码，如：print: String=>Void{ [native code] }）
+        /// mult: (a: Number, b: Number)=>Number{ c: Number := 0; whiledo(condition: Void=>Bool { return  }, do); }
+        /// </summary>
+        public string Raw { get; set; }
+
         public static VarData New (double o)
         {
             return new NumberData
