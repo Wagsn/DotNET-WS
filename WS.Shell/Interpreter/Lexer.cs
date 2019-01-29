@@ -182,6 +182,7 @@ namespace WS.Shell
                 }
             }
             Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens)}");
+            Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens.Select(t => $"({t.Kind}, {t.Value})"))}");
             return null;
         }
 
@@ -194,7 +195,7 @@ namespace WS.Shell
         {
             var strs = new List<string>();
             // 扫描优先级（标识符>数值字面量>边界符）（暂时只做变量定义表达式（VariableDeclaration:"<id_name>[:<id_name>]:=<num_expr>;"）与数值四则运算表达式（BinaryExpression: "<id|num><[+|-|*|/]><id|num>"））
-            Regex regex = new Regex($@"({IdentifierReg})|({NumericReg})|({PunctuatorPattern})");  // ({IdentifierRegex})|({NumericRegex})
+            Regex regex = new Regex($@"({StringReg})|({IdentifierReg})|({NumericReg})|({PunctuatorPattern})");  // 
             var matches = regex.Matches(source);
             string matchedstr = "";
             foreach (Match match in matches)
@@ -228,7 +229,7 @@ namespace WS.Shell
         /// <summary>
         /// 符号表达式（边界符与运算符）
         /// </summary>
-        private static readonly string PunctuatorPattern = @"(:=)|(=>)|(\r\n)|(\s+)|[\+\-\*/=\{\}\(\)\[\];:,\.]";
+        private static readonly string PunctuatorPattern = @"(:=)|(=>)|(\r\n)|(\s+)|[<>\+\-\*/=\{\}\(\)\[\];:,\.]";
 
         ///// <summary>
         ///// 符号表达式（边界符与运算符）
@@ -243,6 +244,11 @@ namespace WS.Shell
         /// <summary>
         /// 标识表达式
         /// </summary>
-        private static readonly string IdentifierReg = $@"(?<=\s|\b|_)({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*(?=\s|\b)";
+        private static readonly string IdentifierReg = $@"(?<=\s|\b)({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*(?=\s|\b)";
+        
+        /// <summary>
+        /// 字符串字面量
+        /// </summary>
+        private static readonly string StringReg = $@"'[^']*'";
     }
 }

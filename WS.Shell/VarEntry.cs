@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WS.Shell.CmdUnit;
 
 namespace WS.Shell
 {
@@ -33,22 +34,26 @@ namespace WS.Shell
         public string Name { get; set; }
 
         /// <summary>
-        /// 原始数据，声明及定义
-        /// </summary>
-        public string Raw { get; set; }
-
-        /// <summary>
         /// 变量值（包含类型，值，种类）
         /// </summary>
         public VarData Data { get; set; } = new VarData();
+
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public TypeInfo Type { get; set; }
+
+        /// <summary>
+        /// 原始数据，声明及定义
+        /// </summary>
+        public string Raw { get; set; }
     }
 
     /// <summary>
-    /// 变量值的描述，Variable Value | Value Kind
-    /// str:string="hello"  // type = string value = "hello"
-    /// num=163511  // type = var  value = 163511 
+    /// 变量值的描述
+    /// Name，Data，Type，Kind，Sign，Raw，Set，Get，Run
     /// </summary>
-    public class VarData
+    public class VarData : ScriptContext
     {
         /// <summary>
         /// 值名（如函数名）
@@ -63,7 +68,7 @@ namespace WS.Shell
         /// <summary>
         /// 值的类型，C#系统标识
         /// </summary>
-        public Type Type { get; set; }
+        public TypeInfo Type { get; set; }
 
         /// <summary>
         /// 值的种类，本系统内部标识，如Number，String
@@ -73,7 +78,7 @@ namespace WS.Shell
         /// <summary>
         /// 标签（"String=>Void|Void=>String"）
         /// </summary>
-        public string Sign { get; set; }
+        public SignInfo Sign { get; set; }
 
         /// <summary>
         /// 原始代码（定义的代码，如：print: String=>Void{ [native code] }）
@@ -101,7 +106,7 @@ namespace WS.Shell
         /// p.age = 23;
         /// </summary>
         /// <param name="args">参数</param>
-        public virtual void Set(object[] args)
+        public virtual void Set(VarData[] args)
         {
             throw new NotImplementedException("没有实现");
         }
@@ -110,7 +115,7 @@ namespace WS.Shell
         /// var a = p.age;
         /// </summary>
         /// <returns></returns>
-        public virtual object Get()
+        public virtual VarData Get()
         {
             throw new NotImplementedException("没有实现");
         }
@@ -120,10 +125,69 @@ namespace WS.Shell
         /// </summary>
         /// <param name="args">参数</param>
         /// <returns></returns>
-        public virtual object Run(object[] args)
+        public virtual VarData Run(VarData[] args)
         {
             Set(args);
             return Get();
+        }
+    }
+
+    /// <summary>
+    /// 函数实例
+    /// </summary>
+    public class FunData : VarData
+    {
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <param name="caller">调用上下文</param>
+        /// <param name="args">实际参数</param>
+        /// <returns></returns>
+        public VarData Run(VarData caller, VarData[] args)
+        {
+            // 将调用上下文(CallContext.VarTable)和实参保存在函数上下文(VarTable)中
+            // 还有父类上下文(BaseContext.VarTable)和外层上下文(OutContext.VarTable)
+            // 局部上下文(LocalContext.VarTable)
+
+            return null;
+        }
+
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <param name="args">实际参数</param>
+        /// <returns></returns>
+        public override VarData Run(VarData[] args)
+        {
+            // 变量表-添加形参（从类型信息中获取形参信息：）
+            VarTable.Add(new VarEntry
+            {
+                Data = new VarData
+                {
+
+                }
+            });
+            // 变量表-保存实参
+            VarTable.Add(new VarEntry
+            {
+                Name = "argumnets",
+                //Raw = "argumnets",
+                Data = new VarData
+                {
+                    Sign = new SignInfo
+                    {
+                        IsUnit = true,
+                        Name = "List<Object>"
+                    }
+                }
+            });
+            // 计算
+
+            // 返回值
+            return new VarData
+            {
+
+            };
         }
     }
 
@@ -138,7 +202,7 @@ namespace WS.Shell
         public NumberData()
         {
             Kind = "Number";
-            Type = typeof(NumberData);
+            //Type = typeof(NumberData);
         }
     }
 
@@ -150,7 +214,7 @@ namespace WS.Shell
         public StringData()
         {
             Kind = "String";
-            Type = typeof(StringData);
+            //Type = typeof(StringData);
         }
     }
 
@@ -213,6 +277,11 @@ namespace WS.Shell
     /// </summary>
     public class SignInfo
     {
+        /// <summary>
+        /// 名称（如："String=>Void"）
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// 输入签名
         /// </summary>

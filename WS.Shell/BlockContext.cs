@@ -461,7 +461,7 @@ namespace WS.Shell
             // 缓存参数
             VarMap.Set("arguments", new VarData
             {
-                Type = values.GetType(),
+                //Type = values.GetType(),
                 Kind = "Array[Unit]",
                 Data = values
             });
@@ -488,7 +488,7 @@ namespace WS.Shell
             {
                 Data = new VarData
                 {
-                    Type = "string".GetType(),
+                    //Type = "string".GetType(),
                     Data = "string"
                 }
             };

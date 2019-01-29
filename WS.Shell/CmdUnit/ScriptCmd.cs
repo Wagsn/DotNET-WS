@@ -40,10 +40,21 @@ namespace WS.Shell.CmdUnit
                     new VarEntry
                     {
                         Name = "print",
-                        Raw = "print: String=>Void{ [native code] }",
+                        Raw = "print: String => Void{ [native code] }",
                         Data = new VarData
                         {
 
+                        }
+                    },
+                    new VarEntry
+                    {
+                        // 对象名
+                        Name = "import",
+                        Raw = "import: String => Object { [native code] }",
+                        // 对象值
+                        Data = new VarData
+                        {
+                            
                         }
                     }
                 }
@@ -51,15 +62,21 @@ namespace WS.Shell.CmdUnit
             // 交互执行
             Console.WriteLine("Wagsn Script: 进入交互执行。。。\r\n");
             int code = 1;
+            string readLine =null;
             while (true)
             {
                 Console.Write("> ");
-                var readLine = Console.ReadLine();
+                readLine = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(readLine))
                 {
                     continue;
                 }
                 Lexer.Lexing(readLine);
+                // test:= import('./input/test.txt');
+                // filestr = fs.read('./input/test.txt');
+                // test2 := compiler.compile(filestr);
+                // tokens 
+                // print('161615');
                 // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
                 //Lexer.Scanning(readLine);
                 //Console.WriteLine();
@@ -120,5 +137,10 @@ namespace WS.Shell.CmdUnit
         /// 变量表
         /// </summary>
         public IList<VarEntry> VarTable { get; set; }
+
+        public ScriptContext()
+        {
+            VarTable = new List<VarEntry>();
+        }
     }
 }

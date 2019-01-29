@@ -90,21 +90,21 @@ namespace WS.Shell.CmdUnit
                 if (MatchNumber(valueRaw, out double dbval))
                 {
                     entry.Data.Data = dbval;
-                    entry.Data.Type = typeof(double);
+                    //entry.Data.Type = typeof(double);
                     entry.Data.Kind = "number";
                 }
                 // 匹配布尔
                 else if (MatchBoolean(valueRaw, out bool blval))
                 {
                     entry.Data.Data = blval;
-                    entry.Data.Type = typeof(bool);
+                    //entry.Data.Type = typeof(bool);
                     entry.Data.Kind = "boolean";
                 }
                 // 其它作字符串处理
                 else
                 {
                     entry.Data.Data = valueRaw;
-                    entry.Data.Type = typeof(string);
+                    //entry.Data.Type = typeof(string);
                     entry.Data.Kind = "string";
                 }
                 return 0;
