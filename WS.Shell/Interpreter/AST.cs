@@ -110,15 +110,4 @@ namespace WS.Shell
             Type = "Identifier";
         }
     }
-
-    /// <summary>
-    /// 在源代码中的范围
-    /// </summary>
-    public class Range
-    {
-        public int start =-1;
-        public int end =-1;
-
-        public Location loc;
-    }
 }

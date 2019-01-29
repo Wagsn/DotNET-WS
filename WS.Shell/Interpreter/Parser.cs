@@ -30,9 +30,9 @@ namespace WS.Shell
         /// </summary>
         /// <param name="tokens">单词流</param>
         /// <returns></returns>
-        public AST Parse (Token[] tokens)
+        public AST Parse (List<Token> tokens)
         {
-            for(int i=0; i< tokens.Length; i++)
+            for(int i=0; i< tokens.Count; i++)
             {
                 
             }

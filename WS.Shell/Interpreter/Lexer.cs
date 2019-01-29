@@ -16,7 +16,9 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WS.Shell
 {
@@ -28,98 +30,111 @@ namespace WS.Shell
         /// <summary>
         /// Lexing Lexical(词汇)
         /// </summary>
-        /// <param name="sourceCode">源代码文本</param>
-        /// <returns></returns>
-        public static Token[] Lexing(string sourceCode)
+        /// <param name="sourceCode">源代码字符串</param>
+        /// <returns>记号流</returns>
+        public static List<Token> Lexing(string sourceCode)
         {
-            // 引号开始
-            int quotationSstart = -1;
-            int letterStart = -1;
-            //int spaceStart = -1;
-            var trimCode = sourceCode;
-            List<Token> tokens = new List<Token>();
-            for (int i = 0; i < trimCode.Length; i++)
-            {
-                // 遇到引号
-                if (trimCode[i] == '"')
-                {
-                    // 开始引号
-                    if (quotationSstart == -1)
-                    {
-                        quotationSstart = i;
-                    }
-                    // 结束引号
-                    else
-                    {
-                        Token token = new Token
-                        {
-                            Type = "String",
-                            Value = trimCode.Substring(quotationSstart, i - quotationSstart),
-                            Range = new int[2] { quotationSstart, i }
-                        };
-                        tokens.Add(token);
-                        quotationSstart = -1;
-                    }
-                }
-                // 遇到制表符及空格
-                else if (trimCode[i] == ' ' || trimCode[i] == '\t' || trimCode[i] == '\n' || trimCode[i] == '\r')
-                {
-                    // 引号未开始
-                    if (quotationSstart == -1)
-                    {
-                        // 字母结束
-                        if (letterStart != -1)
-                        {
-                            Token token = new Token
-                            {
-                                Type = "Identifier",
-                                Value = trimCode.Substring(letterStart, i - letterStart - 1),
-                                Range = new int[2] { letterStart, i - 1 }
-                            };
-                            tokens.Add(token);
-                            letterStart = -1;
-                        }
-                    }
-                    // 引号已开始
-                    else
-                    {
-                        continue;
-                    }
-                }
-                // 遇到字母
-                else if (trimCode[i] >= 'a' && trimCode[i] <= 'Z')
-                {
-                    // 引号未开始
-                    if (quotationSstart == -1)
-                    {
-                        if (letterStart == -1)
-                        {
-                            letterStart = i;
-                        }
-                    }
-                    // 引号已开始
-                    else
-                    {
-                        continue;
-                    }
-                }
-                // 不能包含其它字符
-                else
-                {
-                    throw new Exception("源代码不能包含其它字符");
-                }
-            }
-            return tokens.ToArray();
+            return Lexing(Scanning(sourceCode));
         }
 
-        public static Token[] Scanner(string source)
+        /// <summary>
+        /// 词法分析
+        /// 通过预处理数据输出记号流
+        /// </summary>
+        /// <param name="predata">预处理数据</param>
+        /// <returns></returns>
+        public static List<Token> Lexing(string[] predata)
         {
+            var tokens = new List<Token>();
+            // 行列的改变和\n有关
+            var currRow = 0;
+            var currCol = 0;
+            var currPos = 0;
+            foreach(var lexeme in predata)
+            {
+                // 符号或者空格
+                if (PunctuatorRegex.IsMatch(lexeme))
+                {
+                    tokens.Add(new Token
+                    {
+                        Type = "Punctuator",
+                        Value = lexeme,
+                        Loc = new Location
+                        {
+                            Start = new Position {},
+                            End =  new Position {},
+                            Range = new Range
+                            {
+                                Start = currPos,
+                                End = currPos+lexeme.Length
+                            }
+                        }
+                    });
+                    currPos += lexeme.Length;
+                }
+
+            }
             return null;
         }
 
+        /// <summary>
+        /// 利用正则表达式生成预处理数据
+        /// </summary>
+        /// <param name="source">源代码</param>
+        /// <returns></returns>
+        public static string[] Scanning(string source)
+        {
+            //Console.WriteLine("输入字符串：" + source);
+            var strs = new List<string>();
+            // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
+            // source.Length: 139, matchedstr.Length: 139
+            // 扫描优先级（标识符>数值字面量>边界符）（暂时只做变量定义表达式（VariableDeclaration:"<id_name>[:<id_name>]:=<num_expr>;"）与数值四则运算表达式（BinaryExpression: "<id|num><[+|-|*|/]><id|num>"））
+            Regex regex = new Regex($@"({IdentifierReg})|({NumericReg})|({PunctuatorPattern})");  // ({IdentifierRegex})|({NumericRegex})
+            var matches = regex.Matches(source);
+            //string matchedstr = "";
+            foreach(Match match in matches)
+            {
+                strs.Add(match.Value);
+                //matchedstr += match.Value;
+            }
+            //Console.WriteLine($"source.Length: {source.Length}, matchedstr.Length: {matchedstr.Length}\r\n{JsonUtil.ToJson(strs)}");
+            return strs.ToArray();
+        }
+
+        /// <summary>
+        /// 总表达式
+        /// </summary>
+        private static readonly string TotalRegex = $@"({IdentifierReg})|({NumericReg})";
+
+        /// <summary>
+        /// 英文字符表达式
+        /// </summary>
         private static readonly string LetterRegex = @"[a-zA-Z]";
+
+        /// <summary>
+        /// 数字字符表达式
+        /// </summary>
         private static readonly string DigitRegex = @"[0-9]";  // \d
-        private static readonly string IdentifierRegex = $"{LetterRegex}({DigitRegex}|{LetterRegex})*";
+
+        /// <summary>
+        /// 符号表达式（边界符与运算符）
+        /// </summary>
+        private static readonly string PunctuatorPattern = @"(:=)|(=>)|[\+-\*/=\{\}\(\);:,\s\.]";
+
+        /// <summary>
+        /// 符号表达式（边界符与运算符）
+        /// </summary>
+        private static readonly Regex PunctuatorRegex = new Regex(PunctuatorPattern);
+
+        /// <summary>
+        /// 数字表达式
+        /// </summary>
+        private static readonly string NumericReg = $@"(?<=\s|\b){DigitRegex}+(?=\s|\b)";
+
+        /// <summary>
+        /// 标识表达式
+        /// </summary>
+        private static readonly string IdentifierReg = $@"(?<=\s|\b){LetterRegex}({DigitRegex}|{LetterRegex})*(?=\s|\b)";
         
         /// <summary>
         /// 预处理，将字符串拆分为最小表示单元

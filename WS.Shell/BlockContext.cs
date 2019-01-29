@@ -245,9 +245,9 @@ namespace WS.Shell
                 // 在这里简单读取Print函数 print "hello world"
                 string code = VarMap.Get("source").Data.ToString();
 
-                Token[] tokenArr = Lexer.Lexing(code);
+                List<Token> tokenArr = Lexer.Lexing(code);
 
-                for (int i=0; i<tokenArr.Length; i++)
+                for (int i=0; i<tokenArr.Count; i++)
                 {
                     if(tokenArr[i].Type == "String")
                     {

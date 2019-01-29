@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WS.Text;
 
 namespace WS.Shell.CmdUnit
 {
@@ -32,29 +33,49 @@ namespace WS.Shell.CmdUnit
                 }
             }
             // 创建上下文
-            ScriptContext context = new ScriptContext();
-            context.VarTable.Add(new VarEntry
+            ScriptContext context = new ScriptContext
             {
-                Name = "print",
-                Raw = "print: String=>Void{[native code]}",
-                Data = new VarData
+                VarTable = new List<VarEntry>
                 {
+                    new VarEntry
+                    {
+                        Name = "print",
+                        Raw = "print: String=>Void{ [native code] }",
+                        Data = new VarData
+                        {
 
+                        }
+                    }
                 }
-            });
+            };
             // 交互执行
             Console.WriteLine("Wagsn Script: 进入交互执行。。。\r\n");
             int code = 1;
             while (true)
             {
                 Console.Write("> ");
-                var input = Console.ReadLine().Trim().Trim(';');
+                var readLine = Console.ReadLine();
+                // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
+                Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(readLine)));
+                var input = readLine.Trim().Trim(';');
                 if (string.IsNullOrWhiteSpace(input))
                 {
                     continue;
                 }
                 switch (input)
                 {
+                    case "testScanning()":
+                        var filePath = "./input/test.txt";
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            var fileStr = System.IO.File.ReadAllText(filePath);
+                            Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
+                        }
+                        else
+                        {
+                            Console.WriteLine("文件不存在：" + filePath);
+                        }
+                        break;
                     case "clear()":
                         Console.Clear();
                         break;

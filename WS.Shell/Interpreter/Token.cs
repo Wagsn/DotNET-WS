@@ -26,42 +26,19 @@ namespace WS.Shell
     public class Token
     {
         /// <summary>
-        /// 类型(描述语法树相关的类型)（Keyword：关键字、Identifier：标识符、Punctuator：符号(界符，运算符)，符号表、Numeric：数字，Literal：字面量, String Boolean Null）
+        /// 类型(描述语法树相关的类型)（Keyword：关键字、Identifier：标识符、Punctuator：符号(界符，如："}"，运算符，如："+")，符号表、Numeric：数字，Literal：字面量（String：字符串，Boolean：布尔，None：空））
         /// </summary>
         public string Type { get; set; }
 
         /// <summary>
-        /// 值（文本）
+        /// 值（文本，如："=", "1236", "||", "\"name\""）
         /// </summary>
         public string Value { get; set; }
-
-        private int[] range = new int[2];
 
         /// <summary>
         /// 所在范围 index-base range [start: int, end: int]
         /// </summary>
-        public int[] Range
-        {
-            get
-            {
-                return range;
-            }
-            set
-            {
-                if (value.Length != 2)
-                {
-                    throw new ArgumentException("参数错误");
-                }
-                else
-                {
-                    range = value;
-                }
-            }  
-        }
-
-        // Line and column-based  Location(start: Position(line: int, column: int), end: Position(line: int, column: int))
-
-        public readonly Location loc = new Location();
+        public Location Loc { get; set; }
     }
 
     /// <summary>
@@ -69,8 +46,36 @@ namespace WS.Shell
     /// </summary>
     public class Location
     {
-        public Position start;
-        public Position end;
+        /// <summary>
+        /// 开始位置
+        /// </summary>
+        public Position Start { get; set; }
+
+        /// <summary>
+        /// 结束位置
+        /// </summary>
+        public Position End { get; set; }
+
+        /// <summary>
+        /// 字符流范围
+        /// </summary>
+        public Range Range { get; set; }
+    }
+
+    /// <summary>
+    /// 在源代码中的范围
+    /// </summary>
+    public class Range
+    {
+        /// <summary>
+        /// 源代码字符串流开始索引
+        /// </summary>
+        public int Start { get; set; }
+
+        /// <summary>
+        /// 源代码字符串流结束索引
+        /// </summary>
+        public int End { get; set; }
     }
 
     /// <summary>

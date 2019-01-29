@@ -110,7 +110,7 @@ namespace WS.Shell
         /// var a = p.age;
         /// </summary>
         /// <returns></returns>
-        public virtual object[] Get()
+        public virtual object Get()
         {
             throw new NotImplementedException("没有实现");
         }
@@ -120,7 +120,7 @@ namespace WS.Shell
         /// </summary>
         /// <param name="args">参数</param>
         /// <returns></returns>
-        public virtual object[] Run(object[] args)
+        public virtual object Run(object[] args)
         {
             Set(args);
             return Get();
@@ -153,4 +153,121 @@ namespace WS.Shell
             Type = typeof(StringData);
         }
     }
+
+    /// <summary>
+    /// 类型信息
+    /// Person: Object {
+    ///     Address: Object {
+    ///         // address = "Hb Village, Hb Town, Kx County";
+    ///         // setter of Address.
+    ///         set: (val:String)=>Void {
+    ///             // 切割字符串,从小到大, Hb Village, Hb Town, Kx County
+    ///             strs: List<string> := val.split(",");
+    ///             village:= strs[0].split(" ")[0];
+    ///             town:= strs[2].split(" ")[0];
+    ///             county:= strs[4].split(" ")[0];
+    ///         };
+    ///         // getter of Address.
+    ///         get: Void=>String {
+    ///             return $"{village} Village, {town} Town, {county} County";
+    ///         }
+    ///         county: String;  // 县
+    ///         town: String;  // 镇
+    ///         village: String;  // 村
+    ///     };
+    ///     name: String := "wagsn";
+    ///     age: Number := 23;
+    ///     address: Address := Address(){
+    ///         county:= "kx",
+    ///         town:= "hb",
+    ///         village:= "hb"
+    ///     };
+    /// };
+    /// </summary>
+    public class TypeInfo
+    {
+        /// <summary>
+        /// 类型名(Person)
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 类型签名（函数签名为类型名组装而成，如：String=>Void）(Object)
+        /// </summary>
+        public string Sign { get; set; }
+
+        /// <summary>
+        /// 基类类型信息
+        /// </summary>
+        public TypeInfo BaseType { get; set; }
+        
+        /// <summary>
+        /// 成员类型信息
+        /// </summary>
+        // getters setters menbers
+        public List<TypeInfo> Members { get; set; }
+    }
+
+    /// <summary>
+    /// 签名信息
+    /// </summary>
+    public class SignInfo
+    {
+        /// <summary>
+        /// 输入签名
+        /// </summary>
+        public SignInfo Input { get; set; }
+
+        /// <summary>
+        /// 输出签名
+        /// </summary>
+        public SignInfo OutPut { get; set; }
+
+        /// <summary>
+        /// 签名类型
+        /// </summary>
+        public TypeInfo UnitType { get; set; }
+
+        /// <summary>
+        /// 是否原子（原子类型的输入与输出一致）
+        /// </summary>
+        public bool IsUnit { get; set; }
+    }
+
+    /// <summary>
+    /// 实例对象信息
+    /// </summary>
+    public class ObjectInfo
+    {
+
+    }
+
+    /// <summary>
+    /// 对象类型实例
+    /// </summary>
+    public class ObjectType
+    {
+
+    }
+
+    /// <summary>
+    /// 表达式
+    /// </summary>
+    public class Expr
+    {
+
+    } 
+
+    /// <summary>
+    /// 语句体
+    /// </summary>
+    public class Stat
+    {
+
+    }
+
+    /// <summary>
+    /// 执行块
+    /// </summary>
+    public class Prog { }
 }
