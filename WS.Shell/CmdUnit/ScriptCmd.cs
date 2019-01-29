@@ -55,21 +55,26 @@ namespace WS.Shell.CmdUnit
             {
                 Console.Write("> ");
                 var readLine = Console.ReadLine();
-                // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
-                Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(readLine)));
-                var input = readLine.Trim().Trim(';');
-                if (string.IsNullOrWhiteSpace(input))
+                if (string.IsNullOrWhiteSpace(readLine))
                 {
                     continue;
                 }
-                switch (input)
+                Lexer.Lexing(readLine);
+                // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
+                //Lexer.Scanning(readLine);
+                //Console.WriteLine();
+                switch (readLine.Trim().Trim(';'))
                 {
                     case "testScanning()":
-                        var filePath = "./input/test.txt";
+                        var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "input", "test.txt");
                         if (System.IO.File.Exists(filePath))
                         {
                             var fileStr = System.IO.File.ReadAllText(filePath);
-                            Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
+                            Console.WriteLine(fileStr);
+                            Console.WriteLine();
+                            //Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
+                            //Lexer.Scanning(fileStr);
+                            Lexer.Lexing(fileStr);
                         }
                         else
                         {
@@ -90,7 +95,7 @@ namespace WS.Shell.CmdUnit
                         code = 0;
                         break;
                     default:
-                        Console.WriteLine($"< {input}");
+                        Console.WriteLine($"< {readLine}");
                         break;
                 }
                 if (code == 0) return 0;

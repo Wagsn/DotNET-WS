@@ -33,6 +33,7 @@ namespace WS.Shell
         /// <returns></returns>
         public static App New(string[] args)
         {
+            Console.WriteLine($"args:\r\n{JsonUtil.ToJson(args)}");
             return new App();
         }
 
@@ -89,25 +90,34 @@ namespace WS.Shell
                 nextWords = nextLine.Split(" ");
                 cmd = nextWords[0];
                 arg = nextLine.Substring(cmd.Length).Trim();
-                switch (cmd)
+                try
                 {
-                    case "":
-                        break;
-                    case "exit":
-                        return 0;
-                    case "clearlast":
-                        Console.SetCursorPosition(0, Console.CursorSize - 1);
-                        break;
-                    case "test_split":
-                        Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonUtil.ToJson("hello world".Split(" "))); // ["hello","world"]
-                        Console.WriteLine("String.Split \"\" with \" \": " + JsonUtil.ToJson("".Split(" ")));  // [""]
-                        break;
-                    // 
-                    case "exception":
-                        throw new Exception("test exception");
-                    default:
-                        AppContext.cmdManager.Run(cmd, arg);
-                        break;
+                    switch (cmd)
+                    {
+                        case "":
+                            break;
+                        case "exit":
+                            return 0;
+                        case "clearlast":
+                            Console.SetCursorPosition(0, Console.CursorSize - 1);
+                            break;
+                        case "test_split":
+                            Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonUtil.ToJson("hello world".Split(" "))); // ["hello","world"]
+                            Console.WriteLine("String.Split \"\" with \" \": " + JsonUtil.ToJson("".Split(" ")));  // [""]
+                            break;
+                        case "exception":
+                            throw new Exception("test exception");
+                        default:
+                            AppContext.cmdManager.Run(cmd, arg);
+                            break;
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"命令执行失败:\r\n{e}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
                 }
                 Console.Write($"WS {AppContext.CurrentDirectory}> ");
             }

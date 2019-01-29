@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using WS.Text;
 
 namespace WS.Shell
 {
@@ -30,11 +31,11 @@ namespace WS.Shell
         /// <summary>
         /// Lexing Lexical(词汇)
         /// </summary>
-        /// <param name="sourceCode">源代码字符串</param>
+        /// <param name="source">源代码字符串</param>
         /// <returns>记号流</returns>
-        public static List<Token> Lexing(string sourceCode)
+        public static List<Token> Lexing(string source)
         {
-            return Lexing(Scanning(sourceCode));
+            return Lexing(Scanning(source));
         }
 
         /// <summary>
@@ -50,30 +51,137 @@ namespace WS.Shell
             var currRow = 0;
             var currCol = 0;
             var currPos = 0;
-            foreach(var lexeme in predata)
+            Regex IdentifierRegex = new Regex($"({IdentifierReg})");
+            Regex NumericRegex = new Regex($"({NumericReg})");
+            Regex PunctuatorRegex = new Regex($"({PunctuatorPattern})");
+            foreach (var lexeme in predata)
             {
-                // 符号或者空格
-                if (PunctuatorRegex.IsMatch(lexeme))
+                if (IdentifierRegex.IsMatch(lexeme))
                 {
                     tokens.Add(new Token
                     {
-                        Type = "Punctuator",
+                        Kind = "Identifier",
                         Value = lexeme,
                         Loc = new Location
                         {
-                            Start = new Position {},
-                            End =  new Position {},
+                            Start = new Position
+                            {
+                                line = currRow,
+                                column = currCol
+                            },
+                            End = new Position
+                            {
+                                line = currRow,
+                                column = currCol + lexeme.Length
+                            },
                             Range = new Range
                             {
                                 Start = currPos,
-                                End = currPos+lexeme.Length
+                                End = currPos + lexeme.Length
                             }
                         }
                     });
                     currPos += lexeme.Length;
+                    currCol += lexeme.Length;
                 }
-
+                else if (NumericRegex.IsMatch(lexeme))
+                {
+                    tokens.Add(new Token
+                    {
+                        Kind = "Numeric",
+                        Value = lexeme,
+                        Loc = new Location
+                        {
+                            Start = new Position
+                            {
+                                line = currRow,
+                                column = currCol
+                            },
+                            End = new Position
+                            {
+                                line = currRow,
+                                column = currCol + lexeme.Length
+                            },
+                            Range = new Range
+                            {
+                                Start = currPos,
+                                End = currPos + lexeme.Length
+                            }
+                        }
+                    });
+                    currPos += lexeme.Length;
+                    currCol += lexeme.Length;
+                }
+                //符号或者空格
+                else if (PunctuatorRegex.IsMatch(lexeme))
+                {
+                    // 换行
+                    if (lexeme == "\r\n")
+                    {
+                        //tokens.Add(new Token
+                        //{
+                        //    Kind = "Punctuator",
+                        //    Value = lexeme,
+                        //    Loc = new Location
+                        //    {
+                        //        Start = new Position
+                        //        {
+                        //            line = currRow,
+                        //            column = currCol
+                        //        },
+                        //        End = new Position
+                        //        {
+                        //            line = currRow,
+                        //            column = currCol + lexeme.Length
+                        //        },
+                        //        Range = new Range
+                        //        {
+                        //            Start = currPos,
+                        //            End = currPos + lexeme.Length
+                        //        }
+                        //    }
+                        //});
+                        currPos += lexeme.Length;
+                        currRow++;
+                        currCol = 0;
+                        continue;
+                    }
+                    // 空格及制表符等不可见字符
+                    if (string.IsNullOrWhiteSpace(lexeme))
+                    {
+                        currPos += lexeme.Length;
+                        currCol += lexeme.Length;
+                        continue;
+                    }
+                    // 符号
+                    tokens.Add(new Token
+                    {
+                        Kind = "Punctuator",
+                        Value = lexeme,
+                        Loc = new Location
+                        {
+                            Start = new Position
+                            {
+                                line = currRow,
+                                column = currCol
+                            },
+                            End = new Position
+                            {
+                                line = currRow,
+                                column = currCol + lexeme.Length
+                            },
+                            Range = new Range
+                            {
+                                Start = currPos,
+                                End = currPos + lexeme.Length
+                            }
+                        }
+                    });
+                    currPos += lexeme.Length;
+                    currCol += lexeme.Length;
+                }
             }
+            Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens)}");
             return null;
         }
 
@@ -84,20 +192,21 @@ namespace WS.Shell
         /// <returns></returns>
         public static string[] Scanning(string source)
         {
-            //Console.WriteLine("输入字符串：" + source);
             var strs = new List<string>();
-            // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
-            // source.Length: 139, matchedstr.Length: 139
             // 扫描优先级（标识符>数值字面量>边界符）（暂时只做变量定义表达式（VariableDeclaration:"<id_name>[:<id_name>]:=<num_expr>;"）与数值四则运算表达式（BinaryExpression: "<id|num><[+|-|*|/]><id|num>"））
             Regex regex = new Regex($@"({IdentifierReg})|({NumericReg})|({PunctuatorPattern})");  // ({IdentifierRegex})|({NumericRegex})
             var matches = regex.Matches(source);
-            //string matchedstr = "";
-            foreach(Match match in matches)
+            string matchedstr = "";
+            foreach (Match match in matches)
             {
                 strs.Add(match.Value);
-                //matchedstr += match.Value;
+                matchedstr += match.Value;
             }
-            //Console.WriteLine($"source.Length: {source.Length}, matchedstr.Length: {matchedstr.Length}\r\n{JsonUtil.ToJson(strs)}");
+            Console.WriteLine($"Lexemes:\r\n{JsonUtil.ToJson(strs)}");
+            if (source.Length != matchedstr.Length)
+            {
+                throw new Exception($"脚本解释器-词法分析器-预处理失败\r\nsource.Length: {source.Length}, matchedstr.Length: {matchedstr.Length}\r\nInput:\r\n{source}\r\nReverse:\r\n{matchedstr}");
+            }
             return strs.ToArray();
         }
 
@@ -119,31 +228,21 @@ namespace WS.Shell
         /// <summary>
         /// 符号表达式（边界符与运算符）
         /// </summary>
-        private static readonly string PunctuatorPattern = @"(:=)|(=>)|[\+-\*/=\{\}\(\);:,\s\.]";
+        private static readonly string PunctuatorPattern = @"(:=)|(=>)|(\r\n)|(\s+)|[\+\-\*/=\{\}\(\)\[\];:,\.]";
+
+        ///// <summary>
+        ///// 符号表达式（边界符与运算符）
+        ///// </summary>
+        //private static readonly Regex PunctuatorRegex = new Regex($"({PunctuatorPattern})");
 
         /// <summary>
-        /// 符号表达式（边界符与运算符）
+        /// 数字表达式(非负浮点数)
         /// </summary>
-        private static readonly Regex PunctuatorRegex = new Regex(PunctuatorPattern);
-
-        /// <summary>
-        /// 数字表达式
-        /// </summary>
-        private static readonly string NumericReg = $@"(?<=\s|\b){DigitRegex}+(?=\s|\b)";
+        private static readonly string NumericReg = $@"(?<=\s|\b)(\d+)(\.\d+)?(?=\s|\b)";
 
         /// <summary>
         /// 标识表达式
         /// </summary>
-        private static readonly string IdentifierReg = $@"(?<=\s|\b){LetterRegex}({DigitRegex}|{LetterRegex})*(?=\s|\b)";
-        
-        /// <summary>
-        /// 预处理，将字符串拆分为最小表示单元
-        /// (in: "var num: int =  46516"->out: ["var", " ", "num", ":", " ", "int", " ", "=", "  ", "46516"])
-        /// (in: "var num/* note*/ :int;"->out: ["var", " ", "num", "/* note*/", " ", ":", "int", ";"])
-        /// </summary>
-        private string[] Pretreatment(string src)
-        {
-            return null;
-        }
+        private static readonly string IdentifierReg = $@"(?<=\s|\b|_)({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*(?=\s|\b)";
     }
 }

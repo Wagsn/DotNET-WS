@@ -249,11 +249,11 @@ namespace WS.Shell
 
                 for (int i=0; i<tokenArr.Count; i++)
                 {
-                    if(tokenArr[i].Type == "String")
+                    if(tokenArr[i].Kind == "String")
                     {
                         
                     }
-                    else if(tokenArr[i].Type == "Identifier")
+                    else if(tokenArr[i].Kind == "Identifier")
                     {
 
                     }
