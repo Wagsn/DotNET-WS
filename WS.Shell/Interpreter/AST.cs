@@ -47,14 +47,14 @@ namespace WS.Shell
         //public string Kind { get; set; }
 
         /// <summary>
-        /// 节点类型（语法树相关的）
+        /// 节点类型（语法树相关的，如：Program）
         /// </summary>
         public string Type { get; set; }
 
         /// <summary>
-        /// 在源代码中的位置，共享的对象
+        /// 源代码位置信息
         /// </summary>
-        public Range Range { get; set; }
+        public Location Location { get; set; }
 
         /// <summary>
         /// 访问节点，
@@ -67,11 +67,26 @@ namespace WS.Shell
 
         }
 
+        /// <summary>
+        /// 接收一个访问器
+        /// </summary>
+        /// <param name="visitor"></param>
         public void Accept(ASTVisitor visitor)
         {
 
         }
     }
+
+
+    /// <summary>
+    /// 程序节点
+    /// </summary>
+    public class ProgramASTNode
+    {
+
+    }
+
+
 
     /// <summary>
     /// https://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTVisitor.html
