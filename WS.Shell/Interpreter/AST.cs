@@ -81,12 +81,26 @@ namespace WS.Shell
     /// <summary>
     /// 程序节点
     /// </summary>
-    public class ProgramASTNode
+    public class ProgramASTNode : ASTNode
     {
+        public List<ASTNode> Body { get; set; }
 
+        public ProgramASTNode()
+        {
+            Type = "Program";
+        }
     }
 
-
+    public class VariableDeclarator : ASTNode
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public VariableDeclarator()
+        {
+            Type = "VariableDeclarator";
+        }
+    }
 
     /// <summary>
     /// https://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTVisitor.html

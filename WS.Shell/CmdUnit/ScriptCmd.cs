@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WS.Text;
 
@@ -43,7 +44,8 @@ namespace WS.Shell.CmdUnit
                         Raw = "print: String => Void{ [native code] }",
                         Data = new VarData
                         {
-
+                            Name ="print",
+                            
                         }
                     },
                     new VarEntry
@@ -52,10 +54,7 @@ namespace WS.Shell.CmdUnit
                         Name = "import",
                         Raw = "import: String => Object { [native code] }",
                         // 对象值
-                        Data = new VarData
-                        {
-                            
-                        }
+                        Data = new PrintData()
                     }
                 }
             };
@@ -66,23 +65,51 @@ namespace WS.Shell.CmdUnit
             while (true)
             {
                 Console.Write("> ");
+                // load source
                 readLine = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(readLine))
                 {
                     continue;
                 }
-                Lexer.Lexing(readLine);
+                // gen tokens
+                var tokens = Lexer.Lexing(readLine);
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    var token = tokens[i];
+                    switch (token.Type)
+                    {
+                        case "Identifier":
+                            // 如果 在当前上下文存在
+                            if (context.VarTable.Any(v => v.Name == token.Value))
+                            {
+                                // 调用？
+                                if(i+1<tokens.Count && tokens[i + 1].Value == "(")
+                                {
+
+                                }
+                                //context.VarTable.Where(v => v.Name == token.Value).First().Data.Run();
+                            }
+                            // 不存在
+                            else
+                            {
+                                // 声明？类型，变量
+                            }
+
+                            break;
+                        case "Punctuator":
+
+                            break;
+                    }
+                }
+                // gen mainCall
+                //var mainCall = new 
+                // gen 
                 // test:= import('./input/test.txt');
                 // filestr = fs.read('./input/test.txt');
                 // test2 := compiler.compile(filestr);
-                // tokens 
-                // print('161615');
-                // Person : Object { age : Number; getAge : Void => String { return caller.age; } ;  }; p: Person:= Person(){ age:= 152; }; print(p.getAge());
-                //Lexer.Scanning(readLine);
-                //Console.WriteLine();
                 switch (readLine.Trim().Trim(';'))
                 {
-                    case "testScanning()":
+                    case "testLexing()":
                         var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "input", "test.txt");
                         if (System.IO.File.Exists(filePath))
                         {
@@ -91,7 +118,10 @@ namespace WS.Shell.CmdUnit
                             Console.WriteLine();
                             //Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
                             //Lexer.Scanning(fileStr);
-                            Lexer.Lexing(fileStr);
+                            var tokens =Lexer.Lexing(fileStr);
+                            string res = "";
+                            tokens.Where(t => !(t.Type=="Comment"|| t.Type== "WhiteSpace")).ToList().ForEach(t => res += t?.Value);
+                            Console.WriteLine($"No Comment|WhiteSpace Reverse:\r\n{res}");
                         }
                         else
                         {
@@ -125,22 +155,6 @@ namespace WS.Shell.CmdUnit
             Name = "script";
             Desc = "脚本";
             Usage = "script print(\"hello world\")";
-        }
-    }
-
-    /// <summary>
-    /// 脚本上下文
-    /// </summary>
-    public class ScriptContext
-    {
-        /// <summary>
-        /// 变量表
-        /// </summary>
-        public IList<VarEntry> VarTable { get; set; }
-
-        public ScriptContext()
-        {
-            VarTable = new List<VarEntry>();
         }
     }
 }

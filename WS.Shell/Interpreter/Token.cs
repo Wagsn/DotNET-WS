@@ -28,12 +28,22 @@ namespace WS.Shell
         /// <summary>
         /// 类型(描述语法树相关的类型)（Keyword：关键字，保留字、Identifier：标识符、Punctuator：符号(界符，如："}"，运算符，如："+")，符号表、Numeric：数值字面量，Literal：字面量（String：字符串字面量，Boolean：布尔字面量，None：空字面量））
         /// </summary>
-        public string Kind { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
-        /// 值（文本，如："=", "1236", "||", "\"name\""）
+        /// 值（文本，如："=", "1236", "||", "\"name\"", "print"）
         /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// 类型
+        /// ADD + add, SUB - subtract, MUL * multiply, DIV / divide, 
+        /// LCB { left curly bracket, RCB }, 
+        /// LP ( Left parenthesis, RP ), LSB [ left square bracket, RSB ],
+        /// SEM ; semicolon
+        /// ID, UNK Unknown
+        /// </summary>
+        public string Kind { get; set; }
 
         /// <summary>
         /// 所在范围 index-base range [start: int, end: int]
@@ -83,7 +93,19 @@ namespace WS.Shell
     /// </summary>
     public class Position
     {
-        public int line;
-        public int column;
+        /// <summary>
+        /// 所在行，从0开始
+        /// </summary>
+        public int Line { get; set; }
+
+        /// <summary>
+        /// 所在列，从0开始
+        /// </summary>
+        public int Column { get; set; }
+
+        /// <summary>
+        /// 源代码中偏移量，从0开始
+        /// </summary>
+        public int Offset { get; set; }
     }
 }

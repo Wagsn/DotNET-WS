@@ -130,6 +130,11 @@ namespace WS.Shell
             Set(args);
             return Get();
         }
+
+        public static VarData Apply(VarData caller, VarData[] agrs)
+        {
+            return null;
+        }
     }
 
     /// <summary>
