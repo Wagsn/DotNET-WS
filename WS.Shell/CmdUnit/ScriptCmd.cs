@@ -75,6 +75,8 @@ namespace WS.Shell.CmdUnit
                 var tokens = Lexer.Lexing(readLine);
                 for (int i = 0; i < tokens.Count; i++)
                 {
+                    // 如何载入一条语句
+                    // 然后分析语句
                     var token = tokens[i];
                     switch (token.Type)
                     {
@@ -98,6 +100,11 @@ namespace WS.Shell.CmdUnit
                             break;
                         case "Punctuator":
 
+                            break;
+                        case "String":
+
+                            break;
+                        default:
                             break;
                     }
                 }
