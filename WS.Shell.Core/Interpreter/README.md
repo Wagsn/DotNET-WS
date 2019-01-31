@@ -152,8 +152,8 @@ AssExpr = AssignmentExpression =
 	| <ID> <VDOP> (<Expr>|<ID>|<LIT>)
 // 有返回值（Boolean，String，Number，Object等）
 Expr =
-	| ID
 	| LIT
+	| ID
 	| BinExpr
 	| VarDecExpr
 	| EqExpr
@@ -166,4 +166,75 @@ Stmt =
     | (<Expr>)? <SEM>
 Stmts =	Body =
 	| \{ (<Stmt>)* \}
+```
+
+```
+NextExpr(tokens){
+	var currPos = 0
+	currToken = tokens[currPos]
+	exprStack
+	switch currToken.type
+		case ";"
+			var last = exprStack.pop()
+			return last
+		case LIT  // LIT == LitExpr  // 字面量
+			if(!exprStack.empty()){
+				// 是否可以组合
+				if(CanCombine(exprStack.top(), LIT)){
+					var exp = Combine(exprStack.pop(), LIT)
+					exprStack.push(exp)
+				}else{
+					// 不可以组合表示在必须有分号的情况下出现了问题
+				}
+			}else{
+				exprStack.push(LIT)
+			}
+		case ID // 标识符
+			if(!exprStack.empty()){
+				// 是否可以组合
+				if(CanCombine(exprStack.top(), ID)){
+					var exp = Combine(exprStack.pop(), ID)
+					exprStack.push(exp)
+				}else{
+					// 不可以组合表示在必须有分号的情况下出现了问题
+				}
+			}else{
+				exprStack.push(ID)
+			}
+		case "."  // 成员操作符
+			var last = exprStack.Pop()
+			var currExpr = new MemExpr
+			currExpr.object = last
+			currExpr.property = null
+			exprStack.push(currExpr)
+		case "+-*/"  // binary expression
+			var last = exprStack.Pop()
+			var currExpr = new BinExpr
+			currExpr.left = last
+			var next = NextExpr(tokens.tail(currPos+1))
+			currExpr.right = next.expr  // tail 索引及之后
+			currPos += next.count;
+			exprStack.push(currExpr)
+		case "("  // 可能是双子表达式的开头，或者调用表达式，或者函数定义的形式参数
+			if(!exprStack.empty()){
+				if(exprStack.top()==MemExpr||ID||LIT){
+					var currExpr =new CallExpr
+					currExpr.callee = exprStack.pop()
+					currExpr.arguments =null
+				}
+				else if(exprStack.top()==BinExpr){
+					var last = exprStack.top()
+					if(last.right==null){
+						continue;
+					}
+					else{
+					
+					}
+				}
+			}
+			switch exprStack.top()
+				case 
+}
+
+
 ```
