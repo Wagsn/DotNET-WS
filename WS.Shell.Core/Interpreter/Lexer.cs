@@ -53,12 +53,12 @@ namespace WS.Shell
             var currRow = 0;
             var currCol = 0;
             var currPos = 0;
-            Regex IdentifierRegex = new Regex($"({IdentifierPattern})");
+            Regex IdentifierRegex = new Regex($"({IdPattern})");
             Regex NumericRegex = new Regex($"({NumericPattern})");
             Regex PunctuatorRegex = new Regex($"({PunctuatorPattern})");
             Regex StringRegex = new Regex($"({StringPattern})");
             Regex CommentRegex = new Regex($"({CommentPattern})");
-            Regex WhiteSpaceRegex = new Regex($"({WhiteSpacePattern})");
+            Regex WhiteSpaceRegex = new Regex($"(^{WhiteSpacePattern}$)");
             foreach (var lexeme in predata)
             {
                 // 注释 注释语素
@@ -67,6 +67,7 @@ namespace WS.Shell
                     var token = new Token
                     {
                         Type = "Comment",
+                        Kind = "CMT",
                         Value = lexeme
                     };
                     token.Loc = new Location
@@ -116,6 +117,7 @@ namespace WS.Shell
                     var token = new Token
                     {
                         Type = "WhiteSpace",
+                        Kind = "WS",
                         Value = lexeme,
                         Loc = new Location
                         {
@@ -167,6 +169,7 @@ namespace WS.Shell
                     {
                         // 字符串字面量
                         Type = "String",
+                        Kind = "STR",
                         Value = lexeme,
                         Loc = new Location
                         {
@@ -228,6 +231,7 @@ namespace WS.Shell
                     {
                         // 数值字面量
                         Type = "Numeric",
+                        Kind = "NUM",
                         Value = lexeme,
                         Loc = new Location
                         {
@@ -299,8 +303,8 @@ namespace WS.Shell
                     currCol += lexeme.Length;
                 }
             }
-            Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens)}");
-            Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens.Select(t => $"({t.Type}, {t.Value})"))}");
+            //Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens)}");
+            Console.WriteLine($"Tokens:\r\n{JsonUtil.ToJson(tokens.Select(t => new { t.Type, t.Value } ))}");  //$"(type: {t.Type}, value: {t.Value})"
             return tokens;
         }
 
@@ -322,9 +326,9 @@ namespace WS.Shell
                 strs.Add(match.Value);
                 matchedstr += match.Value;
             }
-            Console.WriteLine($"Lexemes:\r\n{JsonUtil.ToJson(strs)}");
             if (source.Length != matchedstr.Length)
-            {
+            {            
+                Console.WriteLine($"Lexemes:\r\n{JsonUtil.ToJson(strs)}");
                 throw new Exception($"脚本解释器-词法分析器-预处理失败\r\nsource.Length: {source.Length}, matchedstr.Length: {matchedstr.Length}\r\nInput:\r\n{source}\r\nReverse:\r\n{matchedstr}");
             }
             return strs.ToArray();
@@ -333,22 +337,22 @@ namespace WS.Shell
         /// <summary>
         /// 总表达式 字符串字面量-注释-空格-数值字面量-符号-标识符
         /// </summary>
-        private static readonly string TotalRegex = @"('.*?')|(/\*(.|\n)*?\*/)|(//.*[\n$])|(\s+)|((?=\s|\b)(\d+)(\.\d+)?(?=\s|\b))|((:=)|(=>)|[<>\+\-\*/=\{\}\(\)\[\];:,\.])|([a-zA-Z][a-zA-Z0-9]*)";
+        public static readonly string TotalRegex = @"('.*?')|(/\*(.|\n)*?\*/)|(//.*[\n$])|(\s+)|((?=\s|\b)(\d+)(\.\d+)?(?=\s|\b))|((:=)|(=>)|[<>\+\-\*/=\{\}\(\)\[\];:,\.])|([a-zA-Z][a-zA-Z0-9]*)";
 
         /// <summary>
         /// 英文字符表达式
         /// </summary>
-        private static readonly string LetterRegex = @"[a-zA-Z]";
+        public static readonly string LetterRegex = @"[a-zA-Z]";
 
         /// <summary>
         /// 数字字符表达式
         /// </summary>
-        private static readonly string DigitRegex = @"[0-9]";  // \d
+        public static readonly string DigitRegex = @"[0-9]";  // \d
 
         /// <summary>
         /// 符号表达式（边界符与运算符）
         /// </summary>
-        private static readonly string PunctuatorPattern = @"(:=)|(=>)|[<>\+\-\*/=\{\}\(\)\[\];:,\.]";
+        public static readonly string PunctuatorPattern = @"(:=)|(=>)|[<>\+\-\*/=\{\}\(\)\[\];:,\.]";
 
         ///// <summary>
         ///// 符号表达式（边界符与运算符）
@@ -358,26 +362,27 @@ namespace WS.Shell
         /// <summary>
         /// 数字表达式(非负浮点数)
         /// </summary>
-        private static readonly string NumericPattern = $@"(?=\s|\b)(\d+)(\.\d+)?(?=\s|\b)";
+        public static readonly string NumericPattern = $@"(?=\s|\b)(\d+)(\.\d+)?(?=\s|\b)";
 
         /// <summary>
-        /// 标识表达式
+        /// 标识表达式 ({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*
+        /// IdentifierPattern
         /// </summary>
-        private static readonly string IdentifierPattern = $@"(?<=\s|\b)({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*(?=\s|\b)";
-        
+        public static readonly string IdPattern = $@"(?<=\s|\b)({LetterRegex}|_)(_|{DigitRegex}|{LetterRegex})*(?=\s|\b)";
+
         /// <summary>
         /// 字符串字面量
         /// </summary>
-        private static readonly string StringPattern = $@"'.*?'";
+        public static readonly string StringPattern = $@"'.*?'";
 
         /// <summary> 
         /// 单行注释 这里没有过滤掉字符串字面量
         /// </summary>
-        private static readonly string CommentPattern = $@"(/\*(.|\n)*?\*/)|(//.*[\n$])";
+        public static readonly string CommentPattern = $@"(/\*(.|\n)*?\*/)|(//.*[\n$])";
 
         /// <summary>
         /// 空格
         /// </summary>
-        private static readonly string WhiteSpacePattern = $@"\s+";
+        public static readonly string WhiteSpacePattern = $@"\s+";
     }
 }

@@ -77,9 +77,8 @@ namespace WS.Shell
         }
     }
 
-
     /// <summary>
-    /// 程序节点
+    /// 程序节点，根节点
     /// </summary>
     public class ProgramASTNode : ASTNode
     {
@@ -91,6 +90,22 @@ namespace WS.Shell
         }
     }
 
+    /// <summary>
+    /// 语句节点
+    /// </summary>
+    public class StatementASTNode : ASTNode
+    {
+
+    }
+
+    /// <summary>
+    /// 表达式节点
+    /// </summary>
+    public class ExpressionASTNode : ASTNode
+    {
+
+    }
+    
     public class VariableDeclarator : ASTNode
     {
         /// <summary>

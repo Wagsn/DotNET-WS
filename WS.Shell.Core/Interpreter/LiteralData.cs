@@ -5,33 +5,32 @@ using System.Text;
 namespace WS.Shell
 {
     /// <summary>
-    /// 空
+    /// 字面量
     /// </summary>
-    public class NoneData : VarData
+    public class LiteralData : VarData
     {
-        public NoneData()
+        public LiteralData()
         {
-            Data = "None";
-            Name = "None";
-            Kind = "None";
-            Raw = "None";
+            Data = "Literal";
+            Name = "Literal";
+            Kind = "Literal";
+            Raw = "Literal";
             IsUnit = true;
         }
 
         public override VarData Get()
         {
-            Console.WriteLine("None can not be set value");
             return this;
         }
 
         public override void Set(VarData[] args)
         {
-            Console.WriteLine("None can not be set value");
+            Console.WriteLine("Literal can not be set value");
         }
 
         public override VarData Run(VarData[] args)
         {
-            Console.WriteLine("None can not be set value");
+            Console.WriteLine("Literal can not be set value");
             return this;
         }
     }

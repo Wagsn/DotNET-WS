@@ -19,21 +19,21 @@ namespace WS.Shell.CmdUnit
         /// <returns></returns>
         public override int Excute(string arg)
         {
+            // 解析参数
             if (!string.IsNullOrWhiteSpace(arg))
             {
-                var funName = "";
-                //var funArg = "";
+                var funName = arg.Trim(' ').Trim(';');
                 switch (funName)
                 {
                     case "exit()":
-                    case "exit();":
+                        Console.WriteLine("离开交互执行");
                         return 0;
                     default:
-                        Console.WriteLine($"输入：{arg}");
+                        Console.WriteLine($"输入参数：{arg.Trim(' ')}");
                         return 1;
                 }
             }
-            // 创建上下文
+            // 创建价平户执行上下文
             ScriptContext context = new ScriptContext
             {
                 VarTable = new List<VarEntry>
@@ -42,11 +42,7 @@ namespace WS.Shell.CmdUnit
                     {
                         Name = "print",
                         Raw = "print: String => Void{ [native code] }",
-                        Data = new VarData
-                        {
-                            Name ="print",
-                            
-                        }
+                        Data = new PrintData()
                     },
                     new VarEntry
                     {
@@ -55,13 +51,22 @@ namespace WS.Shell.CmdUnit
                         Raw = "import: String => Object { [native code] }",
                         // 对象值
                         Data = new PrintData()
+                    },
+                    new VarEntry
+                    {
+                        Name ="load",
+                        Raw = "load: String=>String { [native code] }",
+                        Data = new LoadData()
                     }
                 }
             };
             // 交互执行
             Console.WriteLine("Wagsn Script: 进入交互执行。。。\r\n");
-            int code = 1;
+            // 退出码
+            int exitCode = -1;
+            // 读入代码
             string readLine =null;
+            // 进入交互循环
             while (true)
             {
                 Console.Write("> ");
@@ -73,44 +78,86 @@ namespace WS.Shell.CmdUnit
                 }
                 // gen tokens
                 var tokens = Lexer.Lexing(readLine).Where(t => !(t.Type == "Comment" || t.Type == "WhiteSpace")).ToList();
-
+                // 语句开始 遇到SEM变为true
+                bool stmtStartFlag = true;
                 // statement 语句拆分
+                List<List<Token>> stmts = new List<List<Token>>();
+                // 当前语句
+                List<Token> currStmt = new List<Token>();
+                VarData last = new NoneData();
+                // 位置暂存栈
+                Stack<int> stashStack = new Stack<int>();
+                //stashStack.Peek();
+                // 当前位置
+                int currPos = -1;
+                // 根节点
 
                 for (int i = 0; i < tokens.Count; i++)
                 {
-                    // 如何载入一条语句
-                    // 然后分析语句
-                    var token = tokens[i];
-                    switch (token.Type)
+
+                    // 得到语句 方式一：用一个数组来保存（不支持嵌套）
+                    //switch (tokens[i].Type)
+                    //{
+
+                    //}
+                    // 如何载入一条语句 暂时只有单条语句(赋值语句 num:= 123.456;, 函数调用语句 print('wagssn');)
+                    // 单函数无参数调用语句
+
+                    // 单函数单参数调用语句（<ID> <LP> <LIT> <RP> <SEM> ） 必须要有5个Token, （函数调用语句最少4个Token）
+                    if (tokens.Count - i >= 5 && tokens[i].Type == "Identifier" && tokens[i + 1].Value == "(" && IsLiteral(tokens[i + 2].Type) && tokens[i + 3].Value == ")" && tokens[i + 4].Value == ";")
                     {
-                        case "Identifier":
-                            // 如果 在当前上下文存在
-                            if (context.VarTable.Any(v => v.Name == token.Value))
+                        // 获取函数
+                        if(tokens[i].Value == "print" && context.VarTable.Any(v => v.Name == "print"))
+                        {
+                            var print = context.VarTable.Where(v => v.Name == "print").First();
+                            // 参数构造
+                            List<VarData> args = new List<VarData>();
+                            if(tokens[i + 2].Type == "String")
                             {
-                                // 调用？
-                                if(i+1<tokens.Count && tokens[i + 1].Value == "(")
+                                args.Add(new StringData(tokens[i + 2].Value));
+                            }
+                            else //if(tokens[i + 2].Type == "Numeric")
+                            {
+                                args.Add(new LiteralData
                                 {
-
-                                }
-                                //context.VarTable.Where(v => v.Name == token.Value).First().Data.Run();
+                                    // 需要解析Token
+                                    Data = tokens[i + 2].Value,
+                                    Kind = "Object",
+                                    Raw = tokens[i + 2].Value
+                                });
                             }
-                            // 不存在
-                            else
+                            // 函数调用 这里没有注入调用上下文（创建一个参数类型，把调用上下文封装到参数对象中去）
+                            var result = print.Data.Run(args.ToArray());
+                            last = result;
+                        }
+                        else if (tokens[i].Value == "load" && context.VarTable.Any(v => v.Name == "load"))
+                        {
+                            var load = context.VarTable.Where(v => v.Name == "load").First();
+                            // 参数构造
+                            List<VarData> args = new List<VarData>();
+                            if (tokens[i + 2].Type == "String")
                             {
-                                // 声明？类型，变量
+                                args.Add(new StringData(tokens[i + 2].Value));
                             }
-
-                            break;
-                        case "Punctuator":
-
-                            break;
-                        case "String":
-
-                            break;
-                        default:
-                            break;
+                            else //if(tokens[i + 2].Type == "Numeric")
+                            {
+                                args.Add(new LiteralData
+                                {
+                                    // 需要解析Token
+                                    Data = tokens[i + 2].Value,
+                                    Kind = "Object",
+                                    Raw = tokens[i + 2].Value
+                                });
+                            }
+                            // 函数调用 这里没有注入调用上下文（创建一个参数类型，把调用上下文封装到参数对象中去）
+                            var result = load.Data.Run(args.ToArray());
+                            last = result;
+                        }
+                        stmts.Add(tokens.Skip(i).Take(5).ToList());
+                        i += 4;
                     }
                 }
+                Console.WriteLine($"Statements:\r\n{JsonUtil.ToJson(stmts)}");
                 // gen mainCall
                 //var mainCall = new 
                 // gen 
@@ -119,43 +166,35 @@ namespace WS.Shell.CmdUnit
                 // test2 := compiler.compile(filestr);
                 switch (readLine.Trim().Trim(';'))
                 {
-                    case "testLexing()":
-                        var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "input", "test.txt");
-                        if (System.IO.File.Exists(filePath))
-                        {
-                            var fileStr = System.IO.File.ReadAllText(filePath);
-                            Console.WriteLine(fileStr);
-                            Console.WriteLine();
-                            //Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
-                            //Lexer.Scanning(fileStr);
-                            //var tokens =Lexer.Lexing(fileStr);
-                            string res = "";
-                            tokens.Where(t => !(t.Type=="Comment"|| t.Type== "WhiteSpace")).ToList().ForEach(t => res += t?.Value);
-                            Console.WriteLine($"No Comment|WhiteSpace Reverse:\r\n{res}");
-                        }
-                        else
-                        {
-                            Console.WriteLine("文件不存在：" + filePath);
-                        }
-                        break;
+                    case "clear();":
                     case "clear()":
                         Console.Clear();
                         break;
+                    case "cursorleft();":
                     case "cursorleft()":
                         Console.WriteLine("> " + Console.CursorLeft);
                         break;
+                    case "beep();":
                     case "beep()":
                         // 通过控制台扬声器播放提示音
                         Console.Beep();
                         break;
+                    case "exit();":
                     case "exit()":
-                        code = 0;
+                        exitCode = 0;
                         break;
                     default:
-                        Console.WriteLine($"< {readLine}");
                         break;
                 }
-                if (code == 0) return 0;
+                foreach(var stmt in stmts)
+                {
+                    var s = "";
+                    stmt.ForEach(t => s += (t.Kind +" "));
+                    Console.WriteLine(s);
+                }
+                // 打印返回值
+                Console.WriteLine($"< {last.Data}");
+                if (exitCode >= 0) return 0;
             }
             //RunContext
         }
@@ -166,5 +205,47 @@ namespace WS.Shell.CmdUnit
             Desc = "脚本";
             Usage = "script print(\"hello world\")";
         }
+
+        ///// <summary>
+        ///// 下一条语句
+        ///// </summary>
+        ///// <param name="tokens"></param>
+        ///// <param name="pos"></param>
+        ///// <returns></returns>
+        //public static dynamic NextStatement(List<Token> tokens, int pos)
+        //{
+        //    return null;
+        //}
+
+        
+        public static dynamic NextExpression(List<Token> tokens, int currPos, int pos)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 是否是字面量
+        /// </summary>
+        /// <param name="type">Token类型</param>
+        /// <returns></returns>
+        public static bool IsLiteral(string type)
+        {
+            return type == "String" || type == "Numeric" || type == "Boolean" || type == "Number";
+        }
+
+        /// <summary>
+        /// 字面量 Literal
+        /// </summary>
+        public static readonly string LitPattern = $@"({Lexer.StringPattern})|({Lexer.NumericPattern})";
+
+        /// <summary>
+        /// 表达式
+        /// </summary>
+        public static readonly string ExprPattern = $@"({LitPattern})|({Lexer.IdPattern})|({Lexer.IdPattern}\(({Lexer.IdPattern}(\.{Lexer.IdPattern})*)?\))";
+
+        /// <summary>
+        /// 语句
+        /// </summary>
+        public static readonly string StmtPattern = $@"({ExprPattern})?;"; 
     }
 }

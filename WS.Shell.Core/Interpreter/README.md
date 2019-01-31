@@ -105,4 +105,65 @@ print: (params: Object[]) => Void {
 
 print ( '123456' );
 
-
+```regex
+ID = $@"\w[\w\d]*"
+STR = String =$@"'.*?'"
+BOOL = Boolean = $@"true|false"
+NUM = Number =$@"(\d+)(\.\d+)?"
+LIT = Literal = $@"({NUM})|({STR})|({BOOL})"
+// 双子操作符
+BOP = Binary Operator = $@"[(==|>=|<=|!=)\+\-\*/]"
+// 赋值
+VDOP = $@":="
+// 等号
+EQOP = $@"=="
+// 分号
+SEM = $@";"
+// 冒号
+COL = colon = $@":"
+// 问号
+QUE = Question mark = $@"\?"
+// 点号
+DOT = $@"\."
+LP = $@"\("
+RP = $@"\)"
+// 逗号
+COM = comma = $@","
+// 双子表达式
+BinExpr =
+	| <Expr> <BOP> <Expr>
+// 赋值表达式
+VarDecExpr =
+	| <ID> <VDOP> <Expr>
+ConExpr = ConditionalExpression =
+	| <Expr> <QUE> <Expr> <COL> <Expr>
+// 相等表达式
+EqExpr =
+	| <Expr> <EQOP> <Expr>
+// 成员表达式
+MemExpr =
+	| (<ID>|<MemExpr>*) (<DOT> <ID>)
+// 调用表达式
+CallExpr =
+	| $@"(({ID})|({MemExpr}))({WS})({DOT})({LP})(({Expr})(({COM})({Expr}))*)?({RP})"
+	| (<ID>|<MemExpr>) <DOT> <LP> (<Expr> (<COM> <Expr>)*)? <RP>   // person.name.eat('apple', 'meat')
+// 赋值表达式
+AssExpr = AssignmentExpression =
+	| <ID> <VDOP> (<Expr>|<ID>|<LIT>)
+// 有返回值（Boolean，String，Number，Object等）
+Expr =
+	| ID
+	| LIT
+	| BinExpr
+	| VarDecExpr
+	| EqExpr
+	| CallExpr
+	| \( <Expr> \)
+// 表达式语句
+ExprStmt =
+	| <Expr> <SEM>
+Stmt =
+    | (<Expr>)? <SEM>
+Stmts =	Body =
+	| \{ (<Stmt>)* \}
+```

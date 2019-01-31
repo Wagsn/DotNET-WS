@@ -58,12 +58,12 @@ namespace WS.Shell
         /// <summary>
         /// 值名（如函数名）
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "None";
 
         /// <summary>
         /// 值的包装，将各种值包装成object
         /// </summary>
-        public object Data { get; set; }
+        public object Data { get; set; } = "None";
 
         /// <summary>
         /// 值的类型，C#系统标识
@@ -73,7 +73,12 @@ namespace WS.Shell
         /// <summary>
         /// 值的种类，本系统内部标识，如Number，String
         /// </summary>
-        public string Kind { get; set; }
+        public string Kind { get; set; } = "None";
+
+        /// <summary>
+        /// 是否为原子数据
+        /// </summary>
+        public bool IsUnit { get; set; }
 
         /// <summary>
         /// 标签（"String=>Void|Void=>String"）
@@ -84,7 +89,7 @@ namespace WS.Shell
         /// 原始代码（定义的代码，如：print: String=>Void{ [native code] }）
         /// mult: (a: Number, b: Number)=>Number{ c: Number := 0; whiledo(condition: Void=>Bool { return  }, do); }
         /// </summary>
-        public string Raw { get; set; }
+        public string Raw { get; set; } = "None";
 
         public static VarData New (double o)
         {
@@ -134,6 +139,23 @@ namespace WS.Shell
         public static VarData Apply(VarData caller, VarData[] agrs)
         {
             return null;
+        }
+
+        /// <summary>
+        /// 获取其值
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public static object GetData(VarData data)
+        {
+            if (data.IsUnit)
+            {
+                return data.Data;
+            }
+            else
+            {
+                return GetData(data.Get());
+            }
         }
     }
 
@@ -208,18 +230,6 @@ namespace WS.Shell
         {
             Kind = "Number";
             //Type = typeof(NumberData);
-        }
-    }
-
-    /// <summary>
-    /// 字符串
-    /// </summary>
-    public class StringData : VarData
-    {
-        public StringData()
-        {
-            Kind = "String";
-            //Type = typeof(StringData);
         }
     }
 
