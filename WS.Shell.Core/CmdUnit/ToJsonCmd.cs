@@ -49,7 +49,7 @@ namespace WS.Shell.CmdUnit
             // 在变量表中查询arg所含有的参数
             // 解析arg为参数组，在context的变量表中找出这些变量，再将变量转换成JSON字符串输出的到控制台，如果找不到
             string normal = WS.Text.Format.NormalSpace(arg);
-            string[] words = normal.Split(" ");
+            string[] words = normal.Split(' ');
             Console.Write("out: ");
             // 这里最好和原始输入对应起来，只是将变量替换
             for (int i = 0; i < words.Length; i++)

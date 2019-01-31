@@ -134,7 +134,8 @@ namespace WS.Shell
         /// <returns></returns>
         public virtual TValue GetOrDefault(string key)
         {
-            return Pairs.GetValueOrDefault(key);
+            Pairs.TryGetValue(key, out TValue value);
+            return value;
         }
 
         /// <summary>

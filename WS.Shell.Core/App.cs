@@ -87,7 +87,7 @@ namespace WS.Shell
             while (true)
             {
                 nextLine = Console.ReadLine().Trim();
-                nextWords = nextLine.Split(" ");
+                nextWords = nextLine.Split(' ');
                 cmd = nextWords[0];
                 arg = nextLine.Substring(cmd.Length).Trim();
                 try
@@ -102,8 +102,8 @@ namespace WS.Shell
                             Console.SetCursorPosition(0, Console.CursorSize - 1);
                             break;
                         case "test_split":
-                            Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonUtil.ToJson("hello world".Split(" "))); // ["hello","world"]
-                            Console.WriteLine("String.Split \"\" with \" \": " + JsonUtil.ToJson("".Split(" ")));  // [""]
+                            Console.WriteLine("String.Split \"hello world\" with \" \": " + JsonUtil.ToJson("hello world".Split(' '))); // ["hello","world"]
+                            Console.WriteLine("String.Split \"\" with \" \": " + JsonUtil.ToJson("".Split(' ')));  // [""]
                             break;
                         case "exception":
                             throw new Exception("test exception");

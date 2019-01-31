@@ -44,7 +44,7 @@ namespace WS.Shell.CmdUnit
             }
             else
             {
-                string[] numRaws = arg.Trim().Split(" ");  // 这里切割之前需要过滤空格
+                string[] numRaws = arg.Trim().Split(' ');  // 这里切割之前需要过滤空格
                 List<int> nums = new List<int>();
                 foreach (var numRaw in numRaws)
                 {

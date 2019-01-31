@@ -72,7 +72,10 @@ namespace WS.Shell.CmdUnit
                     continue;
                 }
                 // gen tokens
-                var tokens = Lexer.Lexing(readLine);
+                var tokens = Lexer.Lexing(readLine).Where(t => !(t.Type == "Comment" || t.Type == "WhiteSpace")).ToList();
+
+                // statement 语句拆分
+
                 for (int i = 0; i < tokens.Count; i++)
                 {
                     // 如何载入一条语句
@@ -125,7 +128,7 @@ namespace WS.Shell.CmdUnit
                             Console.WriteLine();
                             //Console.WriteLine(JsonUtil.ToJson(Lexer.Scanning(fileStr)));
                             //Lexer.Scanning(fileStr);
-                            var tokens =Lexer.Lexing(fileStr);
+                            //var tokens =Lexer.Lexing(fileStr);
                             string res = "";
                             tokens.Where(t => !(t.Type=="Comment"|| t.Type== "WhiteSpace")).ToList().ForEach(t => res += t?.Value);
                             Console.WriteLine($"No Comment|WhiteSpace Reverse:\r\n{res}");

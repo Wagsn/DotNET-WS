@@ -49,7 +49,7 @@ namespace WS.Shell.CmdUnit
             // 单变量定义
             // TODO 正则验证
             // 切割
-            List<string> vars = arg.Split("=").ToList();
+            List<string> vars = arg.Split('=').ToList();
             // 声明部分
             string declare = vars[0];
             // 值部分 字符串形式
@@ -59,7 +59,7 @@ namespace WS.Shell.CmdUnit
             string varType = null;
             if (declare.IndexOf(":") > 0)
             {
-                var declares = declare.Split(":");
+                var declares = declare.Split(':');
                 varName = declares[0].NormalSpace();  // 命名规则验证
                 varType = declares[1].NormalSpace();  // 类型校验 
             }

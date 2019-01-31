@@ -101,4 +101,8 @@ print: (params: Object[]) => Void {
 	[native code]
 }
 
+// Token流解析
+
+print ( '123456' );
+
 
