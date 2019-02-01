@@ -169,6 +169,7 @@ Stmts =	Body =
 ```
 
 ```
+// 递归解析
 NextExpr(tokens){
 	var currPos = 0
 	currToken = tokens[currPos]
@@ -236,5 +237,36 @@ NextExpr(tokens){
 				case 
 }
 
+
+// 暂时只解析表达式语句
+NextStatement(tokens){
+	stmtStack.
+	var currStmt = new ExprStmt()
+	var next = NextExpression(tokens)  // expr code nextpos
+	currStmt.type = 'ExprStmt'
+	currStmt.expr = next.expr
+}
+NextExpression(tokens){
+	currPos
+	currToken =
+	switch currToken.type
+		case ID
+			var currExpr =new Expr
+			currExpr.type = ID
+			curr.name = ID.value
+			return currExpr
+		case LIT
+			var currExpr =new Expr
+			currExpr.type = LIT
+			currExpr.value = 
+			currExpr.raw =
+		case "."
+			var last = exprStack.pop()
+			var currExpr = new MemExpr
+			var next = NextExpression(tokens.tail(currPos+1))
+			currExpr.object = last
+			currExpr.property = next.expr
+			currPos = next.
+}
 
 ```

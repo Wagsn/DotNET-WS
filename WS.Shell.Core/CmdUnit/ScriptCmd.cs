@@ -206,20 +206,71 @@ namespace WS.Shell.CmdUnit
             Usage = "script print(\"hello world\")";
         }
 
-        ///// <summary>
-        ///// 下一条语句
-        ///// </summary>
-        ///// <param name="tokens"></param>
-        ///// <param name="pos"></param>
-        ///// <returns></returns>
-        //public static dynamic NextStatement(List<Token> tokens, int pos)
-        //{
-        //    return null;
-        //}
-
-        
-        public static dynamic NextExpression(List<Token> tokens, int currPos, int pos)
+        /// <summary>
+        /// 下一条语句
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public static dynamic NextStatement(Stack<Statement> stmtStack, List<Token> tokens)
         {
+            var currPos = 0;
+            List<Statement> Body = new List<Statement>();
+            var exprStack = new Stack<Expression>();
+            NextExpression(exprStack, tokens.Skip(currPos+1).Take(tokens.Count).ToList());
+            var currStmt = new ExpressionStatement();
+
+            return null;
+        }
+
+        /// <summary>
+        /// 下一条表达式
+        /// </summary>
+        /// <param name="exprStack"></param>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
+        public static dynamic NextExpression(Stack<Expression> exprStack, List<Token> tokens)
+        {
+            var currPos = 0;
+            var currToken = tokens[currPos];
+            switch (currToken.Type)
+            {
+                case "Identifier":
+                    var idExpr = new IdentiferExpression();
+                    idExpr.StartPos = exprStack.Peek().EndPos;
+                    idExpr.EndPos = idExpr.StartPos + 1;
+                    exprStack.Push(idExpr);
+                    break;
+                case "Numeric":
+                    var numExpr = new NumericExpression();
+                    numExpr.StartPos = exprStack.Peek().EndPos;
+                    numExpr.EndPos = numExpr.StartPos + 1;
+                    exprStack.Push(numExpr);
+                    break;
+                case "String":
+                    var strExpr = new StringExpression();
+                    strExpr.StartPos = exprStack.Peek().EndPos;
+                    strExpr.EndPos = strExpr.StartPos + 1;
+                    exprStack.Push(strExpr);
+                    break;
+                case "Punctuator":
+                    switch (tokens[currPos].Value)
+                    {
+                        // 成员操作符
+                        case ".":
+                            var last = exprStack.Pop();
+                            var memExpr = new MemberExpression();
+                            NextExpression(exprStack, tokens.Skip(currPos + 1).Take(tokens.Count).ToList());  // 这里会push一个表达式
+                            memExpr.Object = last;
+                            memExpr.Property = exprStack.Pop();
+                            memExpr.StartPos = memExpr.Object.StartPos;
+                            memExpr.EndPos = memExpr.Property.EndPos;
+                            exprStack.Push(memExpr);
+                            break;
+                    }
+                    break;
+
+            }
             return null;
         }
 
@@ -247,5 +298,34 @@ namespace WS.Shell.CmdUnit
         /// 语句
         /// </summary>
         public static readonly string StmtPattern = $@"({ExprPattern})?;"; 
+    }
+
+    public class ExpressionStatement : Statement { }
+
+    public class Statement
+    {
+        public int StartPos { get; set; }
+
+        public int EndPos { get; set; }
+    }
+
+    public class MemberExpression : Expression
+    {
+        public Expression Object { get; set; }
+
+        public Expression Property { get; set; }
+    }
+
+    public class StringExpression : Expression { }
+
+    public class NumericExpression : Expression { }
+
+    public class IdentiferExpression: Expression { }
+
+    public class Expression
+    {
+        public int StartPos { get; set; }
+        
+        public int EndPos { get; set; }
     }
 }
