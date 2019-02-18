@@ -203,7 +203,15 @@ namespace WS.Shell.CmdUnit
         {
             Name = "script";
             Desc = "脚本";
-            Usage = "script print(\"hello world\")";
+            Usage = "script";
+        }
+
+
+        public static void ReadStatements(List<Token> tokens)
+        {
+            // 将tokens转换成语句列表
+            int currPos = 0;
+
         }
 
         /// <summary>
@@ -212,15 +220,29 @@ namespace WS.Shell.CmdUnit
         /// <param name="tokens"></param>
         /// <param name="pos"></param>
         /// <returns></returns>
-        public static dynamic NextStatement(Stack<Statement> stmtStack, List<Token> tokens)
+        public static Statement NextStatement(Stack<Statement> stmtStack, List<Token> tokens)
         {
             var currPos = 0;
             List<Statement> Body = new List<Statement>();
             var exprStack = new Stack<Expression>();
             NextExpression(exprStack, tokens.Skip(currPos+1).Take(tokens.Count).ToList());
-            var currStmt = new ExpressionStatement();
-
-            return null;
+            var last = exprStack.Pop();
+            
+            if (tokens[last.EndPos+1].Kind == "SEM")
+            {
+                var currStmt = new ExpressionStatement
+                {
+                    StartPos = last.StartPos,
+                    EndPos = last.EndPos + 1,
+                    Expression = last
+                };
+                return currStmt;
+            }
+            else
+            {
+                Console.WriteLine("语法错误，表达式不以分号结尾。");
+                return null;
+            }
         }
 
         /// <summary>
@@ -229,21 +251,25 @@ namespace WS.Shell.CmdUnit
         /// <param name="exprStack"></param>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public static dynamic NextExpression(Stack<Expression> exprStack, List<Token> tokens)
+        public static dynamic NextExpression(Stack<Expression> exprStack, List<Token> tokens, int startPos = 0)
         {
-            var currPos = 0;
+            var currPos = startPos;
             var currToken = tokens[currPos];
             switch (currToken.Type)
             {
                 case "Identifier":
-                    var idExpr = new IdentiferExpression();
-                    idExpr.StartPos = exprStack.Peek().EndPos;
+                    var idExpr = new IdentiferExpression
+                    {
+                        StartPos = exprStack.Peek().EndPos
+                    };
                     idExpr.EndPos = idExpr.StartPos + 1;
                     exprStack.Push(idExpr);
                     break;
                 case "Numeric":
-                    var numExpr = new NumericExpression();
-                    numExpr.StartPos = exprStack.Peek().EndPos;
+                    var numExpr = new NumericExpression
+                    {
+                        StartPos = exprStack.Peek().EndPos
+                    };
                     numExpr.EndPos = numExpr.StartPos + 1;
                     exprStack.Push(numExpr);
                     break;
@@ -300,7 +326,10 @@ namespace WS.Shell.CmdUnit
         public static readonly string StmtPattern = $@"({ExprPattern})?;"; 
     }
 
-    public class ExpressionStatement : Statement { }
+    public class ExpressionStatement : Statement
+    {
+        public Expression Expression { get; set; }
+    }
 
     public class Statement
     {
@@ -328,4 +357,26 @@ namespace WS.Shell.CmdUnit
         
         public int EndPos { get; set; }
     }
+
+    /**
+     * code is far away from bug *with the animal protecting 
+    *  ┏┓　　　┏┓
+    *┏┛┻━━━┛┻┓
+    *┃　　　　　　　┃ 　
+    *┃　　　━　　　┃
+    *┃　┳┛　┗┳　┃
+    *┃　　　　　　　┃
+    *┃　　　┻　　　┃
+    *┃　　　　　　　┃
+    *┗━┓　　　┏━┛
+    *　　┃　　　┃神兽保佑
+    *　　┃　　　┃代码无BUG！
+    *　　┃　　　┗━━━┓
+    *　　┃　　　　　　　┣┓
+    *　　┃　　　　　　　┏┛
+    *　　┗┓┓┏━┳┓┏┛
+    *　　　┃┫┫　┃┫┫
+    *　　　┗┻┛　┗┻┛ 
+    */
+
 }
