@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using WS.Text;
@@ -211,7 +212,6 @@ namespace WS.Shell.CmdUnit
         {
             // 将tokens转换成语句列表
             int currPos = 0;
-
         }
 
         /// <summary>
@@ -326,6 +326,17 @@ namespace WS.Shell.CmdUnit
         public static readonly string StmtPattern = $@"({ExprPattern})?;"; 
     }
 
+    /// <summary>
+    /// 语句块
+    /// </summary>
+    public class BlockStatement : Statement
+    {
+        public List<Statement> Statements { get; set; }
+    }
+
+    /// <summary>
+    /// 表达式语句
+    /// </summary>
     public class ExpressionStatement : Statement
     {
         public Expression Expression { get; set; }
@@ -349,10 +360,96 @@ namespace WS.Shell.CmdUnit
 
     public class NumericExpression : Expression { }
 
-    public class IdentiferExpression: Expression { }
+    /// <summary>
+    /// 左结合 
+    /// 主要是解析的时候
+    /// 
+    /// </summary>
+    public class BinaryExpression : Expression
+    {
+        /// <summary>
+        /// 操作符
+        /// </summary>
+        public string Operator { get; set; }
+
+        /// <summary>
+        /// 左
+        /// </summary>
+        public Exception Left { get; set; }
+        /// <summary>
+        /// 右
+        /// </summary>
+        public Exception Right { get; set; }
+    }
+
+    /// <summary>
+    /// 赋值表达式 右结合
+    /// </summary>
+    public class AssignmentExpression : Expression
+    {
+        /// <summary>
+        /// 操作符
+        /// </summary>
+        public string Operator { get; set; }
+
+        /// <summary>
+        /// 左
+        /// </summary>
+        public Exception Left { get; set; }
+        /// <summary>
+        /// 右
+        /// </summary>
+        public Exception Right { get; set; }
+    }
+
+    /// <summary>
+    /// 逻辑(布尔)表达式 左结合
+    /// </summary>
+    public class LogicalExpression : Expression
+    {
+        /// <summary>
+        /// 操作符
+        /// </summary>
+        public string Operator { get; set; }
+
+        /// <summary>
+        /// 左
+        /// </summary>
+        public Exception Left { get; set; }
+        /// <summary>
+        /// 右
+        /// </summary>
+        public Exception Right { get; set; }
+    }
+
+    /// <summary>
+    /// 标识符
+    /// </summary>
+    public class IdentiferExpression: Expression
+    {
+        public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// 调用表达式
+    /// </summary>
+    public class CallExpression
+    {
+        /// <summary>
+        /// 调用者
+        /// </summary>
+        public Exception Callee { get; set; }
+
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public List<Exception> Arguments { get; set; }
+    }
 
     public class Expression
     {
+        public VarData Data { get; set; }
+
         public int StartPos { get; set; }
         
         public int EndPos { get; set; }
@@ -379,4 +476,629 @@ namespace WS.Shell.CmdUnit
     *　　　┗┻┛　┗┻┛ 
     */
 
+    /**
+     * E->T|EAT  // Expression
+     * T->F|TMF  // Term
+     * F->(E)|i  // Factor
+     * A->+|-  // Add
+     * M->*|/  // Mult
+     * 
+     */
+    /**
+     * Expression -> Expression Operator Expression
+     * Statement -> Expression Semicolon 
+     * Expression -> CallExpression | MemberExpression | LogicalExpression | AssignmentExpression
+     * AssignmentExpression -> MemberExpression "=" Expression | Identifier "=" Expression 
+     * LogicalExpression -> Expression | LogicalExpression "&&" Expression | LogicalExpression "||" Expression   // "&&" > "||"
+     * MemberExpression -> Expression "." Identifier | Expression "[" Expression "]"
+     * CallExpression -> Expression "(" Arguments ")"     // { Callee, Operator, Arguments }
+     * Arguments -> WhiteSpace | Expression | Expression "," Arguments   // 不结合
+     * Semicolon -> ";"
+     * Literal -> String | Number | Boolean | "None"
+     * Boolean -> "True" | "False"
+     * String -> 
+     * Number -> Int Frac Exp
+     * Int -> Digit | OneNine Digit | "-" Digit | "-" OneNine Digit
+     * Digits -> Digit | Digit Digits
+     * Digit -> "0" | OneNine
+     * OneNine -> "0" . "9"
+     * Frac -> "" | "." Digits
+     * Exp -> "" |  "E" Sign Digits | "e" Sign Digits
+     * Sign -> "" | "+"" | "-"
+     */
+}
+
+
+namespace WS.Shell.Core
+{
+    public class WSData
+    {
+
+    }
+
+    /// <summary>
+    /// 值
+    /// </summary>
+    public class WSValue : WSData
+    {
+        /// <summary>
+        /// 转型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static WSValue Cast<T>(T value)
+        {
+            return null;
+        }
+
+        public WSBoolean ToBoolean()
+        {
+            return WSBoolean.New(false);
+        }
+
+        public WSObject ToObject()
+        {
+            return WSObject.New();
+        }
+
+        public WSNumber ToNumber()
+        {
+            return WSNumber.New(0);
+        }
+
+        public new WSString ToString()
+        {
+            return WSString.New("");
+        }
+
+        public bool DeepEquals(WSValue that)
+        {
+            return false;
+        }
+
+        public bool BooleanValue()
+        {
+            return false;
+        }
+
+    }
+
+    /// <summary>
+    /// 字面量
+    /// </summary>
+    public class WSLiteral : WSValue
+    {
+    }
+
+    /// <summary>
+    /// 布尔量
+    /// </summary>
+    public class WSBoolean : WSLiteral
+    {
+        private bool V { get; set; }
+
+        public static WSBoolean New(bool value)
+        {
+            return new WSBoolean
+            {
+                V = false
+            };
+        }
+
+        public bool Value()
+        {
+            return false;
+        }
+    }
+
+    public class WSNumber : WSLiteral
+    {
+        public double V { get; set; }
+
+        public static WSNumber New(double value)
+        {
+            return new WSNumber
+            {
+                V = value
+            };
+        }
+
+        public static WSNumber Cast(WSValue obj)
+        {
+            return new WSNumber
+            {
+                V =0
+            };
+        }
+
+        public double Value()
+        {
+            return V;
+        }
+    }
+
+    public class WSInteger : WSNumber
+    {
+        public static WSInteger New(int value)
+        {
+            return new WSInteger
+            {
+                V = value
+            };
+        }
+
+        public new static WSInteger Cast(WSValue obj)
+        {
+            return new WSInteger
+            {
+                V = 0
+            };
+        }
+
+        public new int Value()
+        {
+            return (int)V;
+        }
+    }
+
+    public class WSName : WSLiteral
+    {
+        public static WSName Cast(WSValue obj)
+        {
+            return new WSName();
+        }
+    }
+
+    public class WSString : WSName
+    {
+        private static readonly string empty = "";
+
+        public static WSString Empty()
+        {
+            return new WSString
+            {
+                V = ""
+            };
+        }
+
+        public static WSString New (string value)
+        {
+            return new WSString
+            {
+                V = value
+            };
+        }
+
+        public new static WSString Cast(WSValue value)
+
+        {
+            return new WSString
+            {
+                V = empty
+            };
+        }
+
+        public static WSString Concat(WSString left, WSString right)
+        {
+            return new WSString
+            {
+                V = left.V + right.V
+            };
+        }
+
+        private string V { get; set; }
+
+        public string Value()
+        {
+            return V;
+        }
+
+        public int Length()
+        {
+            return V.Length;
+        }
+    }
+
+    public class WSObject : WSValue
+    {
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public static WSObject New()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 没有句柄，不计数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool Set(WSValue key, WSValue value)
+        {
+            return false;
+        }
+
+        public WSValue Get(WSValue value)
+        {
+            return null;
+        }
+
+        public bool Has(WSValue key)
+        {
+            return false;
+        }
+
+        public WSObject Clone()
+        {
+            return null;
+        }
+
+        public bool Delete(WSValue key)
+        {
+            return false;
+        }
+
+        public bool CallAsFunction(WSValue recv, List<WSValue> argv)
+        {
+            return false;
+        }
+    }
+
+    public class StringObject : WSObject
+    {
+        public WSString ValueOf()
+        {
+            return WSString.New("");
+        }
+
+        public static WSValue New(string value)
+        {
+            return null;
+        }
+    }
+
+    public class WSArray: WSObject
+    {
+        public static WSArray New()
+        {
+            return new WSArray();
+        }
+
+        public int Length()
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// 函数实例
+    /// </summary>
+    public class WSFunction : WSObject
+    {
+        public static WSFunction New(Func<List<WSValue>, WSValue> fun)
+        {
+            return new WSFunction
+            {
+                Fun =fun
+            };
+        }
+        
+        private Func<List<WSValue>, WSValue> Fun { get; set; }
+
+        private string Name { get; set; } = "";
+
+        public WSObject NewInstance()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 函数调用
+        /// </summary>
+        /// <param name="recv">调用者</param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public WSValue Call(WSValue recv, List<WSValue> argv)
+        {
+            return Fun(argv);
+        }
+
+        public void SetName(WSString name)
+        {
+            Name = name.Value();
+        }
+
+        public WSValue GetName()
+        {
+            return WSString.New(Name);
+        }
+    }
+
+    /// <summary>
+    /// 模板（函数模板，对象模板）
+    /// The superclass of object and function templates.
+    /// </summary>
+    public class WSTemplate : WSData
+    {
+        public void Set(WSName name, WSData value)
+        {
+        }
+        public void Set(string name, WSData value)
+        {
+        }
+    }
+
+    public class WSObjectTemplate : WSTemplate
+    {
+        public static WSObjectTemplate New()
+        {
+            return new WSObjectTemplate
+            {
+
+            };
+        }
+    }
+
+    /// <summary>
+    /// 函数模板
+    /// </summary>
+    public class WSFunctionTemplate : WSTemplate
+    {
+        public static WSFunctionTemplate New()
+        {
+            return new WSFunctionTemplate
+            {
+            };
+        }
+
+        public static WSFunctionTemplate New(Func<List<WSValue>, WSValue> func)
+        {
+            return new WSFunctionTemplate
+            {
+
+            };
+        }
+
+        public static void Test()
+        {
+            WSFunctionTemplate t = WSFunctionTemplate.New();
+            t.Set("func_property", WSNumber.New(1));
+
+            WSTemplate proto_t = t.PrototypeTemplate();
+            proto_t.Set("proto_method", WSFunctionTemplate.New());
+            proto_t.Set("proto_const", WSNumber.New(2));
+
+            WSObjectTemplate instance_t = t.InstanceTemplate();
+            instance_t.Set("instance_property", WSNumber.New(3));
+
+            WSFunction function = t.GetFunction();
+            WSObject instance = function.NewInstance();
+
+            WSFunctionTemplate parent = t;
+            WSFunctionTemplate child = WSFunctionTemplate.New();
+            child.Inherit(parent);
+
+            WSFunction child_function = child.GetFunction();
+            WSObject child_instance = child_function.NewInstance();
+        }
+
+        public void Inherit(WSFunctionTemplate parent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WSFunction GetFunction()
+        {
+            return new WSFunction();
+        }
+        
+        /// <summary>
+        /// 原型模板
+        /// </summary>
+        /// <returns></returns>
+        public WSObjectTemplate PrototypeTemplate()
+        {
+            return WSObjectTemplate.New();
+        }
+
+        public WSObjectTemplate InstanceTemplate()
+        {
+            return WSObjectTemplate.New();
+        }
+    }
+
+    /// <summary>
+    /// The information passed to a property callback about the context of the property access.
+    /// </summary>
+    public class PropertyCallbackInfo
+    {
+        /// <summary>
+        /// 值
+        /// </summary>
+        /// <returns></returns>
+        public WSValue Data()
+        {
+            return WSString.New("");
+        }
+
+        /// <summary>
+        /// 调用者
+        /// </summary>
+        /// <returns></returns>
+        public WSObject This()
+        {
+            return WSObject.New();
+        }
+
+        /// <summary>
+        /// 上下文
+        /// </summary>
+        /// <returns></returns>
+        public WSObject Holder()
+        {
+            return WSObject.New();
+        }
+        
+        /// <summary>
+        /// 返回值
+        /// </summary>
+        /// <returns></returns>
+        public WSObject GetReturnValue()
+        {
+            return WSObject.New();
+        }
+    }
+
+    public class Context
+    {
+
+    }
+}
+
+
+namespace WS.Script.Core
+{
+    /// <summary>
+    /// 值对象和模板类型的超类
+    /// The superclass of values and API object templates.
+    /// </summary>
+    public class WSData
+    {
+
+    }
+
+    /// <summary>
+    /// 模板，类型信息描述
+    /// </summary>
+    public class WSTemplate : WSData
+    {
+
+    }
+
+    /// <summary>
+    /// 值，对象实例描述
+    /// The superclass of all JavaScript values and objects.
+    /// </summary>
+    public class WSValue : WSData
+    {
+
+    }
+
+    /// <summary>
+    /// 字面量实例描述
+    /// </summary>
+    public class WSLiteral : WSValue
+    {
+    }
+
+    public class WSNumber : WSLiteral
+    {
+    }
+    public class WSString : WSLiteral
+    {
+    }
+    public class WSBoolean : WSLiteral
+    {
+    }
+    
+
+    /// <summary>
+    /// 实例对象描述（动态对象）
+    /// </summary>
+    public class WSObject : WSValue
+    {
+        public bool Has(WSValue key)
+        {
+            return false;
+        }
+
+        public bool Set(WSValue key, WSValue value)
+        {
+            return false;
+        }
+
+        public WSValue Get(WSValue key)
+        {
+            return null;
+        }
+
+        public bool Delete(WSValue key)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// 将当前对象作为函数执行
+        /// </summary>
+        /// <param name="recv">调用者</param>
+        /// <param name="argv">参数</param>
+        /// <returns></returns>
+        public WSValue CallAsFunction(WSValue recv, List<WSValue> argv)
+        {
+            return null;
+        }
+
+        public WSValue CallAsConstructor(List<WSValue> argv)
+        {
+            return null;
+        }
+
+        public WSValue Run(WSValue recv, List<WSValue> argv)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 数组
+    /// </summary>
+    public class WSArray : WSObject
+    {
+    }
+
+    /// <summary>
+    /// 函数对象描述
+    /// </summary>
+    public class WSFunction : WSObject
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recv"></param>
+        /// <param name="argv"></param>
+        /// <returns></returns>
+        public WSValue Call(WSValue recv, List<WSValue> argv)
+        {
+            return null;
+        }
+
+        public void SetName(WSString name)
+        {
+
+        }
+
+        public WSValue GetName()
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 日期时间
+    /// </summary>
+    public class WSDate : WSObject
+    {
+    }
+
+    public class WSObjectTemplate:WSData
+    {
+        public WSObject NewInstance()
+        {
+            return null;
+        }
+    }
 }
