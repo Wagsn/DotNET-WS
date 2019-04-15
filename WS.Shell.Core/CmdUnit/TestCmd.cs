@@ -20,6 +20,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using WS.IO;
 using WS.Text;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace WS.Shell.CmdUnit
 {
@@ -100,6 +102,42 @@ namespace WS.Shell.CmdUnit
             Name = "test";
             Desc = "测试命令，用来测试编写的库函数是否正常工作";
             Usage = "test [funcName [args]]";
+        }
+
+        public static void Test()
+        {
+            Regex colReg = new Regex(@"<td>(.*?)</td><td>(.*?)</td>");
+            var text = @"
+<html>
+<head><title>表格</title></head>
+<body>
+    <table  border=1>
+        <tr><th>学号</th><th>姓名</th></tr>
+        <tr><td>1001</td><td>杨秀璋</td></tr>
+        <tr><td>1002</td><td>严娜</td></tr>
+    </table>
+</body>
+</html>";
+            var match = Regex.Match(text, @"<tr>(.*?)</tr>");
+            // GroupCollection 表示匹配的表达式组，在第几个位置就是第几组，这里只有一组，索引从1开始
+            // CaptureColection 表示捕获集，每一个捕获包含索引、长度、值等信息
+
+            var rows = ((IEnumerable<Capture>)match.Groups[1].Captures).Select(a => a.Value);
+            var list = new List<List<string>>();
+            foreach (string capture in match.Groups[1].Captures)
+            {
+                // 每一行数据
+                var ma = colReg.Match(capture);
+                list.Add(new List<string>
+                {
+                    // 学号
+                    ma.Groups[1].Captures[0].ToString(),
+                    // 姓名
+                    ma.Groups[2].Captures[0].ToString()
+                });
+
+            }
+
         }
     }
 }

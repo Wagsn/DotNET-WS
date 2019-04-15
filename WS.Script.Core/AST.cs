@@ -36,6 +36,8 @@ namespace WS.Script.Core
     /// </summary>
     public class ASTNode
     {
+        public int TokenIndex { get; set; }
+
         ///// <summary>
         ///// 名称（person, marth）
         ///// </summary>
@@ -120,6 +122,10 @@ namespace WS.Script.Core
 
         public ExpressionASTNode Argument { get; set; }
 
+        public UnaryExpression()
+        {
+            Type = "UnaryExpression";
+        }
     }
 
     /// <summary>
@@ -170,6 +176,54 @@ namespace WS.Script.Core
     }
 
     /// <summary>
+    /// 调用表达式
+    /// </summary>
+    public class CallExpression : ExpressionASTNode
+    {
+        /// <summary>
+        /// 调用者表达式
+        /// </summary>
+        public ExpressionASTNode Callee { get; set; }
+
+        /// <summary>
+        /// 参数表达式
+        /// </summary>
+        public List<ExpressionASTNode> Arguments { get; set; }
+
+        public CallExpression()
+        {
+            Type = "CallExpression";
+        }
+    }
+
+    /// <summary>
+    /// 成员表达式
+    /// </summary>
+    public class MemberExpression :ExpressionASTNode
+    {
+        /// <summary>
+        /// 对象
+        /// </summary>
+        public ExpressionASTNode Object { get; set; }
+
+        /// <summary>
+        /// 属性
+        /// </summary>
+        public ExpressionASTNode Property { get; set; }
+
+        /// <summary>
+        /// 属性是否需要计算
+        /// 如果是ID则为false，其它为true
+        /// </summary>
+        public bool Computed { get; set; }
+
+        public MemberExpression()
+        {
+            Type = "MemberExpression";
+        }
+    }
+
+    /// <summary>
     /// 数组表达式
     /// </summary>
     public class ArrayExpression : ExpressionASTNode
@@ -179,6 +233,70 @@ namespace WS.Script.Core
         public ArrayExpression()
         {
             Type = "ArrayExpression";
+        }
+    }
+
+    public class FunctionExpression :ExpressionASTNode
+    {
+        public Identifier Id { get; set; }
+
+        public List<ExpressionASTNode> Params { get; set; }
+
+        public StatementASTNode Body { get; set; }
+    }
+
+    /// <summary>
+    /// 箭头函数
+    /// Body如果是表达式，则表达式为返回值，如果为块域，则return语句作为返回值
+    /// </summary>
+    public class ArrowFunctionExpression : FunctionExpression
+    {
+    }
+
+    /// <summary>
+    /// IF语句
+    /// </summary>
+    public class IfStatement : StatementASTNode
+    {
+        /// <summary>
+        /// condition
+        /// </summary>
+        public ExpressionASTNode Test { get; set; }
+
+        /// <summary>
+        /// if
+        /// </summary>
+        public StatementASTNode Consequent { get; set; }
+
+        /// <summary>
+        /// else
+        /// </summary>
+        public StatementASTNode Alternate { get; set; }
+    }
+
+    /// <summary>
+    /// 语句块
+    /// </summary>
+    public class BlockStatement : StatementASTNode
+    {
+        public List<ASTNode> Body { get; set; }
+
+        public BlockStatement()
+        {
+            Type = "BlockStatement";
+        }
+    }
+
+    /// <summary>
+    /// 返回语句
+    /// </summary>
+    public class ReturnStatement :StatementASTNode
+    {
+        public ExpressionASTNode Argument { get; set; }
+
+        public ReturnStatement()
+        {
+            Type = "ReturnStatement";
         }
     }
 
@@ -194,6 +312,20 @@ namespace WS.Script.Core
         public VariableDeclarator()
         {
             Type = "VariableDeclarator";
+        }
+    }
+
+    public class FunctionDeclaration : StatementASTNode
+    {
+        public Identifier Id { get; set; }
+
+        public List<ExpressionASTNode> Params { get; set; }
+
+        public BlockStatement Body { get; set; }
+
+        public FunctionDeclaration()
+        {
+            Type = "FunctionDeclaration";
         }
     }
 
@@ -235,6 +367,16 @@ namespace WS.Script.Core
         public Identifier()
         {
             Type = "Identifier";
+        }
+    }
+
+    public class Numeric : ExpressionASTNode
+    {
+        public object Value { get; set; }
+
+        public Numeric()
+        {
+            Type = "Numeric";
         }
     }
 }
