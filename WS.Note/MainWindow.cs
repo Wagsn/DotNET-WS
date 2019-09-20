@@ -127,31 +127,31 @@ namespace WS.Note
             if (budle.IsNew)
             {
                 var saveFileName = Path.HasExtension(budle.TabTitle) ? budle.TabTitle : budle.TabTitle + ".txt";
+                var saveFileDialog = this.SaveFileDialog;
 
-                SaveFileDialog.DefaultExt = "txt";
-                SaveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-                SaveFileDialog.FileName = saveFileName;
-
-                DialogResult DialogResult = SaveFileDialog.ShowDialog();
-                if (DialogResult == DialogResult.Cancel)
+                //SaveFileDialog.DefaultExt = "txt";
+                saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog.FileName = saveFileName;
+                var dialogResult = saveFileDialog.ShowDialog();
+                if (dialogResult == DialogResult.Cancel)
                 {
-                    SetCurrStatus($"取消保存");
+                    SetCurrStatus($"取消保存：{budle.TabTitle}");
                     return;
                 }
-                string fileName = this.SaveFileDialog.FileName;
-                if (DialogResult == DialogResult.OK && fileName.Length > 0)
+                string fileName = saveFileDialog.FileName;
+                if (dialogResult == DialogResult.OK && fileName.Length > 0)
                 {
-                    richTextBox.SaveFile(SaveFileDialog.FileName, RichTextBoxStreamType.PlainText);
+                    richTextBox.SaveFile(saveFileDialog.FileName, RichTextBoxStreamType.PlainText);
                     budle.IsNew = false;
-                    budle.SrcPath = SaveFileDialog.FileName;
+                    budle.SrcPath = saveFileDialog.FileName;
                     budle.TabTitle = Path.GetFileName(fileName);
-                    SetCurrStatus($"保存成功: {budle.SrcPath}");
+                    SetCurrStatus($"保存成功：{budle.SrcPath}");
                 }
             }
             else
             {
                 richTextBox.SaveFile(budle.SrcPath, RichTextBoxStreamType.PlainText);
-                SetCurrStatus($"保存成功: {budle.SrcPath}");
+                SetCurrStatus($"保存成功：{budle.SrcPath}");
             }
         }
 
@@ -210,9 +210,19 @@ namespace WS.Note
             }
         }
 
+        /// <summary>
+        /// 关闭主窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void OpenFolderMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
