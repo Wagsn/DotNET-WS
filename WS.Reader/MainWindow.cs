@@ -22,9 +22,12 @@ namespace WS.Reader
             view.FormBorderStyle = FormBorderStyle.None;
             view.Show();
             ViewForm = view;
+            RichTextBox = (RichTextBox)ViewForm.Controls.Find("RichTextBox", true).FirstOrDefault();
         }
 
         private ViewForm ViewForm { get; set; }
+
+        private RichTextBox RichTextBox { get; set; }
 
         private void OpenMenuItem_Click(object sender, EventArgs e)
         {
@@ -38,10 +41,9 @@ namespace WS.Reader
                 {
                     if (System.IO.File.Exists(fileName))
                     {
-                        var richTextBox = (RichTextBox)ViewForm.Controls.Find("RichTextBox", true).FirstOrDefault();
-                        if (richTextBox != null)
+                        if (RichTextBox != null)
                         {
-                            richTextBox.LoadFile(fileName, RichTextBoxStreamType.PlainText);
+                            RichTextBox.LoadFile(fileName, RichTextBoxStreamType.PlainText);
                         }
                     }
                 }
@@ -49,6 +51,18 @@ namespace WS.Reader
                 {
                     MessageBox.Show(ex.ToString(), "发生错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void 内容CToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RichTextBox.LoadFile("res/Help.txt", RichTextBoxStreamType.PlainText);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "发生错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
