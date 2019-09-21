@@ -15,6 +15,13 @@ namespace WS.Reader
         public MainWindow()
         {
             InitializeComponent();
+
+            ViewForm view = new ViewForm();
+            view.MdiParent = this;
+            view.Dock = DockStyle.Fill;
+            view.FormBorderStyle = FormBorderStyle.None;
+            view.Show();
+            ViewForm = view;
         }
 
         private ViewForm ViewForm { get; set; }
@@ -31,15 +38,6 @@ namespace WS.Reader
                 {
                     if (System.IO.File.Exists(fileName))
                     {
-                        if(ViewForm == null)
-                        {
-                            ViewForm view = new ViewForm();
-                            view.MdiParent = this;
-                            view.Dock = DockStyle.Fill;
-                            view.FormBorderStyle = FormBorderStyle.None;
-                            view.Show();
-                            ViewForm = view;
-                        }
                         var richTextBox = (RichTextBox)ViewForm.Controls.Find("RichTextBox", true).FirstOrDefault();
                         if (richTextBox != null)
                         {

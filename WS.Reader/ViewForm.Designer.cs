@@ -40,7 +40,7 @@
             this.RichTextBox.ReadOnly = true;
             this.RichTextBox.Size = new System.Drawing.Size(800, 450);
             this.RichTextBox.TabIndex = 0;
-            this.RichTextBox.Text = "这是第一行\n这是第二行\n这是第三行";
+            this.RichTextBox.Text = "";
             this.RichTextBox.WordWrap = false;
             // 
             // ViewForm
