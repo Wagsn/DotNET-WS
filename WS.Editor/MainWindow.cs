@@ -28,6 +28,11 @@ namespace WS.Editor
         /// </summary>
         public TabAdapter TabAdapter { get; }
 
+        /// <summary>
+        /// 当前编辑框
+        /// </summary>
+        private RichTextBox CurrEidtBox { get; set; }
+
         public MainWindow()
         {
             WindowId = Guid.NewGuid().ToString("N");
@@ -55,10 +60,12 @@ namespace WS.Editor
         public void SetCurrStatus(string text)
         {
             CurrStatus.Text = text;
-            var outpuTextBox = Output.Controls.Find("OutputTextBox", true).FirstOrDefault();
+            var outpuTextBox = (TextBox)OtherTabWraper.Controls.Find("OutputTextBox", true).FirstOrDefault();
+
             if(outpuTextBox != null)
             {
-                outpuTextBox.Text += text+"\r\n";
+                outpuTextBox.AppendText(text + "\r\n");
+                outpuTextBox.ScrollToCaret();
             }
         }
 
@@ -300,13 +307,38 @@ namespace WS.Editor
         private void PrintPreviewMenuItem_Click(object sender, EventArgs e)
         {
             //PrintDocument.
-            PrintPreviewDialog.ShowDialog();
+            var page = MainTabControl.SelectedTab;
+            PrintPreviewDialog.ShowDialog(page);
         }
 
         private void MainTabControl_DragOver(object sender, DragEventArgs e)
         {
-            SetCurrStatus($"拖动结束：{e.Data}");
             TabPage source = (TabPage)e.Data.GetData(typeof(TabPage));
+            //SetCurrStatus($"MainTabControl_DragOver：{source}");
+            if (source != null)
+            {
+                for (int i = 0; i < MainTabControl.TabPages.Count; i++)
+                {
+                    if (MainTabControl.GetTabRect(i).Contains(MainTabControl.PointToClient(new Point(e.X, e.Y))))
+                    {
+                        if(MainTabControl.TabPages.IndexOf(source) != i)
+                        {
+                            e.Effect = DragDropEffects.Move;
+                            TabAdapter.Swap(MainTabControl.TabPages.IndexOf(source), i);
+                            MainTabControl.SelectedTab = source;
+                            SetCurrStatus($"拖动结束：{source.Text}");
+                            return;
+                        }
+                    }
+                }
+            }
+            e.Effect = DragDropEffects.None;
+        }
+
+        private void MainTabControl_DragDrop(object sender, DragEventArgs e)
+        {
+            TabPage source = (TabPage)e.Data.GetData(typeof(TabPage));
+            SetCurrStatus($"MainTabControl_DragDrop：{source}");
             if (source != null)
             {
                 for (int i = 0; i < MainTabControl.TabPages.Count; i++)
@@ -316,13 +348,87 @@ namespace WS.Editor
                         //var tab = MainTabControl.TabPages[i];
                         //SetCurrStatus($"拖动开始：{MainTabControl.TabPages[i].Text}，AlowDrop：{tab.AllowDrop}");
                         //tab.DoDragDrop(e, DragDropEffects.Move);
-                        e.Effect = DragDropEffects.Move;
-                        TabAdapter.Swap(MainTabControl.TabPages.IndexOf(source), i);
-                        return;
+                        if (MainTabControl.TabPages.IndexOf(source) != i)
+                        {
+                            e.Effect = DragDropEffects.Move;
+                            TabAdapter.Swap(MainTabControl.TabPages.IndexOf(source), i);
+                            SetCurrStatus($"拖动结束：{e.Data}");
+                            return;
+                        }
                     }
                 }
             }
             e.Effect = DragDropEffects.None;
+        }
+
+        private void PrintMenuItem_Click(object sender, EventArgs e)
+        {
+            SetCurrStatus($"打印：{MainTabControl.SelectedTab.Text}");
+        }
+
+        private void AutoLinefeedMenuItem_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+            if (editTextBox != null)
+            {
+                editTextBox.WordWrap = !editTextBox.WordWrap;
+                AutoLinefeedMenuItem.Checked = !AutoLinefeedMenuItem.Checked;
+            }
+        }
+
+        private void CommentToolButton_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+            if(editTextBox != null)
+            {
+                SetCurrStatus($"光标所在位置 行: {editTextBox.GetLineFromCharIndex(editTextBox.GetFirstCharIndexOfCurrentLine())}, 列: {editTextBox.SelectionStart - editTextBox.GetFirstCharIndexOfCurrentLine()}");
+            }
+        }
+
+        private void CopyMenuItem_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+            if(editTextBox != null)
+            {
+                editTextBox.Copy();
+                SetCurrStatus($"Copy Text: {editTextBox.SelectedText}");
+            }
+        }
+
+        private void PasteMenuItem_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+            if(editTextBox != null)
+            {
+                editTextBox.Paste();
+                if (Clipboard.ContainsText())
+                {
+                    SetCurrStatus($"Paste Text: {editTextBox.SelectedText}");
+                }
+                else
+                {
+                    SetCurrStatus($"Clipboard has not Text!");
+                }
+            }
+        }
+
+        private void OutputMenuItem_Click(object sender, EventArgs e)
+        {
+            if (OutputMenuItem.Checked)
+            {
+                OutputMenuItem.Checked = !OutputMenuItem.Checked;
+                OtherTabWraper.Hide();
+            }
+            else
+            {
+                OutputMenuItem.Checked = !OutputMenuItem.Checked;
+                OtherTabWraper.Show();
+            }
+        }
+
+        private void MainTabControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            //SetCurrStatus($"MainTabControl_MouseMove: {sender}");
         }
     }
 }

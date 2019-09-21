@@ -33,6 +33,7 @@
             // 
             // OutputTextBox
             // 
+            this.OutputTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.OutputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OutputTextBox.Location = new System.Drawing.Point(0, 0);
             this.OutputTextBox.Multiline = true;
@@ -40,7 +41,7 @@
             this.OutputTextBox.ReadOnly = true;
             this.OutputTextBox.Size = new System.Drawing.Size(800, 450);
             this.OutputTextBox.TabIndex = 0;
-            this.OutputTextBox.Text = "输出框：";
+            this.OutputTextBox.Text = "输出：";
             // 
             // OutputForm
             // 

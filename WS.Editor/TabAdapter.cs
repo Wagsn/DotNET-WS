@@ -68,11 +68,40 @@ namespace WS.Editor
                 TabTitle = title,
                 TabPage = CreateEditPage(title),
             };
+            bundle.TabPage.AllowDrop = true;
+            bundle.TabPage.DragDrop += OnDragDrop;
+
             ((RichTextBox)bundle.TabPage.Controls.Find("RichTextBox", true).FirstOrDefault()).LoadFile(bundle.SrcPath, RichTextBoxStreamType.PlainText);
             TabControl.TabPages.Add(bundle.TabPage);
             var index = TabControl.TabPages.IndexOf(bundle.TabPage);
             TabControl.SelectedIndex = index;
             TabBundles.Add(bundle);
+        }
+
+        private void OnDragDrop(object sender, DragEventArgs e)
+        {
+            TabPage source = (TabPage)e.Data.GetData(typeof(TabPage));
+            MainWindow.SetCurrStatus($"OnDragDrop：{source}");
+            if (source != null)
+            {
+                for (int i = 0; i < TabControl.TabPages.Count; i++)
+                {
+                    if (TabControl.GetTabRect(i).Contains(e.X, e.Y))
+                    {
+                        //var tab = MainTabControl.TabPages[i];
+                        //SetCurrStatus($"拖动开始：{MainTabControl.TabPages[i].Text}，AlowDrop：{tab.AllowDrop}");
+                        //tab.DoDragDrop(e, DragDropEffects.Move);
+                        if (TabControl.TabPages.IndexOf(source) != i)
+                        {
+                            e.Effect = DragDropEffects.Move;
+                            Swap(TabControl.TabPages.IndexOf(source), i);
+                            MainWindow.SetCurrStatus($"拖动结束：{e.Data}");
+                            return;
+                        }
+                    }
+                }
+            }
+            e.Effect = DragDropEffects.None;
         }
 
         /// <summary>
@@ -174,9 +203,11 @@ namespace WS.Editor
             {
                 throw new IndexOutOfRangeException("Tab Page Index out of the Range");
             }
-            TabPage page = tabControl.TabPages[index1];
-            tabControl.TabPages.RemoveAt(index1);
-            tabControl.TabPages.Insert(index2, page);
+            TabPage page1 = tabControl.TabPages[index1];
+            TabPage page2 = tabControl.TabPages[index2];
+
+            tabControl.TabPages[index2] = page1;
+            tabControl.TabPages[index1] = page2;
         }
 
         /// <summary>

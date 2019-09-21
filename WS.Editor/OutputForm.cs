@@ -16,5 +16,15 @@ namespace WS.Editor
         {
             InitializeComponent();
         }
+
+        public void AppendLine(string text)
+        {
+            OutputTextBox.AppendText(text + "\r\n");
+        }
+
+        public void AppendText(string text)
+        {
+            OutputTextBox.AppendText(text);
+        }
     }
 }

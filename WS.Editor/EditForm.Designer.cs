@@ -32,14 +32,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditForm));
             this.RichTextBox = new System.Windows.Forms.RichTextBox();
             this.EditContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.全选AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.粘贴PToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.复制CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.剪切TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.重复RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.撤消UToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重复RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.剪切TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PasteContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.全选AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,6 +51,7 @@
             this.RichTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.RichTextBox.Location = new System.Drawing.Point(0, 0);
             this.RichTextBox.Name = "RichTextBox";
+            this.RichTextBox.ShortcutsEnabled = false;
             this.RichTextBox.Size = new System.Drawing.Size(800, 450);
             this.RichTextBox.TabIndex = 0;
             this.RichTextBox.Text = "";
@@ -63,36 +64,31 @@
             this.重复RToolStripMenuItem,
             this.toolStripMenuItem1,
             this.剪切TToolStripMenuItem,
-            this.复制CToolStripMenuItem,
-            this.粘贴PToolStripMenuItem,
+            this.CopyContextMenuItem,
+            this.PasteContextMenuItem,
             this.toolStripMenuItem2,
             this.全选AToolStripMenuItem});
             this.EditContextMenu.Name = "EditContextMenu";
-            this.EditContextMenu.Size = new System.Drawing.Size(162, 148);
+            this.EditContextMenu.Size = new System.Drawing.Size(181, 170);
             // 
-            // 全选AToolStripMenuItem
+            // 撤消UToolStripMenuItem
             // 
-            this.全选AToolStripMenuItem.Name = "全选AToolStripMenuItem";
-            this.全选AToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.全选AToolStripMenuItem.Text = "全选(&A)";
+            this.撤消UToolStripMenuItem.Name = "撤消UToolStripMenuItem";
+            this.撤消UToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.撤消UToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.撤消UToolStripMenuItem.Text = "撤消(&U)";
             // 
-            // 粘贴PToolStripMenuItem
+            // 重复RToolStripMenuItem
             // 
-            this.粘贴PToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("粘贴PToolStripMenuItem.Image")));
-            this.粘贴PToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.粘贴PToolStripMenuItem.Name = "粘贴PToolStripMenuItem";
-            this.粘贴PToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.粘贴PToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.粘贴PToolStripMenuItem.Text = "粘贴(&P)";
+            this.重复RToolStripMenuItem.Name = "重复RToolStripMenuItem";
+            this.重复RToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.重复RToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重复RToolStripMenuItem.Text = "重复(&R)";
             // 
-            // 复制CToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.复制CToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("复制CToolStripMenuItem.Image")));
-            this.复制CToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.复制CToolStripMenuItem.Name = "复制CToolStripMenuItem";
-            this.复制CToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.复制CToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.复制CToolStripMenuItem.Text = "复制(&C)";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // 剪切TToolStripMenuItem
             // 
@@ -100,32 +96,39 @@
             this.剪切TToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.剪切TToolStripMenuItem.Name = "剪切TToolStripMenuItem";
             this.剪切TToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.剪切TToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.剪切TToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.剪切TToolStripMenuItem.Text = "剪切(&T)";
             // 
-            // 重复RToolStripMenuItem
+            // CopyContextMenuItem
             // 
-            this.重复RToolStripMenuItem.Name = "重复RToolStripMenuItem";
-            this.重复RToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.重复RToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.重复RToolStripMenuItem.Text = "重复(&R)";
+            this.CopyContextMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("CopyContextMenuItem.Image")));
+            this.CopyContextMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CopyContextMenuItem.Name = "CopyContextMenuItem";
+            this.CopyContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.CopyContextMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CopyContextMenuItem.Text = "复制(&C)";
+            this.CopyContextMenuItem.Click += new System.EventHandler(this.CopyContextMenuItem_Click);
             // 
-            // 撤消UToolStripMenuItem
+            // PasteContextMenuItem
             // 
-            this.撤消UToolStripMenuItem.Name = "撤消UToolStripMenuItem";
-            this.撤消UToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.撤消UToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.撤消UToolStripMenuItem.Text = "撤消(&U)";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(158, 6);
+            this.PasteContextMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PasteContextMenuItem.Image")));
+            this.PasteContextMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PasteContextMenuItem.Name = "PasteContextMenuItem";
+            this.PasteContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.PasteContextMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.PasteContextMenuItem.Text = "粘贴(&P)";
+            this.PasteContextMenuItem.Click += new System.EventHandler(this.PasteContextMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(158, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // 全选AToolStripMenuItem
+            // 
+            this.全选AToolStripMenuItem.Name = "全选AToolStripMenuItem";
+            this.全选AToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.全选AToolStripMenuItem.Text = "全选(&A)";
             // 
             // EditForm
             // 
@@ -145,8 +148,8 @@
         private System.Windows.Forms.RichTextBox RichTextBox;
         private System.Windows.Forms.ContextMenuStrip EditContextMenu;
         private System.Windows.Forms.ToolStripMenuItem 全选AToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 粘贴PToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 复制CToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PasteContextMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopyContextMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 剪切TToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 重复RToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 撤消UToolStripMenuItem;

@@ -40,7 +40,7 @@
             this.保存SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.另存为AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.打印PToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PrintMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PrintPreviewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.退出XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,15 +49,16 @@
             this.重复RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.剪切TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.复制CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.粘贴PToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.全选AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.格式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.状态栏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具栏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.AutoLinefeedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OutputMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.自定义CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选项OToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,8 +72,7 @@
             this.CurrStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.CurrTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.MainTool = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.CommentToolButton = new System.Windows.Forms.ToolStripButton();
             this.TabContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SaveTabContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseTabContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,13 +82,25 @@
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.PrintDocument = new System.Drawing.Printing.PrintDocument();
             this.PrintPreviewDialog = new System.Windows.Forms.PrintPreviewDialog();
-            this.Output = new System.Windows.Forms.Panel();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
+            this.OtherTabWraper = new System.Windows.Forms.Panel();
+            this.ContentWraper = new System.Windows.Forms.Panel();
+            this.MainToolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            this.OtherTabControl = new System.Windows.Forms.TabControl();
+            this.OutputTab = new System.Windows.Forms.TabPage();
+            this.CommandTab = new System.Windows.Forms.TabPage();
             this.MainMenu.SuspendLayout();
             this.MainStatus.SuspendLayout();
             this.MainTool.SuspendLayout();
             this.TabContextMenu.SuspendLayout();
-            this.Output.SuspendLayout();
+            this.OtherTabWraper.SuspendLayout();
+            this.ContentWraper.SuspendLayout();
+            this.MainToolStripContainer.ContentPanel.SuspendLayout();
+            this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
+            this.MainToolStripContainer.SuspendLayout();
+            this.OtherTabControl.SuspendLayout();
+            this.OutputTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
@@ -117,7 +129,7 @@
             this.保存SToolStripMenuItem,
             this.另存为AToolStripMenuItem,
             this.toolStripSeparator1,
-            this.打印PToolStripMenuItem,
+            this.PrintMenuItem,
             this.PrintPreviewMenuItem,
             this.toolStripSeparator2,
             this.退出XToolStripMenuItem});
@@ -188,14 +200,15 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
             // 
-            // 打印PToolStripMenuItem
+            // PrintMenuItem
             // 
-            this.打印PToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("打印PToolStripMenuItem.Image")));
-            this.打印PToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.打印PToolStripMenuItem.Name = "打印PToolStripMenuItem";
-            this.打印PToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.打印PToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.打印PToolStripMenuItem.Text = "打印(&P)";
+            this.PrintMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PrintMenuItem.Image")));
+            this.PrintMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PrintMenuItem.Name = "PrintMenuItem";
+            this.PrintMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.PrintMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.PrintMenuItem.Text = "打印(&P)";
+            this.PrintMenuItem.Click += new System.EventHandler(this.PrintMenuItem_Click);
             // 
             // PrintPreviewMenuItem
             // 
@@ -225,8 +238,8 @@
             this.重复RToolStripMenuItem,
             this.toolStripSeparator3,
             this.剪切TToolStripMenuItem,
-            this.复制CToolStripMenuItem,
-            this.粘贴PToolStripMenuItem,
+            this.CopyMenuItem,
+            this.PasteMenuItem,
             this.toolStripSeparator4,
             this.全选AToolStripMenuItem});
             this.编辑EToolStripMenuItem.Name = "编辑EToolStripMenuItem";
@@ -261,23 +274,25 @@
             this.剪切TToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.剪切TToolStripMenuItem.Text = "剪切(&T)";
             // 
-            // 复制CToolStripMenuItem
+            // CopyMenuItem
             // 
-            this.复制CToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("复制CToolStripMenuItem.Image")));
-            this.复制CToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.复制CToolStripMenuItem.Name = "复制CToolStripMenuItem";
-            this.复制CToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.复制CToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.复制CToolStripMenuItem.Text = "复制(&C)";
+            this.CopyMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("CopyMenuItem.Image")));
+            this.CopyMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CopyMenuItem.Name = "CopyMenuItem";
+            this.CopyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.CopyMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.CopyMenuItem.Text = "复制(&C)";
+            this.CopyMenuItem.Click += new System.EventHandler(this.CopyMenuItem_Click);
             // 
-            // 粘贴PToolStripMenuItem
+            // PasteMenuItem
             // 
-            this.粘贴PToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("粘贴PToolStripMenuItem.Image")));
-            this.粘贴PToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.粘贴PToolStripMenuItem.Name = "粘贴PToolStripMenuItem";
-            this.粘贴PToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.粘贴PToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.粘贴PToolStripMenuItem.Text = "粘贴(&P)";
+            this.PasteMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PasteMenuItem.Image")));
+            this.PasteMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.PasteMenuItem.Name = "PasteMenuItem";
+            this.PasteMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.PasteMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.PasteMenuItem.Text = "粘贴(&P)";
+            this.PasteMenuItem.Click += new System.EventHandler(this.PasteMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -287,6 +302,7 @@
             // 全选AToolStripMenuItem
             // 
             this.全选AToolStripMenuItem.Name = "全选AToolStripMenuItem";
+            this.全选AToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.全选AToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.全选AToolStripMenuItem.Text = "全选(&A)";
             // 
@@ -301,7 +317,8 @@
             this.视图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.状态栏ToolStripMenuItem,
             this.工具栏ToolStripMenuItem,
-            this.toolStripMenuItem1});
+            this.AutoLinefeedMenuItem,
+            this.OutputMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
             this.视图ToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.视图ToolStripMenuItem.Text = "视图(&V)";
@@ -312,23 +329,36 @@
             this.状态栏ToolStripMenuItem.CheckOnClick = true;
             this.状态栏ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.状态栏ToolStripMenuItem.Name = "状态栏ToolStripMenuItem";
-            this.状态栏ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.状态栏ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.状态栏ToolStripMenuItem.Text = "状态栏(&S)";
             this.状态栏ToolStripMenuItem.Click += new System.EventHandler(this.StatusbarMenuItem_Click);
             // 
             // 工具栏ToolStripMenuItem
             // 
+            this.工具栏ToolStripMenuItem.Checked = true;
             this.工具栏ToolStripMenuItem.CheckOnClick = true;
+            this.工具栏ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.工具栏ToolStripMenuItem.Name = "工具栏ToolStripMenuItem";
-            this.工具栏ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.工具栏ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.工具栏ToolStripMenuItem.Text = "工具栏(&T)";
             this.工具栏ToolStripMenuItem.Click += new System.EventHandler(this.ToolbarMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // AutoLinefeedMenuItem
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
-            this.toolStripMenuItem1.Text = "自动换行";
+            this.AutoLinefeedMenuItem.Name = "AutoLinefeedMenuItem";
+            this.AutoLinefeedMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AutoLinefeedMenuItem.Text = "自动换行";
+            this.AutoLinefeedMenuItem.Click += new System.EventHandler(this.AutoLinefeedMenuItem_Click);
+            // 
+            // OutputMenuItem
+            // 
+            this.OutputMenuItem.Checked = true;
+            this.OutputMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.OutputMenuItem.Name = "OutputMenuItem";
+            this.OutputMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.OutputMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OutputMenuItem.Text = "输出";
+            this.OutputMenuItem.Click += new System.EventHandler(this.OutputMenuItem_Click);
             // 
             // 工具TToolStripMenuItem
             // 
@@ -342,13 +372,13 @@
             // 自定义CToolStripMenuItem
             // 
             this.自定义CToolStripMenuItem.Name = "自定义CToolStripMenuItem";
-            this.自定义CToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.自定义CToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.自定义CToolStripMenuItem.Text = "自定义(&C)";
             // 
             // 选项OToolStripMenuItem
             // 
             this.选项OToolStripMenuItem.Name = "选项OToolStripMenuItem";
-            this.选项OToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.选项OToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.选项OToolStripMenuItem.Text = "选项(&O)";
             // 
             // 帮助HToolStripMenuItem
@@ -419,37 +449,23 @@
             // MainTool
             // 
             this.MainTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
-            this.MainTool.Location = new System.Drawing.Point(0, 25);
+            this.CommentToolButton});
+            this.MainTool.Location = new System.Drawing.Point(0, 0);
             this.MainTool.Name = "MainTool";
+            this.MainTool.Padding = new System.Windows.Forms.Padding(0);
             this.MainTool.Size = new System.Drawing.Size(1014, 25);
+            this.MainTool.Stretch = true;
             this.MainTool.TabIndex = 3;
             this.MainTool.Text = "工具栏";
-            this.MainTool.Visible = false;
             // 
-            // toolStripButton1
+            // CommentToolButton
             // 
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(52, 22);
-            this.toolStripButton1.Text = "运行";
-            // 
-            // MainTabControl
-            // 
-            this.MainTabControl.AllowDrop = true;
-            this.MainTabControl.ContextMenuStrip = this.TabContextMenu;
-            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Location = new System.Drawing.Point(0, 25);
-            this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
-            this.MainTabControl.Name = "MainTabControl";
-            this.MainTabControl.Padding = new System.Drawing.Point(0, 0);
-            this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1014, 496);
-            this.MainTabControl.TabIndex = 0;
-            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
-            this.MainTabControl.DragOver += new System.Windows.Forms.DragEventHandler(this.MainTabControl_DragOver);
-            this.MainTabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainTabControl_MouseDown);
+            this.CommentToolButton.Image = ((System.Drawing.Image)(resources.GetObject("CommentToolButton.Image")));
+            this.CommentToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CommentToolButton.Name = "CommentToolButton";
+            this.CommentToolButton.Size = new System.Drawing.Size(52, 22);
+            this.CommentToolButton.Text = "注释";
+            this.CommentToolButton.Click += new System.EventHandler(this.CommentToolButton_Click);
             // 
             // TabContextMenu
             // 
@@ -500,42 +516,120 @@
             this.PrintPreviewDialog.Name = "PrintPreviewDialog";
             this.PrintPreviewDialog.Visible = false;
             // 
-            // Output
+            // MainTabControl
             // 
-            this.Output.Controls.Add(this.OutputTextBox);
-            this.Output.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Output.Location = new System.Drawing.Point(0, 421);
-            this.Output.Name = "Output";
-            this.Output.Padding = new System.Windows.Forms.Padding(5);
-            this.Output.Size = new System.Drawing.Size(1014, 100);
-            this.Output.TabIndex = 4;
-            this.Output.Tag = "WS.Editor.OutputForm";
+            this.MainTabControl.AllowDrop = true;
+            this.MainTabControl.ContextMenuStrip = this.TabContextMenu;
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.MainTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.Padding = new System.Drawing.Point(0, 0);
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(1014, 379);
+            this.MainTabControl.TabIndex = 0;
+            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
+            this.MainTabControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainTabControl_DragDrop);
+            this.MainTabControl.DragOver += new System.Windows.Forms.DragEventHandler(this.MainTabControl_DragOver);
+            this.MainTabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainTabControl_MouseDown);
+            this.MainTabControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainTabControl_MouseMove);
             // 
             // OutputTextBox
             // 
+            this.OutputTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.OutputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputTextBox.Location = new System.Drawing.Point(5, 5);
-            this.OutputTextBox.Margin = new System.Windows.Forms.Padding(10);
+            this.OutputTextBox.Location = new System.Drawing.Point(0, 0);
             this.OutputTextBox.Multiline = true;
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.ReadOnly = true;
-            this.OutputTextBox.Size = new System.Drawing.Size(1004, 90);
+            this.OutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.OutputTextBox.Size = new System.Drawing.Size(1006, 66);
             this.OutputTextBox.TabIndex = 0;
             this.OutputTextBox.Text = "输出：\r\n";
+            this.OutputTextBox.WordWrap = false;
+            // 
+            // OtherTabWraper
+            // 
+            this.OtherTabWraper.Controls.Add(this.OtherTabControl);
+            this.OtherTabWraper.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.OtherTabWraper.Location = new System.Drawing.Point(0, 379);
+            this.OtherTabWraper.Name = "OtherTabWraper";
+            this.OtherTabWraper.Size = new System.Drawing.Size(1014, 92);
+            this.OtherTabWraper.TabIndex = 4;
+            this.OtherTabWraper.Tag = "";
+            // 
+            // ContentWraper
+            // 
+            this.ContentWraper.Controls.Add(this.MainToolStripContainer);
+            this.ContentWraper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentWraper.Location = new System.Drawing.Point(0, 25);
+            this.ContentWraper.Name = "ContentWraper";
+            this.ContentWraper.Size = new System.Drawing.Size(1014, 496);
+            this.ContentWraper.TabIndex = 5;
+            // 
+            // MainToolStripContainer
+            // 
+            this.MainToolStripContainer.BottomToolStripPanelVisible = false;
+            // 
+            // MainToolStripContainer.ContentPanel
+            // 
+            this.MainToolStripContainer.ContentPanel.Controls.Add(this.MainTabControl);
+            this.MainToolStripContainer.ContentPanel.Controls.Add(this.OtherTabWraper);
+            this.MainToolStripContainer.ContentPanel.Size = new System.Drawing.Size(1014, 471);
+            this.MainToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainToolStripContainer.LeftToolStripPanelVisible = false;
+            this.MainToolStripContainer.Location = new System.Drawing.Point(0, 0);
+            this.MainToolStripContainer.Name = "MainToolStripContainer";
+            this.MainToolStripContainer.RightToolStripPanelVisible = false;
+            this.MainToolStripContainer.Size = new System.Drawing.Size(1014, 496);
+            this.MainToolStripContainer.TabIndex = 5;
+            this.MainToolStripContainer.Text = "toolStripContainer1";
+            // 
+            // MainToolStripContainer.TopToolStripPanel
+            // 
+            this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainTool);
+            // 
+            // OtherTabControl
+            // 
+            this.OtherTabControl.Controls.Add(this.OutputTab);
+            this.OtherTabControl.Controls.Add(this.CommandTab);
+            this.OtherTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OtherTabControl.Location = new System.Drawing.Point(0, 0);
+            this.OtherTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.OtherTabControl.Name = "OtherTabControl";
+            this.OtherTabControl.SelectedIndex = 0;
+            this.OtherTabControl.Size = new System.Drawing.Size(1014, 92);
+            this.OtherTabControl.TabIndex = 1;
+            // 
+            // OutputTab
+            // 
+            this.OutputTab.Controls.Add(this.OutputTextBox);
+            this.OutputTab.Location = new System.Drawing.Point(4, 22);
+            this.OutputTab.Name = "OutputTab";
+            this.OutputTab.Size = new System.Drawing.Size(1006, 66);
+            this.OutputTab.TabIndex = 0;
+            this.OutputTab.Text = "输出";
+            // 
+            // CommandTab
+            // 
+            this.CommandTab.Location = new System.Drawing.Point(4, 22);
+            this.CommandTab.Name = "CommandTab";
+            this.CommandTab.Size = new System.Drawing.Size(1006, 66);
+            this.CommandTab.TabIndex = 1;
+            this.CommandTab.Text = "命令";
+            this.CommandTab.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1014, 543);
-            this.Controls.Add(this.Output);
-            this.Controls.Add(this.MainTabControl);
-            this.Controls.Add(this.MainTool);
+            this.Controls.Add(this.ContentWraper);
             this.Controls.Add(this.MainMenu);
             this.Controls.Add(this.MainStatus);
             this.MainMenuStrip = this.MainMenu;
             this.Name = "MainWindow";
-            this.Text = "Note";
+            this.Text = "Editor";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.MainMenu.ResumeLayout(false);
             this.MainMenu.PerformLayout();
@@ -544,8 +638,16 @@
             this.MainTool.ResumeLayout(false);
             this.MainTool.PerformLayout();
             this.TabContextMenu.ResumeLayout(false);
-            this.Output.ResumeLayout(false);
-            this.Output.PerformLayout();
+            this.OtherTabWraper.ResumeLayout(false);
+            this.ContentWraper.ResumeLayout(false);
+            this.MainToolStripContainer.ContentPanel.ResumeLayout(false);
+            this.MainToolStripContainer.TopToolStripPanel.ResumeLayout(false);
+            this.MainToolStripContainer.TopToolStripPanel.PerformLayout();
+            this.MainToolStripContainer.ResumeLayout(false);
+            this.MainToolStripContainer.PerformLayout();
+            this.OtherTabControl.ResumeLayout(false);
+            this.OutputTab.ResumeLayout(false);
+            this.OutputTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -558,9 +660,8 @@
         private System.Windows.Forms.ToolStrip MainTool;
         private System.Windows.Forms.ToolStripMenuItem 视图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 工具栏ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton CommentToolButton;
         private System.Windows.Forms.ToolStripMenuItem 格式ToolStripMenuItem;
-        private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.ToolStripStatusLabel CurrTime;
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
@@ -581,7 +682,7 @@
         private System.Windows.Forms.ToolStripMenuItem 保存SToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 另存为AToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem 打印PToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PrintMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PrintPreviewMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem 退出XToolStripMenuItem;
@@ -590,13 +691,13 @@
         private System.Windows.Forms.ToolStripMenuItem 重复RToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem 剪切TToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 复制CToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 粘贴PToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopyMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PasteMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem 全选AToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关闭CToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenFolderMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem AutoLinefeedMenuItem;
         private System.Windows.Forms.ContextMenuStrip TabContextMenu;
         private System.Windows.Forms.ToolStripMenuItem SaveTabContextMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CloseTabContextMenuItem;
@@ -604,8 +705,15 @@
         private System.Windows.Forms.ToolStripMenuItem CloseOtherTabContextMenuItem;
         private System.Drawing.Printing.PrintDocument PrintDocument;
         private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog;
-        private System.Windows.Forms.Panel Output;
+        private System.Windows.Forms.ToolStripMenuItem OutputMenuItem;
+        private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.TextBox OutputTextBox;
+        private System.Windows.Forms.Panel OtherTabWraper;
+        private System.Windows.Forms.Panel ContentWraper;
+        private System.Windows.Forms.ToolStripContainer MainToolStripContainer;
+        private System.Windows.Forms.TabControl OtherTabControl;
+        private System.Windows.Forms.TabPage OutputTab;
+        private System.Windows.Forms.TabPage CommandTab;
     }
 }
 

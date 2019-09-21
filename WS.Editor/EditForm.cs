@@ -40,6 +40,33 @@ namespace WS.Editor
 
             this.RichTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
         }
+
+        private void CopyContextMenuItem_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)Controls.Find("RichTextBox", true).FirstOrDefault();
+            if (editTextBox != null)
+            {
+                editTextBox.Copy();
+                //.SetCurrStatus($"Copy Text: {editTextBox.SelectedText}");
+            }
+        }
+
+        private void PasteContextMenuItem_Click(object sender, EventArgs e)
+        {
+            var editTextBox = (RichTextBox)Controls.Find("RichTextBox", true).FirstOrDefault();
+            if (editTextBox != null)
+            {
+                editTextBox.Paste();
+                if (Clipboard.ContainsText())
+                {
+                    //SetCurrStatus($"Paste Text: {editTextBox.SelectedText}");
+                }
+                else
+                {
+                    //SetCurrStatus($"Clipboard has not Text!");
+                }
+            }
+        }
     }
 
 }
