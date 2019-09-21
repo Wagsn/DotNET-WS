@@ -65,5 +65,11 @@ namespace WS.Reader
                 MessageBox.Show(ex.ToString(), "发生错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void 退出XToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO 保存操作
+            this.Close();
+        }
     }
 }
