@@ -19,15 +19,23 @@ namespace WS.Editor
             InitializeComponent();
         }
 
-        private void ShowNewForm(object sender, EventArgs e)
+        private void NewMenuItem_Click(object sender, EventArgs e)
         {
-            Form childForm = new Form();
-            childForm.MdiParent = this;
-            childForm.Text = "窗口 " + childFormNumber++;
-            childForm.Show();
+            var tabPage = new TabPage();
+
+            var pageNode = new TabPageNodeBase
+            {
+                Type = nameof(PageNodeType.Edit),
+                Url = "http://www.baidu.com",
+            };
+
+            tabPage.Text = "分页 " + childFormNumber++;
+            tabPage.Tag = pageNode;
+
+            TabControl.TabPages.Add(tabPage);
         }
 
-        private void OpenFile(object sender, EventArgs e)
+        private void OpenMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -38,7 +46,7 @@ namespace WS.Editor
             }
         }
 
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -68,12 +76,12 @@ namespace WS.Editor
 
         private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            toolStrip.Visible = toolBarToolStripMenuItem.Checked;
+            MainTool.Visible = toolBarToolStripMenuItem.Checked;
         }
 
         private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            statusStrip.Visible = statusBarToolStripMenuItem.Checked;
+            MainStatus.Visible = statusBarToolStripMenuItem.Checked;
         }
 
         private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -102,6 +110,16 @@ namespace WS.Editor
             {
                 childForm.Close();
             }
+        }
+
+        private void SaveMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UndoMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Undo");
         }
     }
 }

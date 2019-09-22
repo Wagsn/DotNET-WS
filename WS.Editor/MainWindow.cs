@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace WS.Editor
 {
@@ -35,7 +36,7 @@ namespace WS.Editor
 
         public MainWindow()
         {
-            WindowId = Guid.NewGuid().ToString("N");
+            WindowId = Guid.NewGuid().ToString();
 
             InitializeComponent();
 
@@ -48,7 +49,7 @@ namespace WS.Editor
             ////this.Output.Controls.Add(output);
             //output.Show();
 
-            CurrStatus.Text = "就绪";
+            SetCurrStatus($"就绪-窗口：{WindowId}");
 
             TabAdapter = new TabAdapter
             {
@@ -59,7 +60,11 @@ namespace WS.Editor
 
         public void SetCurrStatus(string text)
         {
+            // 状态栏输出
             CurrStatus.Text = text;
+            // 控制台输出
+            Console.WriteLine(text);
+            // 输出框输出
             var outpuTextBox = (TextBox)OtherTabWraper.Controls.Find("OutputTextBox", true).FirstOrDefault();
 
             if(outpuTextBox != null)
@@ -67,6 +72,7 @@ namespace WS.Editor
                 outpuTextBox.AppendText(text + "\r\n");
                 outpuTextBox.ScrollToCaret();
             }
+            // TODO 同时输出到TextBox、Console、File，自定义或引入NLOG，引入NLOG参考：https://www.crifan.com/csharp_implement_log_system_same_time_output_to_file_and_terminal/
         }
 
         /// <summary>
@@ -262,6 +268,11 @@ namespace WS.Editor
                     if (MainTabControl.GetTabRect(i).Contains(new Point(e.X, e.Y)))
                     {
                         MainTabControl.SelectedIndex = i;
+                        //var node = MainTabControl.TabPages[i].Tag as ITabPageNode;
+                        //if(node != null)
+                        //{
+                        //    SetCurrStatus($"Tab Page Data: {JsonConvert.SerializeObject(node)}");
+                        //}
                         SetCurrStatus($"右键打开并操作：{MainTabControl.TabPages[i].Text}");
                     }
                 }
@@ -378,7 +389,13 @@ namespace WS.Editor
 
         private void CommentToolButton_Click(object sender, EventArgs e)
         {
-            var editTextBox = (RichTextBox)MainTabControl.SelectedTab.Controls.Find("RichTextBox", true).FirstOrDefault();
+            var page = MainTabControl.SelectedTab;
+            if(page == null)
+            {
+                SetCurrStatus($"不存在标签页");
+                return;
+            }
+            var editTextBox = (RichTextBox)page.Controls.Find("RichTextBox", true).FirstOrDefault();
             if(editTextBox != null)
             {
                 SetCurrStatus($"光标所在位置 行: {editTextBox.GetLineFromCharIndex(editTextBox.GetFirstCharIndexOfCurrentLine())}, 列: {editTextBox.SelectionStart - editTextBox.GetFirstCharIndexOfCurrentLine()}");
@@ -429,6 +446,22 @@ namespace WS.Editor
         private void MainTabControl_MouseMove(object sender, MouseEventArgs e)
         {
             //SetCurrStatus($"MainTabControl_MouseMove: {sender}");
+        }
+
+        private void ConsoleMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ConsoleMenuItem.Checked)
+            {
+                // 关闭控制台
+                ConsoleMenuItem.Checked = !ConsoleMenuItem.Checked;
+                NativeMethods.CloseConsole();
+            }
+            else
+            {
+                // 开启控制台
+                ConsoleMenuItem.Checked = !ConsoleMenuItem.Checked;
+                NativeMethods.OpenConsole();
+            }
         }
     }
 }

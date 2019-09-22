@@ -14,10 +14,17 @@ namespace WS.Editor
         [STAThread]
         static void Main()
         {
+            //MyConsole console = new MyConsole();
+            //console.WriteLine("控制台");
+            //NativeMethods.AllocConsole();
+            //NativeMethods.AttachConsole(NativeMethods.ATTACH_PARENT_PROCESS);
+            //NativeMethods.OpenConsole();
+            //Console.WriteLine("This is a test");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new MainWindow());
-            Application.Run(new MainForm());
+            Application.Run(new MainWindow());
+            //Application.Run(new MainForm());
         }
     }
 }

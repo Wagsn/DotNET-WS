@@ -85,22 +85,23 @@
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
             this.OtherTabWraper = new System.Windows.Forms.Panel();
-            this.ContentWraper = new System.Windows.Forms.Panel();
-            this.MainToolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.OtherTabControl = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
             this.CommandTab = new System.Windows.Forms.TabPage();
+            this.ContentWraper = new System.Windows.Forms.Panel();
+            this.MainToolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            this.ConsoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.MainStatus.SuspendLayout();
             this.MainTool.SuspendLayout();
             this.TabContextMenu.SuspendLayout();
             this.OtherTabWraper.SuspendLayout();
+            this.OtherTabControl.SuspendLayout();
+            this.OutputTab.SuspendLayout();
             this.ContentWraper.SuspendLayout();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.MainToolStripContainer.SuspendLayout();
-            this.OtherTabControl.SuspendLayout();
-            this.OutputTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
@@ -318,7 +319,8 @@
             this.状态栏ToolStripMenuItem,
             this.工具栏ToolStripMenuItem,
             this.AutoLinefeedMenuItem,
-            this.OutputMenuItem});
+            this.OutputMenuItem,
+            this.ConsoleMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
             this.视图ToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.视图ToolStripMenuItem.Text = "视图(&V)";
@@ -347,7 +349,7 @@
             // 
             this.AutoLinefeedMenuItem.Name = "AutoLinefeedMenuItem";
             this.AutoLinefeedMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.AutoLinefeedMenuItem.Text = "自动换行";
+            this.AutoLinefeedMenuItem.Text = "自动换行(&F)";
             this.AutoLinefeedMenuItem.Click += new System.EventHandler(this.AutoLinefeedMenuItem_Click);
             // 
             // OutputMenuItem
@@ -357,7 +359,7 @@
             this.OutputMenuItem.Name = "OutputMenuItem";
             this.OutputMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.OutputMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.OutputMenuItem.Text = "输出";
+            this.OutputMenuItem.Text = "输出(&O)";
             this.OutputMenuItem.Click += new System.EventHandler(this.OutputMenuItem_Click);
             // 
             // 工具TToolStripMenuItem
@@ -448,6 +450,7 @@
             // 
             // MainTool
             // 
+            this.MainTool.Dock = System.Windows.Forms.DockStyle.None;
             this.MainTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CommentToolButton});
             this.MainTool.Location = new System.Drawing.Point(0, 0);
@@ -558,6 +561,36 @@
             this.OtherTabWraper.TabIndex = 4;
             this.OtherTabWraper.Tag = "";
             // 
+            // OtherTabControl
+            // 
+            this.OtherTabControl.Controls.Add(this.OutputTab);
+            this.OtherTabControl.Controls.Add(this.CommandTab);
+            this.OtherTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OtherTabControl.Location = new System.Drawing.Point(0, 0);
+            this.OtherTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.OtherTabControl.Name = "OtherTabControl";
+            this.OtherTabControl.SelectedIndex = 0;
+            this.OtherTabControl.Size = new System.Drawing.Size(1014, 92);
+            this.OtherTabControl.TabIndex = 1;
+            // 
+            // OutputTab
+            // 
+            this.OutputTab.Controls.Add(this.OutputTextBox);
+            this.OutputTab.Location = new System.Drawing.Point(4, 22);
+            this.OutputTab.Name = "OutputTab";
+            this.OutputTab.Size = new System.Drawing.Size(1006, 66);
+            this.OutputTab.TabIndex = 0;
+            this.OutputTab.Text = "输出";
+            // 
+            // CommandTab
+            // 
+            this.CommandTab.Location = new System.Drawing.Point(4, 22);
+            this.CommandTab.Name = "CommandTab";
+            this.CommandTab.Size = new System.Drawing.Size(1006, 66);
+            this.CommandTab.TabIndex = 1;
+            this.CommandTab.Text = "命令";
+            this.CommandTab.UseVisualStyleBackColor = true;
+            // 
             // ContentWraper
             // 
             this.ContentWraper.Controls.Add(this.MainToolStripContainer);
@@ -589,35 +622,12 @@
             // 
             this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainTool);
             // 
-            // OtherTabControl
+            // ConsoleMenuItem
             // 
-            this.OtherTabControl.Controls.Add(this.OutputTab);
-            this.OtherTabControl.Controls.Add(this.CommandTab);
-            this.OtherTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OtherTabControl.Location = new System.Drawing.Point(0, 0);
-            this.OtherTabControl.Margin = new System.Windows.Forms.Padding(0);
-            this.OtherTabControl.Name = "OtherTabControl";
-            this.OtherTabControl.SelectedIndex = 0;
-            this.OtherTabControl.Size = new System.Drawing.Size(1014, 92);
-            this.OtherTabControl.TabIndex = 1;
-            // 
-            // OutputTab
-            // 
-            this.OutputTab.Controls.Add(this.OutputTextBox);
-            this.OutputTab.Location = new System.Drawing.Point(4, 22);
-            this.OutputTab.Name = "OutputTab";
-            this.OutputTab.Size = new System.Drawing.Size(1006, 66);
-            this.OutputTab.TabIndex = 0;
-            this.OutputTab.Text = "输出";
-            // 
-            // CommandTab
-            // 
-            this.CommandTab.Location = new System.Drawing.Point(4, 22);
-            this.CommandTab.Name = "CommandTab";
-            this.CommandTab.Size = new System.Drawing.Size(1006, 66);
-            this.CommandTab.TabIndex = 1;
-            this.CommandTab.Text = "命令";
-            this.CommandTab.UseVisualStyleBackColor = true;
+            this.ConsoleMenuItem.Name = "ConsoleMenuItem";
+            this.ConsoleMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ConsoleMenuItem.Text = "控制台(&C)";
+            this.ConsoleMenuItem.Click += new System.EventHandler(this.ConsoleMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -639,15 +649,15 @@
             this.MainTool.PerformLayout();
             this.TabContextMenu.ResumeLayout(false);
             this.OtherTabWraper.ResumeLayout(false);
+            this.OtherTabControl.ResumeLayout(false);
+            this.OutputTab.ResumeLayout(false);
+            this.OutputTab.PerformLayout();
             this.ContentWraper.ResumeLayout(false);
             this.MainToolStripContainer.ContentPanel.ResumeLayout(false);
             this.MainToolStripContainer.TopToolStripPanel.ResumeLayout(false);
             this.MainToolStripContainer.TopToolStripPanel.PerformLayout();
             this.MainToolStripContainer.ResumeLayout(false);
             this.MainToolStripContainer.PerformLayout();
-            this.OtherTabControl.ResumeLayout(false);
-            this.OutputTab.ResumeLayout(false);
-            this.OutputTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -714,6 +724,7 @@
         private System.Windows.Forms.TabControl OtherTabControl;
         private System.Windows.Forms.TabPage OutputTab;
         private System.Windows.Forms.TabPage CommandTab;
+        private System.Windows.Forms.ToolStripMenuItem ConsoleMenuItem;
     }
 }
 

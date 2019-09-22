@@ -116,6 +116,11 @@ namespace WS.Editor
             var form = CreateForm(EditFormClassName);
 
             TabPage page = CreateTabPage(bundle.TabTitle, CreateForm(EditFormClassName));
+            page.Tag = new TabPageNodeBase
+            {
+                Title = bundle.TabTitle,
+                Type = PageNodeType.Edit.ToString(),
+            };
             //page.AllowDrop = true;
             TabBundles.Add(new TabBundle
             {
