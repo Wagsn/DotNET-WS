@@ -12,8 +12,17 @@ namespace WS.Editor
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            //NativeMethods.OpenConsole();
+            //NativeMethods.CloseConsole();
+            if (args!=null && args.Length > 0)
+            {
+                // 注：在这里打开控制台，调试模式下后面调用的Console输出都是输出在控制台上
+                NativeMethods.OpenConsole();
+                Console.WriteLine($"控制台输入命令：{string.Join(", ", args)}");
+                //MessageBox.Show($"控制台输入命令：{string.Join(", ", args)}");
+            }
             //MyConsole console = new MyConsole();
             //console.WriteLine("控制台");
             //NativeMethods.AllocConsole();

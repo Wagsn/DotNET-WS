@@ -22,7 +22,7 @@ namespace WS.Editor
         /// <summary>
         /// 窗口GUID
         /// </summary>
-        public string WindowId { get; }
+        public static string Id { get; } = Guid.NewGuid().ToString();
 
         /// <summary>
         /// 选项卡管理器，主要用于动态添加删除选项卡
@@ -36,8 +36,6 @@ namespace WS.Editor
 
         public MainWindow()
         {
-            WindowId = Guid.NewGuid().ToString();
-
             InitializeComponent();
 
             //OutputForm output = new OutputForm();
@@ -49,7 +47,7 @@ namespace WS.Editor
             ////this.Output.Controls.Add(output);
             //output.Show();
 
-            SetCurrStatus($"就绪-窗口：{WindowId}");
+            SetCurrStatus($"就绪-窗口：{Id}");
 
             TabAdapter = new TabAdapter
             {
@@ -462,6 +460,42 @@ namespace WS.Editor
                 ConsoleMenuItem.Checked = !ConsoleMenuItem.Checked;
                 NativeMethods.OpenConsole();
             }
+        }
+
+        private void OpenCmdMenuItem_Click(object sender, EventArgs e)
+        {
+            NativeMethods.OpenCmd();
+        }
+
+        /// <summary>
+        /// 监听命令框键盘按下事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Control)
+            {
+                //CommandTextBox.Text
+
+            }
+        }
+
+        private CmdForm Cmd { get; set; }
+
+        private void CustomCmdMenuItem_Click(object sender, EventArgs e)
+        {
+            if(Cmd == null || Cmd.IsDisposed)
+            {
+                Cmd = new CmdForm();
+            }
+            SetCurrStatus("打开自定义命令窗口");
+            Cmd.Show();
+        }
+
+        private void RestartMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
     }
 }

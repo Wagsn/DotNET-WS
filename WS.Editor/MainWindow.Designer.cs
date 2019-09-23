@@ -59,6 +59,7 @@
             this.工具栏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoLinefeedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OutputMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConsoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.自定义CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选项OToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,9 +89,12 @@
             this.OtherTabControl = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
             this.CommandTab = new System.Windows.Forms.TabPage();
+            this.CommandTextBox = new System.Windows.Forms.RichTextBox();
             this.ContentWraper = new System.Windows.Forms.Panel();
             this.MainToolStripContainer = new System.Windows.Forms.ToolStripContainer();
-            this.ConsoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenCmdMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CustomCmdMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RestartMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.MainStatus.SuspendLayout();
             this.MainTool.SuspendLayout();
@@ -98,6 +102,7 @@
             this.OtherTabWraper.SuspendLayout();
             this.OtherTabControl.SuspendLayout();
             this.OutputTab.SuspendLayout();
+            this.CommandTab.SuspendLayout();
             this.ContentWraper.SuspendLayout();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -133,6 +138,7 @@
             this.PrintMenuItem,
             this.PrintPreviewMenuItem,
             this.toolStripSeparator2,
+            this.RestartMenuItem,
             this.退出XToolStripMenuItem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
             this.文件FToolStripMenuItem.Size = new System.Drawing.Size(58, 21);
@@ -144,7 +150,7 @@
             this.新建NToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.新建NToolStripMenuItem.Name = "新建NToolStripMenuItem";
             this.新建NToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.新建NToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.新建NToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.新建NToolStripMenuItem.Text = "新建(&N)";
             this.新建NToolStripMenuItem.Click += new System.EventHandler(this.NewMenuItem_Click);
             // 
@@ -154,7 +160,7 @@
             this.打开OToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.打开OToolStripMenuItem.Name = "打开OToolStripMenuItem";
             this.打开OToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.打开OToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.打开OToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.打开OToolStripMenuItem.Text = "打开(&O)";
             this.打开OToolStripMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
             // 
@@ -163,21 +169,21 @@
             this.OpenFolderMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("OpenFolderMenuItem.Image")));
             this.OpenFolderMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.OpenFolderMenuItem.Name = "OpenFolderMenuItem";
-            this.OpenFolderMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.OpenFolderMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenFolderMenuItem.Text = "打开文件夹(&F)";
             this.OpenFolderMenuItem.Click += new System.EventHandler(this.OpenFolderMenuItem_Click);
             // 
             // 关闭CToolStripMenuItem
             // 
             this.关闭CToolStripMenuItem.Name = "关闭CToolStripMenuItem";
-            this.关闭CToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.关闭CToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.关闭CToolStripMenuItem.Text = "关闭(&C)";
             this.关闭CToolStripMenuItem.Click += new System.EventHandler(this.CloseMenuItem_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(177, 6);
             // 
             // 保存SToolStripMenuItem
             // 
@@ -185,21 +191,21 @@
             this.保存SToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.保存SToolStripMenuItem.Name = "保存SToolStripMenuItem";
             this.保存SToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.保存SToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.保存SToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.保存SToolStripMenuItem.Text = "保存(&S)";
             this.保存SToolStripMenuItem.Click += new System.EventHandler(this.SaveMenuItem_Click);
             // 
             // 另存为AToolStripMenuItem
             // 
             this.另存为AToolStripMenuItem.Name = "另存为AToolStripMenuItem";
-            this.另存为AToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.另存为AToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.另存为AToolStripMenuItem.Text = "另存为(&A)";
             this.另存为AToolStripMenuItem.Click += new System.EventHandler(this.SaveAsMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // PrintMenuItem
             // 
@@ -207,7 +213,7 @@
             this.PrintMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PrintMenuItem.Name = "PrintMenuItem";
             this.PrintMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.PrintMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.PrintMenuItem.Size = new System.Drawing.Size(180, 22);
             this.PrintMenuItem.Text = "打印(&P)";
             this.PrintMenuItem.Click += new System.EventHandler(this.PrintMenuItem_Click);
             // 
@@ -216,19 +222,19 @@
             this.PrintPreviewMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PrintPreviewMenuItem.Image")));
             this.PrintPreviewMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PrintPreviewMenuItem.Name = "PrintPreviewMenuItem";
-            this.PrintPreviewMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.PrintPreviewMenuItem.Size = new System.Drawing.Size(180, 22);
             this.PrintPreviewMenuItem.Text = "打印预览(&V)";
             this.PrintPreviewMenuItem.Click += new System.EventHandler(this.PrintPreviewMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // 退出XToolStripMenuItem
             // 
             this.退出XToolStripMenuItem.Name = "退出XToolStripMenuItem";
-            this.退出XToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.退出XToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.退出XToolStripMenuItem.Text = "退出(&X)";
             this.退出XToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
@@ -320,7 +326,9 @@
             this.工具栏ToolStripMenuItem,
             this.AutoLinefeedMenuItem,
             this.OutputMenuItem,
-            this.ConsoleMenuItem});
+            this.ConsoleMenuItem,
+            this.OpenCmdMenuItem,
+            this.CustomCmdMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
             this.视图ToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
             this.视图ToolStripMenuItem.Text = "视图(&V)";
@@ -362,6 +370,13 @@
             this.OutputMenuItem.Text = "输出(&O)";
             this.OutputMenuItem.Click += new System.EventHandler(this.OutputMenuItem_Click);
             // 
+            // ConsoleMenuItem
+            // 
+            this.ConsoleMenuItem.Name = "ConsoleMenuItem";
+            this.ConsoleMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ConsoleMenuItem.Text = "控制台(&C)";
+            this.ConsoleMenuItem.Click += new System.EventHandler(this.ConsoleMenuItem_Click);
+            // 
             // 工具TToolStripMenuItem
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -374,13 +389,13 @@
             // 自定义CToolStripMenuItem
             // 
             this.自定义CToolStripMenuItem.Name = "自定义CToolStripMenuItem";
-            this.自定义CToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.自定义CToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.自定义CToolStripMenuItem.Text = "自定义(&C)";
             // 
             // 选项OToolStripMenuItem
             // 
             this.选项OToolStripMenuItem.Name = "选项OToolStripMenuItem";
-            this.选项OToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.选项OToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.选项OToolStripMenuItem.Text = "选项(&O)";
             // 
             // 帮助HToolStripMenuItem
@@ -584,12 +599,23 @@
             // 
             // CommandTab
             // 
+            this.CommandTab.Controls.Add(this.CommandTextBox);
             this.CommandTab.Location = new System.Drawing.Point(4, 22);
             this.CommandTab.Name = "CommandTab";
             this.CommandTab.Size = new System.Drawing.Size(1006, 66);
             this.CommandTab.TabIndex = 1;
             this.CommandTab.Text = "命令";
             this.CommandTab.UseVisualStyleBackColor = true;
+            // 
+            // CommandTextBox
+            // 
+            this.CommandTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CommandTextBox.Location = new System.Drawing.Point(0, 0);
+            this.CommandTextBox.Name = "CommandTextBox";
+            this.CommandTextBox.Size = new System.Drawing.Size(1006, 66);
+            this.CommandTextBox.TabIndex = 0;
+            this.CommandTextBox.Text = "";
+            this.CommandTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandTextBox_KeyDown);
             // 
             // ContentWraper
             // 
@@ -622,12 +648,26 @@
             // 
             this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainTool);
             // 
-            // ConsoleMenuItem
+            // OpenCmdMenuItem
             // 
-            this.ConsoleMenuItem.Name = "ConsoleMenuItem";
-            this.ConsoleMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.ConsoleMenuItem.Text = "控制台(&C)";
-            this.ConsoleMenuItem.Click += new System.EventHandler(this.ConsoleMenuItem_Click);
+            this.OpenCmdMenuItem.Name = "OpenCmdMenuItem";
+            this.OpenCmdMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenCmdMenuItem.Text = "打开CMD(&M)";
+            this.OpenCmdMenuItem.Click += new System.EventHandler(this.OpenCmdMenuItem_Click);
+            // 
+            // CustomCmdMenuItem
+            // 
+            this.CustomCmdMenuItem.Name = "CustomCmdMenuItem";
+            this.CustomCmdMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CustomCmdMenuItem.Text = "自定义CMD";
+            this.CustomCmdMenuItem.Click += new System.EventHandler(this.CustomCmdMenuItem_Click);
+            // 
+            // RestartMenuItem
+            // 
+            this.RestartMenuItem.Name = "RestartMenuItem";
+            this.RestartMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RestartMenuItem.Text = "重启(&R)";
+            this.RestartMenuItem.Click += new System.EventHandler(this.RestartMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -652,6 +692,7 @@
             this.OtherTabControl.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
             this.OutputTab.PerformLayout();
+            this.CommandTab.ResumeLayout(false);
             this.ContentWraper.ResumeLayout(false);
             this.MainToolStripContainer.ContentPanel.ResumeLayout(false);
             this.MainToolStripContainer.TopToolStripPanel.ResumeLayout(false);
@@ -725,6 +766,10 @@
         private System.Windows.Forms.TabPage OutputTab;
         private System.Windows.Forms.TabPage CommandTab;
         private System.Windows.Forms.ToolStripMenuItem ConsoleMenuItem;
+        private System.Windows.Forms.RichTextBox CommandTextBox;
+        private System.Windows.Forms.ToolStripMenuItem OpenCmdMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CustomCmdMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RestartMenuItem;
     }
 }
 
