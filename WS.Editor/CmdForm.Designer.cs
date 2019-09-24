@@ -23,6 +23,10 @@ namespace WS.Editor
             {
                 components.Dispose();
             }
+            if(disposing && (cmd != null))
+            {
+                cmd.CloseCmdThread();
+            }
             base.Dispose(disposing);
         }
 

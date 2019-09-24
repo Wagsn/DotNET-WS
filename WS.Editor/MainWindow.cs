@@ -467,20 +467,6 @@ namespace WS.Editor
             NativeMethods.OpenCmd();
         }
 
-        /// <summary>
-        /// 监听命令框键盘按下事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.KeyCode == Keys.Control)
-            {
-                //CommandTextBox.Text
-
-            }
-        }
-
         private CmdForm Cmd { get; set; }
 
         private void CustomCmdMenuItem_Click(object sender, EventArgs e)
@@ -496,6 +482,114 @@ namespace WS.Editor
         private void RestartMenuItem_Click(object sender, EventArgs e)
         {
             Application.Restart();
+        }
+
+        private void CommandTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("sender: " + sender);
+        }
+
+        private void CommandTextBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            Console.WriteLine($"CommandTextBox_PreviewKeyDown input KeyCode: { e.KeyCode}, IsInputKey: {e.IsInputKey}");
+            //switch (e.KeyCode)
+            //{
+            //    case Keys.Right:
+            //    case Keys.Left:
+            //    case Keys.Up:
+            //    case Keys.Down:
+            //        e.IsInputKey = true;
+            //        return true;
+            //}
+        }
+
+        /// <summary>
+        /// 监听命令框键盘按下事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("CommandTextBox_KeyDown input KeyCode: " + e.KeyCode);
+
+            // 如果回退位置在当前行前两个字符，光标跳转到最后
+            //if (CommandTextBox.SelectionStart - CommandTextBox.GetFirstCharIndexOfCurrentLine() <= 2)
+            //{
+            //    CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+            //    e.Handled = true;
+            //    return;
+            //}
+            if ((CommandTextBox.GetLineFromCharIndex(CommandTextBox.SelectionStart) != CommandTextBox.GetLineFromCharIndex(CommandTextBox.Text.Length) || CommandTextBox.SelectionStart - CommandTextBox.GetFirstCharIndexOfCurrentLine() <= 2)) 
+            {
+                // && CommandTextBox.SelectionStart < (CommandTextBox.GetFirstCharIndexFromLine(CommandTextBox.GetLineFromCharIndex(CommandTextBox.Text.Length)) + 2)
+                // && (!new List<Keys> { Keys.Right, Keys.Left, Keys.Up, Keys.Down }.Contains(e.KeyCode))
+                //if(new List<Keys> { Keys.Right, Keys.Left, Keys.Up, Keys.Down }.Contains(e.KeyCode))
+                //{
+                Console.WriteLine("Invalid input location");
+                CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+                //CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+                //}
+                //e.SuppressKeyPress = false;
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+                var lastLine = CommandTextBox.GetLineFromCharIndex(CommandTextBox.Text.Length);
+                var lastFirstCharIndex = CommandTextBox.GetFirstCharIndexFromLine(lastLine);
+                var lastLineText = CommandTextBox.Text.Substring(lastFirstCharIndex, CommandTextBox.Text.Length - lastFirstCharIndex);
+                CommandTextBox.AppendText(Environment.NewLine + "> ");
+                Console.WriteLine("last line: " + lastLineText);
+                e.Handled = true;
+                return;
+            }
+            //if (e.KeyCode == Keys.Back)
+            //{
+            //    var backLineFirstCharIndex = CommandTextBox.GetFirstCharIndexOfCurrentLine();
+            //    var backLine = CommandTextBox.GetLineFromCharIndex(CommandTextBox.SelectionStart);
+            //    var lastLine = CommandTextBox.GetLineFromCharIndex(CommandTextBox.Text.Length);
+            //    // 如果当前行不是最后一行，光标跳转到最后
+            //    if (backLine != lastLine)
+            //    {
+            //        CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+            //        e.Handled = true;
+            //        return;
+            //    }
+            //    // 如果回退位置在当前行前两个字符，光标跳转到最后
+            //    if (CommandTextBox.SelectionStart - CommandTextBox.GetFirstCharIndexOfCurrentLine() <= 2)
+            //    {
+            //        CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+            //        e.Handled = true;
+            //        return;
+            //    }
+            //    CommandTextBox.GetFirstCharIndexOfCurrentLine();
+            //    var backLineText = CommandTextBox.Text.Substring(backLineFirstCharIndex, CommandTextBox.Text.Length - backLineFirstCharIndex);
+            //    Console.WriteLine("back line: " + backLineText);
+            //    //if(backLineText == "> " || backLineText.IndexOf("> ") > -1 || backLineText.IndexOf(Environment.NewLine) > -1)
+            //    //    e.Handled = true;
+            //}
+        }
+
+        private void CommandTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Console.WriteLine("CommandTextBox_KeyPress input KeyChar: " + e.KeyChar);
+
+            //Console.WriteLine(" CommandTextBox_KeyPress input key: " + e.KeyChar);
+            //if (CommandTextBox.SelectionStart < CommandTextBox.GetFirstCharIndexFromLine(CommandTextBox.GetLineFromCharIndex(CommandTextBox.Text.Length)) + 2 && (!new List<Keys> { Keys.Right, Keys.Left, Keys.Up, Keys.Down }.Contains((Keys)e.KeyChar)))
+            //{
+            //    //if(new List<Keys> { Keys.Right, Keys.Left, Keys.Up, Keys.Down }.Contains(e.KeyCode))
+            //    //{
+            //    Console.WriteLine("非方向键");
+            //    //CommandTextBox.SelectionStart = CommandTextBox.Text.Length;
+            //    //}
+            //    e.Handled = true;
+            //    return;
+            //}
+        }
+
+        private void CommandTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("CommandTextBox_KeyUp input KeyCode: " + e.KeyCode);
         }
     }
 }
