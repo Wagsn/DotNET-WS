@@ -28,7 +28,7 @@ namespace WS.AspNetCore.Quartz
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // 注册调度实例
+            // 注册调度实例 Quartz|Quartz.Impl
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             // 注入HTTP客户端 IHttoClientFactory
             services.AddHttpClient();
