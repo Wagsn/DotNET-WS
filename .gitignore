@@ -260,3 +260,23 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/GenCode/permissionCenters/permissionCenters.cs
+/GenCode/permissionCenters/PermissionCenterDbContext.cs
+/GenCode/permissionCenters/Permission.cs
+/GenCode/permissionCenters/OperateLogDto.cs
+/GenCode/permissionCenters/OperateLog.cs
+/GenCode/permissionCenters/LoginLogDto.cs
+/GenCode/permissionCenters/LoginLog.cs
+/GenCode/permissionCenters/SubjectResourceDto.cs
+/GenCode/permissionCenters/SubjectResource.cs
+/GenCode/permissionCenters/SubjectPermissionRelationDto.cs
+/GenCode/permissionCenters/SubjectPermissionRelation.cs
+/GenCode/permissionCenters/SubjectPermissionExpansionDto.cs
+/GenCode/permissionCenters/SubjectPermissionExpansion.cs
+/GenCode/permissionCenters/SubjectDto.cs
+/GenCode/permissionCenters/Subject.cs
+/GenCode/permissionCenters/PermissionRelationDto.cs
+/GenCode/permissionCenters/PermissionRelation.cs
+/GenCode/permissionCenters/PermissionDto.cs
+/GenCode/permissionCenters/permissionCentersDto.cs
+/GenCode/permissionCenters/permissionCentersDbContext.cs

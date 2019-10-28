@@ -68,68 +68,31 @@
     <Compile Include="permissionCenters\LoginLog.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
     </Compile>
-    <Compile Include="permissionCenters\LoginLogDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\OperateLog.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
     </Compile>
-    <Compile Include="permissionCenters\OperateLogDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\Permission.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\PermissionCenterDbContext.cs">
-      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="permissionCenters\permissionCenters.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>permissionCenters.tt</DependentUpon>
     </Compile>
-    <Compile Include="permissionCenters\permissionCentersDbContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\permissionCentersDto.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\PermissionDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\PermissionRelation.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\PermissionRelationDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
     </Compile>
     <Compile Include="permissionCenters\Subject.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
     </Compile>
-    <Compile Include="permissionCenters\SubjectDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\SubjectPermissionExpansion.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\SubjectPermissionExpansionDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
     </Compile>
     <Compile Include="permissionCenters\SubjectPermissionRelation.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
     </Compile>
-    <Compile Include="permissionCenters\SubjectPermissionRelationDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\SubjectResource.cs">
       <DependentUpon>permissionCenters.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\SubjectResourceDto.cs">
-      <DependentUpon>permissionCentersDto.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
