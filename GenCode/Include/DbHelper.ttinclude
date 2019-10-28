@@ -1,0 +1,45 @@
+﻿<#+
+	public class DbHelper
+    {
+		public static string TrimWrap(string str) 
+        {
+			if(string.IsNullOrEmpty(str)) return "";
+
+            return str.Replace("\r", "").Replace("\n","");
+        }
+
+		public static string WrapComment(string str, string placeholder)
+		{
+		    if(string.IsNullOrEmpty(str)) return "";
+			return str.Replace("\r\n", placeholder);
+		}
+        
+		public static string ConvertColumnName(string columnName)
+        {
+            string name = string.Empty;
+            string[] splitStr = columnName.Split(new char[] { '_','.' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var str in splitStr)
+            {
+                name += FirstToCapital(str);
+            }
+            return name;
+        }
+
+		public static string HandlerEFTableName(string name)
+        {
+            string newName = ConvertColumnName(name);
+            return newName.EndsWith("s") ? newName:newName+"s";
+        }
+
+        public static string FirstToCapital(string str)
+        {
+            return str[0].ToString().ToUpper() + str.Substring(1);
+        }    
+
+		public static string HandlerEFMoreKey(List<Field> fields){
+			var fileNames=string.Join(",", fields.Select(m=>"k." + ConvertColumnName(m.Name))); 
+			var template="b.HasKey(k => new { " + fileNames + " });";
+			return template;
+		}
+    }
+#>

@@ -1,0 +1,76 @@
+<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ include file="$(ProjectDir)Include\\MysqlManager.ttinclude" #>
+<#@ include file="$(ProjectDir)Include\\MysqlDbhelper.ttinclude" #>
+<#@ include file="$(ProjectDir)Include\\DbHelper.ttinclude"  #>
+
+<# 
+    // 数据库连接
+    var connectionString = @"server=127.0.0.1;uid=root;pwd=123456;";
+
+    // 需要解析的数据库
+    var database = new List<string> { "ws_unified_subject" };
+	// 默认命名空间
+	var nameSpace = "PermissionCenter.Dto";
+
+	// 不需要生成的表名
+    var notTables = new List<string> { "" };
+
+	// 不需要生成得字段名
+	var notFields = new List<string> { "IsDeleted" };
+
+	//可空的对象需要增加 ? 
+	var nullTypes = new List<string> { "int","long","double","float","decimal","DateTime" };
+
+    // 文件版权信息
+    var version = "2.0";
+    var author = "T4 自动生成";
+
+    var manager = Manager.Create(Host, GenerationEnvironment);
+    var entities = EntityHelper.GetEntities(connectionString, database);
+
+    foreach(Entity entity in entities)
+    {
+		if(notTables.Contains(entity.EntityName)) 
+			continue;
+		var entityName = DbHelper.ConvertColumnName(entity.EntityName);
+		var className = $"{entityName}Dto";
+        manager.StartNewFile(className + ".cs");
+#>
+//-----------------------------------------------------------------------
+// * version : <#= version #>
+// * author  : <#= author #>
+// * FileName: <#= className #>.cs
+// * history : Created by T4 <#= DateTime.Now #>.
+//-----------------------------------------------------------------------
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace <#= nameSpace #>
+{
+    /// <summary>
+    /// <#=(string.IsNullOrEmpty(entity.Comment)?($"{entityName} DTO Model"):DbHelper.WrapComment(entity.Comment,"\r\n    /// "))#>
+    /// </summary>    
+    public class <#= className #>
+    {
+<#
+        for(int i = 0; i < entity.Fields.Count; i++)
+        {
+			if(notFields.Contains(entity.Fields[i].Name))
+				continue;
+#>
+        /// <summary>
+        /// <#=string.IsNullOrEmpty(entity.Fields[i].Comment)?"":entity.Fields[i].Comment.Replace("\r\n","\r\n        /// ")#>
+        /// </summary><#=(entity.Fields[i].IsNull?"":"\r\n\t\t[Required]")#><#=(string.IsNullOrEmpty(entity.Fields[i].MaxLength)?"":"\r\n\t\t[MaxLength("+entity.Fields[i].MaxLength+")]")#>
+        public <#=(entity.Fields[i].Type)#><#=(nullTypes.Contains(entity.Fields[i].Type)?"?":"")#> <#=DbHelper.ConvertColumnName(entity.Fields[i].Name)#> { get; set; }
+
+<#
+        }
+#>
+    }
+}
+<#        
+        manager.EndBlock(); 
+    }
+
+    manager.Process(true);
+#>

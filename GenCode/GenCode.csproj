@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4544D59B-22C9-4779-9D1D-9AA0F1C39C90}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GenCode</RootNamespace>
+    <AssemblyName>GenCode</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\MySql.Data.dll" />
+    <Content Include="permissionCenters\permissionCentersDbContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>permissionCentersDbContext.cs</LastGenOutput>
+    </Content>
+    <Content Include="permissionCenters\permissionCenters.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>permissionCenters.cs</LastGenOutput>
+    </Content>
+    <Content Include="permissionCenters\permissionCentersDto.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>permissionCentersDto.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\DbHelper.ttinclude" />
+    <None Include="Include\MysqlDbhelper.ttinclude" />
+    <None Include="Include\MysqlManager.ttinclude" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="permissionCenters\LoginLog.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\LoginLogDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\OperateLog.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\OperateLogDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\Permission.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\PermissionCenterDbContext.cs">
+      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\permissionCenters.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\permissionCentersDbContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\permissionCentersDto.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\PermissionDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\PermissionRelation.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\PermissionRelationDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\Subject.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectPermissionExpansion.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectPermissionExpansionDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectPermissionRelation.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectPermissionRelationDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectResource.cs">
+      <DependentUpon>permissionCenters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionCenters\SubjectResourceDto.cs">
+      <DependentUpon>permissionCentersDto.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
