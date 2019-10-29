@@ -11,6 +11,7 @@
 	// 默认命名空间
 	var nameSpace = "PermissionCenter.Entities";
 	var dbContextName = "PermissionCenter";
+	var className = dbContextName + "DbContext";
 	// 不需要生成的表名
     var notTables = new List<string> { "" };
 
@@ -35,9 +36,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace <#=nameSpace#> {
-    public class <#=dbContextName#>DbContext : DbContext {
-        public BrokersDbContext(DbContextOptions<EmployeesDbContext> options)
-            : base(options) { }
+    public class <#=className#> : DbContext 
+	{
+        public BrokersDbContext(DbContextOptions<<#=className#>> options) : base(options) { }
 
 <#
     var entities = EntityHelper.GetEntities(connectionString, database);
@@ -65,17 +66,17 @@ namespace <#=nameSpace#> {
 			continue;
 		var entityName = DbHelper.ConvertColumnName(entity.EntityName);
 #>
-			builder.Entity<<#= entityName #>>(b => {
-
-					b.ToTable("<#= entity.EntityName #>");
-					<#= entity.MoreKey?DbHelper.HandlerEFMoreKey(entity.KeyFields):"" #>
+			builder.Entity<<#= entityName #>>(b => 
+			{
+			    b.Totable("<#=entity.EntityName#>");
+			    <#= entity.MoreKey?DbHelper.HandlerEFMoreKey(entity.KeyFields):"" #>
 <#
-					foreach(var field  in entity.Fields)
-					{
+				foreach(var field  in entity.Fields)
+				{
 #>
-					b.Property(e => e.<#=DbHelper.ConvertColumnName(field.Name)#>).HasColumnName("<#=field.Name#>")<#=field.IsNull?"":".IsRequired()"#><#= string.IsNullOrEmpty(field.MaxLength)?"":(".HasMaxLength("+field.MaxLength+")") #>;
+				b.Property(e => e.<#=DbHelper.ConvertColumnName(field.Name)#>).HasColumnName("<#=field.Name#>")<#=field.IsNull?"":".IsRequired()"#><#= string.IsNullOrEmpty(field.MaxLength)?"":(".HasMaxLength("+field.MaxLength+")") #>;
 <#						
-					}
+				}
 #>
 			});
 <#

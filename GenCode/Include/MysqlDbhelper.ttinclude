@@ -30,6 +30,7 @@
 											,`information_schema`.`COLUMNS`.CHARACTER_MAXIMUM_LENGTH
 										FROM `information_schema`.`TABLES`, `INFORMATION_SCHEMA`.`COLUMNS`
 										WHERE `information_schema`.`COLUMNS`.`TABLE_NAME` = `information_schema`.`TABLES`.`TABLE_NAME`
+										AND `information_schema`.`COLUMNS`.`TABLE_SCHEMA` = `information_schema`.`TABLES`.`TABLE_SCHEMA`
 										AND `information_schema`.`TABLES`.`TABLE_SCHEMA` IN ('{0}') ", dbs);
                 using (var reader = MySqlHelper.ExecuteReader(conn, cmd))
                 {
