@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// 枚举类扩展
@@ -16,8 +14,8 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static IEnumerable<T> Distinct<T>(this IEnumerable<T> enumerable, Func<T, T, bool> comparer)
         {
-            if (enumerable == null || enumerable.Count() <= 1) return enumerable;
-            return enumerable.Where(t => t != null && t.Equals(enumerable.First(b => comparer(t, b))));
+            if (enumerable == null || System.Linq.Enumerable.Count(enumerable) <= 1) return enumerable;
+            return System.Linq.Enumerable.Where(enumerable, t => t != null && t.Equals(System.Linq.Enumerable.First(enumerable, b => comparer(t, b))));
         }
 
         /// <summary>
@@ -27,10 +25,10 @@ namespace System.Collections.Generic
         /// <param name="enumerable"></param>
         /// <param name="predicate">条件表达式</param>
         /// <returns></returns>
-        public static IEnumerable<T> Filter<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            if (enumerable == null || !enumerable.Any()) return enumerable;
-            return enumerable.Where(t => !predicate(t));
+            if (enumerable == null || !System.Linq.Enumerable.Any(enumerable)) return enumerable;
+            return System.Linq.Enumerable.Where(enumerable, t => !predicate(t));
         }
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static IEnumerable<T> TrimEmpty<T>(this IEnumerable<T> enumerable)
         {
-            return enumerable.Filter(t => t == null);
+            return Except(enumerable, t => t == null);
         }
 
         /// <summary>
@@ -52,8 +50,7 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static IEnumerable<string> TrimEmpty(this IEnumerable<string> enumerable)
         {
-            if (enumerable == null || !enumerable.Any()) return enumerable;
-            return enumerable.Filter(string.IsNullOrWhiteSpace);
+            return Except(enumerable, string.IsNullOrWhiteSpace);
         }
 
         /// <summary>
@@ -65,9 +62,9 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static T Reduce<T>(this IEnumerable<T> enumerable, Func<T, T, T> merge)
         {
-            if (enumerable == null || !enumerable.Any()) return default(T);
-            var reslut = enumerable.First();
-            foreach(var item in enumerable.Skip(1))
+            if (enumerable == null || !System.Linq.Enumerable.Any(enumerable)) return default(T);
+            var reslut = System.Linq.Enumerable.First(enumerable);
+            foreach(var item in System.Linq.Enumerable.Skip(enumerable, 1))
             {
                 reslut = merge(reslut, item);
             }
@@ -84,7 +81,7 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static R Reduce<T,R>(this IEnumerable<T> enumerable, Func<R, T, R> merge, R initialValue)
         {
-            if (enumerable == null || !enumerable.Any()) return initialValue;
+            if (enumerable == null || !System.Linq.Enumerable.Any(enumerable)) return initialValue;
             var reslut = initialValue;
             foreach (var item in enumerable)
             {
@@ -102,15 +99,21 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public static IEnumerable<T> RemoveWhere<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            return enumerable.Except(enumerable.Where(predicate));
+            return System.Linq.Enumerable.Except(enumerable, System.Linq.Enumerable.Where(enumerable, predicate));
         }
 
-        public static IEnumerable<T> Union<T>(this IEnumerable<T> enumerable, IEnumerable<T> other, Func<T, T, bool> comparison)
+        /// <summary>
+        /// 并集
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="comparison">比较表达式</param>
+        /// <returns></returns>
+        public static IEnumerable<T> Union<T>(this IEnumerable<T> first, IEnumerable<T> second, Func<T, T, bool> comparison)
         {
-            var otherOwn = other.Where(a => enumerable.All(b => !comparison(a, b)));
-            var result = enumerable.ToList();
-            result.AddRange(otherOwn);
-            return result;
+            // TODO 性能优化
+            return System.Linq.Enumerable.Concat(first, System.Linq.Enumerable.Where(second, a => !System.Linq.Enumerable.Any(first, b => comparison(a, b))));
         }
     }
 }

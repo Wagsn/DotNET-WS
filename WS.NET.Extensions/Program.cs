@@ -63,7 +63,7 @@ namespace WS.NET.Extensions
             Console.WriteLine(ints.TrimEmpty().Select(a => string.IsNullOrWhiteSpace(a) ? "IsNullOrWhiteSpace" : a).Reduce((x, y) => x + "," + y));
             Console.WriteLine(ints.Select(a => a == null ? "IsNull" : a.ToString()).Reduce((x, y) => x + "," + y));
             Console.WriteLine("TrimEmpty: " + ints.TrimEmpty().Select(a => a == null ? "IsNull" : a.ToString()).Reduce((x, y) => x + "," + y));
-            Console.WriteLine("Filter: " + ints.Filter(a => a == null).Select(a => a == null ? "IsNull" : a.ToString()).Reduce((x, y) => x + "," + y));
+            Console.WriteLine("Filter: " + ints.Except(a => a == null).Select(a => a == null ? "IsNull" : a.ToString()).Reduce((x, y) => x + "," + y));
         }
     }
 }

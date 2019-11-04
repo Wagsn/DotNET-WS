@@ -5,6 +5,7 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <RootNamespace>System</RootNamespace>
   </PropertyGroup>
 
 </Project>
