@@ -179,14 +179,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="permissionCenters\efcore-v2_1\dbcontext\ApplicationDbContext.cs">
-      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="permissionCenters\efcore-v2_1\dbcontext\permissionCentersDbContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>permissionCentersDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="permissionCenters\efcore-v2_1\entity\LoginLog.cs">
       <DependentUpon>permissionCenter.tt</DependentUpon>
     </Compile>
