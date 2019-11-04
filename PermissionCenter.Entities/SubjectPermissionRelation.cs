@@ -1,43 +1,43 @@
 //-----------------------------------------------------------------------
 // * version : 2.0
 // * author  : T4 自动生成
-// * FileName: PermissionRelation.cs
-// * history : Created by T4 10/28/2019 10:22:51 
+// * FileName: SubjectPermissionRelation.cs
+// * history : Created by T4 10/28/2019 16:27:46 
 //-----------------------------------------------------------------------
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PermissionCenter.Entities
 {
     /// <summary>
-    /// 权限关联表
-	/// from "permission_relation" table, "ws_unified_subject" database.
+    /// 主体权限关联表
+	/// from "subject_permission_relation" table, "ws_unified_subject" database.
     /// </summary>
-    public class PermissionRelation
+    [Table("subject_permission_relation")] 
+    public class SubjectPermissionRelation
     {
-        /// <summary>
-        /// 子ID
-        /// </summary>
-		[MaxLength(36)]
-        public string ChildId { get; set; }
-
         /// <summary>
         /// ID
         /// </summary>
 		[Key]
 		[MaxLength(36)]
+        [Column("Id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// 直接关联
-        /// </summary>
-        public bool IsDirect { get; set; }
-
-        /// <summary>
-        /// 父ID
+        /// 权限ID
         /// </summary>
 		[MaxLength(36)]
-        public string ParentId { get; set; }
+        [Column("PermissionId")]
+        public string PermissionId { get; set; }
+
+        /// <summary>
+        /// 主体ID
+        /// </summary>
+		[MaxLength(36)]
+        [Column("SubjectId")]
+        public string SubjectId { get; set; }
 
     }
 }

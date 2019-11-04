@@ -2,10 +2,11 @@
 // * version : 2.0
 // * author  : T4 自动生成
 // * FileName: SubjectResource.cs
-// * history : Created by T4 10/28/2019 10:22:51 
+// * history : Created by T4 10/28/2019 16:27:46 
 //-----------------------------------------------------------------------
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PermissionCenter.Entities
 {
@@ -13,6 +14,7 @@ namespace PermissionCenter.Entities
     /// 主体资源表
 	/// from "subject_resource" table, "ws_unified_subject" database.
     /// </summary>
+    [Table("subject_resource")] 
     public class SubjectResource
     {
         /// <summary>
@@ -20,6 +22,7 @@ namespace PermissionCenter.Entities
         /// </summary>
 		[Key]
 		[MaxLength(255)]
+        [Column("Key")]
         public string Key { get; set; }
 
         /// <summary>
@@ -27,12 +30,14 @@ namespace PermissionCenter.Entities
         /// </summary>
 		[Key]
 		[MaxLength(36)]
+        [Column("SubjectId")]
         public string SubjectId { get; set; }
 
         /// <summary>
         /// 值
         /// </summary>
 		[MaxLength(255)]
+        [Column("Value")]
         public string Value { get; set; }
 
     }
