@@ -8,16 +8,22 @@ namespace WS.NET.Extensions
 {
     class Program
     {
-        /// <summary>重庆中央公园
+        /// <summary>
         /// 入口
         /// </summary>
         /// <param name="args">参数</param>
         /// <returns></returns>
         static void Main(string[] args)
         {
-            RunTest(TestReduce);
+            //RunTest(TestReduce);
+            RunTest(TestToDictionary);
             //RunTest(TestTrimEmpty);
             Console.ReadKey();
+        }
+
+        static void TestToDictionary()
+        {
+            Console.WriteLine(new { Name = "Wagsn", Sex = true, Age = 23 }.ToDictionary().Select(a => $"{a.Key}: {a.Value}").Reduce((x,y)=> $"{x}, {y}"));
         }
 
         static void RunTest(Action action)
@@ -43,6 +49,7 @@ namespace WS.NET.Extensions
             //Console.WriteLine("0 ascii: " + Convert.ToInt32('0'));  // 48
             //Console.WriteLine("0 ascii: " + Convert.ToInt32('9'));  // 57
             Console.WriteLine("123456789 convert to integer: " + str.Select(c => c - 48).Reduce((x, y) => x * 10 + y));
+            Console.WriteLine("123456789 convert to integer: " + str.Select(c => c - 48).Reduce((x, y) => x + 1, 0));
 
 
             //var strs = new List<string> { "123", "456", "123", "789" };
