@@ -15,8 +15,18 @@ namespace WS.NET.Extensions
         /// <returns></returns>
         static void Main(string[] args)
         {
+            var a = false;
+            int? b = 1;
+            if (a || (a==false && b > 0))
+            {
+                Console.WriteLine($"a={a}, b={(b == null ? "Null" : $"{b}")}, a || (a==false && b > 0): True");
+            }
+            else
+            {
+                Console.WriteLine($"a={a}, b={(b==null?"Null":$"{b}")}, a || (a==false && b > 0): False");
+            }
             //RunTest(TestReduce);
-            RunTest(TestToDictionary);
+            //RunTest(TestToDictionary);
             //RunTest(TestTrimEmpty);
             Console.ReadKey();
         }

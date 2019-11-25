@@ -8,7 +8,7 @@ namespace WS.Core
 {
     class Program
     {
-        /// <summary>重庆中央公园
+        /// <summary>
         /// 入口
         /// </summary>
         /// <param name="args">参数</param>

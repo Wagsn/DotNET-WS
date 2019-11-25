@@ -1,0 +1,23 @@
+
+FieldMapInfo: 将响应数据的某个字段映射到请求数据的莫格字段
+{
+    "FromName": "Id",
+    "FromLocation": "body:extension:0:BuildingTreeId",
+    "ToName": "BuildingTreeIdTreeId",  // 占位符
+    "ToLocation": "route" // 所在位置
+}
+
+CallMapInfo: 一个响应与一个请求的所有字段映射
+{
+    "FieldMaps": []
+}
+
+DataLinkInfo: 描述一个数据链路的所有接口映射，假定一个接口的请求数据需要从多个接口中获取
+{
+    "CallMaps": []    
+}
+
+接口调用节点: {
+    请求描述信息
+    数据依赖信息
+}
