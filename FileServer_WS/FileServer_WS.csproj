@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AssemblyName>FileServer_WS</AssemblyName>
+    <RootNamespace>FileServer</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

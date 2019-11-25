@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WS.FileServer
+namespace FileServer
 {
     public static class FileStreamingHelper
     {

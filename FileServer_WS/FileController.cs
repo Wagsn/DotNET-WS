@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WS.FileServer
+namespace FileServer
 {
     [Route("[controller]/[action]")]
     public class FileController : Controller

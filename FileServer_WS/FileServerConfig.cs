@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WS.FileServer
+namespace FileServer
 {
     /// <summary>
     /// 文件配置

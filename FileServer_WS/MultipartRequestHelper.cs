@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace WS.FileServer
+namespace FileServer
 {
     public static class MultipartRequestHelper
     {
